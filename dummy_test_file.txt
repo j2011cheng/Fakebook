@@ -1,2 +1,0 @@
-This file has some text. 
-Windows style line endings are an unfortunate fact of this existence. 
