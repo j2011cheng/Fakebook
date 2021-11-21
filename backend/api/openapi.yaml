@@ -49,3 +49,57 @@ components:
           type: string
       required:
         - message
+
+    User:
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        id:
+          type: string
+          format: uuid
+      required:
+        - id
+
+    Item:
+      properties:
+        category:
+          type: string
+        subcategory:
+          type: string
+        name:
+          type: string
+        owner:
+          $ref: '#/components/schemas/User'
+        price:
+          type: string
+          pattern: '^\$?\d+(?:.\d{2})?$'
+        description:
+          type: string
+        location:
+          type: string
+          # location will be changed when we get to the stretch part
+      required:
+        - owner
+        - name
+        - category
+
+    ItemList:
+      properties:
+        name:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+
+security:
+  - bearerAuth: []         # use the same name as above
