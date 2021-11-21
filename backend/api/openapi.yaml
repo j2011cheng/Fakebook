@@ -29,6 +29,59 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  # Unfinished
+  # /items:
+  #   get:
+  #     description: Get listed items
+  #     responses:
+  #       200:
+  #         description: Successful
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/ItemList'
+  #       400:
+  #         description: Invalid search value
+  #       404:
+  #         description: No items found
+  /item:
+    get:
+      description: Get a specific item
+      parameters:
+        - name: id
+          in: query
+          description: Item id
+          required: true
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        404:
+          description: Item not found
+    # Unfinished
+    # post:
+    #   description: Post a new item
+    #   requestBody:
+    #     description: Item to post
+    #     required: true
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: '#/components/schemas/Item'
+    #   responses:
+    #     201:
+    #       description: Item successfully listed
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/Item'
+    #     401:
+    #       description: Unauthorized
+    #     409:
+    #       description: Item already listed
 
 components:
   schemas:
@@ -51,6 +104,7 @@ components:
         - message
 
     User:
+      type: object
       properties:
         name:
           type: string
@@ -62,38 +116,45 @@ components:
           format: uuid
       required:
         - id
+      additionalProperties: false
 
-    Item:
-      properties:
-        category:
-          type: string
-        subcategory:
-          type: string
-        name:
-          type: string
-        owner:
-          $ref: '#/components/schemas/User'
-        price:
-          type: string
-          pattern: '^\$?\d+(?:.\d{2})?$'
-        description:
-          type: string
-        location:
-          type: string
-          # location will be changed when we get to the stretch part
-      required:
-        - owner
-        - name
-        - category
-
-    ItemList:
+    Category:
+      type: object
       properties:
         name:
           type: string
-        items:
+        subcategories:
           type: array
           items:
-            $ref: '#/components/schemas/Item'
+            $ref: '#/components/schemas/Category'
+        attributeList:
+          type: array
+          items:
+            type: string
+            pattern: '^\w+$'
+      required:
+        - name
+      additionalProperties: false
+
+    Item:
+      type: object
+      properties:
+        category:
+          type: '#/components/schemas/Category'
+        attributes:
+          type: object
+        id:
+          type: string
+          format: uuid
+      required:
+        - category
+        - attributes
+      additionalProperties: false
+
+    ItemList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Item'
 
   securitySchemes:
     bearerAuth:            # arbitrary name for the security scheme
