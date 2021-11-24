@@ -1,8 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
 import Dummy from './Dummy';
-import Login from './Login'
+import Login from './Login';
 
 /**
  * Simple component with no state.
