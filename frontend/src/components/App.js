@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Dummy from './Dummy';
 
@@ -9,7 +10,19 @@ import Dummy from './Dummy';
  */
 function App() {
   return (
-    <Dummy />
+    <BrowserRouter>
+      <Switch>
+        <Route path='/' exact>
+          <Dummy/>
+        </Route>
+        <Route path='/dummy' exact>
+          <Dummy/>
+        </Route>
+        <Route path='/login'>
+          <Login/>
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
 
