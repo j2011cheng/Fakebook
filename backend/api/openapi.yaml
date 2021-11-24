@@ -52,6 +52,9 @@ paths:
           in: query
           description: Item id
           required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         200:
           description: Successful
@@ -140,7 +143,7 @@ components:
       type: object
       properties:
         category:
-          type: '#/components/schemas/Category'
+          $ref: '#/components/schemas/Category'
         attributes:
           type: object
         id:
@@ -161,6 +164,3 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT    # optional, arbitrary value for documentation purposes
-
-security:
-  - bearerAuth: []         # use the same name as above
