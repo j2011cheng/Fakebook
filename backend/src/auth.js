@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
 
+const secrets = require('../data/secrets');
+
 exports.authenticate = async (req, res) => {
   const {name, password} = req.body;
   // Replace this with searching database for user
@@ -11,7 +13,8 @@ exports.authenticate = async (req, res) => {
   const user = {
     name: name,
   };
-  if (user) {
+  // For now use username dev and password dev
+  if (user.name === 'dev' && password === 'dev') {
     const accessToken = jwt.sign(
       {name: user.name},
       secrets.accessToken, {
@@ -28,15 +31,13 @@ exports.check = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(' ')[1];
-    console.log(token);
-    // Replace this with verifying token with database
-    // jwt.verify(token, secrets.accessToken, (err, user) => {
-    //   if (err) {
-    //     return res.sendStatus(403);
-    //   }
-    //   req.user = user;
-    //   next();
-    // });
+    jwt.verify(token, secrets.accessToken, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+      req.user = user;
+      next();
+    });
     next();
   } else {
     res.sendStatus(401);
