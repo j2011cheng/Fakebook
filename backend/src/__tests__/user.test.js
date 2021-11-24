@@ -20,7 +20,7 @@ afterAll((done) => {
 test('POST Login', async () => {
   await request.post('/authenticate')
     .send({
-      name: 'dev',
+      email: 'dev',
       password: 'dev',
     })
     .expect(200)
@@ -28,8 +28,8 @@ test('POST Login', async () => {
     .then((res) => {
       expect(res).toBeDefined();
       expect(res.body).toBeDefined();
-      expect(res.body.name).toBeDefined();
-      expect(res.body.name).toEqual('dev');
+      expect(res.body.email).toBeDefined();
+      expect(res.body.email).toEqual('dev');
       expect(res.body.accessToken).toBeDefined();
     });
 });

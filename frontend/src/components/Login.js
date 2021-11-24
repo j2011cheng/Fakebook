@@ -40,25 +40,32 @@ function Login() {
       });
   };
 
+  const onNewClick = (event) => {
+    history.push('/newuser');
+  };
+
   return (
-    <form onSubmit={onSubmit}>
-      <h2 id='welcome'>CSE183 Authenticated Books Example</h2>
-      <input
-        type="text"
-        name="name"
-        placeholder="Name or email"
-        onChange={handleInputChange}
-        required
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        onChange={handleInputChange}
-        required
-      />
-      <input type="submit" value="Submit"/>
-    </form>
+    <div>
+      <h2 id='welcome'>fakebook</h2>
+      <form onSubmit={onSubmit}>
+        <input
+          type='text'
+          name='email'
+          placeholder='Email'
+          onChange={handleInputChange}
+          required
+        />
+        <input
+          type='password'
+          name='password'
+          placeholder='Password'
+          onChange={handleInputChange}
+          required
+        />
+        <input type='submit' value='Submit'/>
+      </form>
+      <button onClick={onNewClick}>Create new account</button>
+    </div>
   );
 }
 
