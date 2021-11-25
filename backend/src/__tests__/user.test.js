@@ -20,7 +20,7 @@ afterAll((done) => {
 test('POST Login', async () => {
   await request.post('/v0/authenticate')
     .send({
-      email: 'dev',
+      email: 'dev@dev.dev',
       password: 'dev',
     })
     .expect(200)
@@ -38,7 +38,7 @@ test('POST Login', async () => {
 test('POST Invalid Login', async () => {
   await request.post('/v0/authenticate')
     .send({
-      name: 'invalid',
+      email: 'invalid@invalid.invalid',
       password: 'invalid',
     })
     .expect(401)
@@ -46,6 +46,32 @@ test('POST Invalid Login', async () => {
     .then((res) => {
       expect(res).toBeDefined();
       expect(res.text).toBeDefined();
-      expect(res.text).toEqual('Username or password incorrect')
+      expect(res.text).toEqual('Email or password is incorrect')
     });
+});
+
+test('POST New User', async () => {
+  await request.post('/v0/newuser')
+    .send({
+      name: 'Test',
+      email: 'user@test.com',
+      password: '12345',
+    })
+    .expect(200);
+});
+
+test('POST New User Already Exists', async () => {
+  await request.post('/v0/newuser')
+    .send({
+      name: 'New',
+      email: 'user@new.com',
+      password: '12345',
+    });
+  await request.post('/v0/newuser')
+  .send({
+    name: 'New',
+    email: 'user@new.com',
+    password: '12345',
+  })
+  .expect(409);
 });

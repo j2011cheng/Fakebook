@@ -49,7 +49,7 @@ function Login() {
       <h2 id='welcome'>fakebook</h2>
       <form onSubmit={onSubmit}>
         <input
-          type='text'
+          type='email'
           name='email'
           placeholder='Email'
           onChange={handleInputChange}

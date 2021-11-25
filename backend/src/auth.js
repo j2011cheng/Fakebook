@@ -1,29 +1,35 @@
 const jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
 
+const db = require('./user.db');
+
 const secrets = require('../data/secrets');
 
 exports.create = async (req, res) => {
   const {name, email, password} = req.body;
-  bcrypt.hash(password, 10, (err, hash) => {
-    // Store hash in user DB and return status
-    console.log(hash);
+  let user = {
+    name: name,
+    email: email,
+  };
+  const response = await db.selectUserByEmail(user.email);
+  if (response) {
+    res.status(409).send();
+  } else {
+    user.hash = bcrypt.hashSync(password, 10);
+    await db.insertUser(user);
     res.status(200).send();
-  });
+  }
 };
 
 exports.authenticate = async (req, res) => {
   const {email, password} = req.body;
-  // Replace this with searching database for user
-  // const user = users.find((user) => {
-  //   return user.email === email &&
-  //   bcrypt.compareSync(password, user.password);
-  // });
-  const user = {
-    email: email,
-  };
-  // For now use username dev and password dev
-  if (user.email === 'dev@dev.dev' && password === 'dev') {
+  const response = await db.selectUserByEmail(email);
+  if (response && bcrypt.compareSync(password, response.person.hash)) {
+    const user = {
+      name: response.person.name,
+      email: response.person.email,
+      id: response.id,
+    }
     const accessToken = jwt.sign(
       {email: user.email},
       secrets.accessToken, {
@@ -35,7 +41,7 @@ exports.authenticate = async (req, res) => {
       accessToken: accessToken,
     });
   } else {
-    res.status(401).send('Username or password incorrect');
+    res.status(401).send('Email or password is incorrect');
   }
 };
 

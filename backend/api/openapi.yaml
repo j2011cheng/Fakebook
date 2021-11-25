@@ -156,6 +156,8 @@ components:
           type: string
           format: uuid
       required:
+        - name
+        - email
         - id
       additionalProperties: false
 
