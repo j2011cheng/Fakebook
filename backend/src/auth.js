@@ -3,6 +3,15 @@ var bcrypt = require('bcrypt');
 
 const secrets = require('../data/secrets');
 
+exports.create = async (req, res) => {
+  const {name, email, password} = req.body;
+  bcrypt.hash(password, 10, (err, hash) => {
+    // Store hash in user DB and return status
+    console.log(hash);
+    res.status(200).send();
+  });
+};
+
 exports.authenticate = async (req, res) => {
   const {email, password} = req.body;
   // Replace this with searching database for user
@@ -14,14 +23,17 @@ exports.authenticate = async (req, res) => {
     email: email,
   };
   // For now use username dev and password dev
-  if (user.email === 'dev' && password === 'dev') {
+  if (user.email === 'dev@dev.dev' && password === 'dev') {
     const accessToken = jwt.sign(
       {email: user.email},
       secrets.accessToken, {
         expiresIn: '30m',
         algorithm: 'HS256'
       });
-    res.status(200).json({email: user.email, accessToken: accessToken});
+    res.status(200).json({
+      owner: user,
+      accessToken: accessToken,
+    });
   } else {
     res.status(401).send('Username or password incorrect');
   }

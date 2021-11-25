@@ -18,7 +18,7 @@ afterAll((done) => {
 });
 
 test('POST Login', async () => {
-  await request.post('/authenticate')
+  await request.post('/v0/authenticate')
     .send({
       email: 'dev',
       password: 'dev',
@@ -28,14 +28,15 @@ test('POST Login', async () => {
     .then((res) => {
       expect(res).toBeDefined();
       expect(res.body).toBeDefined();
-      expect(res.body.email).toBeDefined();
-      expect(res.body.email).toEqual('dev');
+      expect(res.body.owner).toBeDefined();
+      expect(res.body.owner.name).toEqual('dev');
+      expect(res.body.owner.email).toEqual('dev@dev.dev');
       expect(res.body.accessToken).toBeDefined();
     });
 });
 
 test('POST Invalid Login', async () => {
-  await request.post('/authenticate')
+  await request.post('/v0/authenticate')
     .send({
       name: 'invalid',
       password: 'invalid',

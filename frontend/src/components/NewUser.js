@@ -17,7 +17,23 @@ function NewUser() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    history.push('/login');
+    fetch('/v0/newuser', {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw res;
+        }
+        history.push('/login');
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('Error creating login, please try again');
+      });
   };
 
   return (

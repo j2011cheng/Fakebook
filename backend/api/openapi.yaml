@@ -29,6 +29,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /authenticate:
+    post:
+      description: Authenticate a login
+      requestBody:
+        description: Login details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionToken'
+        401:
+          description: Username or password incorrect
+          content:
+            application/json:
+              schema:
+                type: string
+  /newuser:
+    post:
+      description: Create a new user
+      requestBody:
+        description: User details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        200:
+          description: User created
+        409:
+          description: User already exists
   # Unfinished
   # /items:
   #   get:
@@ -120,6 +158,43 @@ components:
       required:
         - id
       additionalProperties: false
+
+    NewUser:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - name
+        - email
+        - password
+      additionalProperties: false
+
+    LoginUser:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+      additionalProperties: false
+
+    SessionToken:
+      type: object
+      properties:
+        owner:
+          $ref: '#/components/schemas/User'
+        accessToken:
+          type: string
 
     Category:
       type: object
