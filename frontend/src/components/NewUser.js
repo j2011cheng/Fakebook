@@ -1,12 +1,26 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+
+import {GlobalContext} from './App';
+
 /**
  * @return {object} JSX
  */
 function NewUser() {
   const [user, setUser] = React.useState({name: '', email: '', password: ''});
   const history = useHistory();
+
+  const [pageView, setPageView] = React.useContext(GlobalContext);
+  console.log('Login.js: \'pageView\' state -', pageView);
 
   const handleInputChange = (event) => {
     const {value, name} = event.target;
@@ -29,6 +43,7 @@ function NewUser() {
           throw res;
         }
         history.push('/login');
+        setPageView('Dashboard');
       })
       .catch((err) => {
         console.log(err);
@@ -37,31 +52,98 @@ function NewUser() {
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <h2 id='welcome'>Welcome to fakebook</h2>
-      <input
-        type='text'
-        name='name'
-        placeholder='Name'
-        onChange={handleInputChange}
-        required
-      />
-      <input
-        type='text'
-        name='email'
-        placeholder='Email'
-        onChange={handleInputChange}
-        required
-      />
-      <input
-        type='password'
-        name='password'
-        placeholder='Password'
-        onChange={handleInputChange}
-        required
-      />
-      <input type='submit' value='Submit'/>
-    </form>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          Fakebook
+        </Typography>
+        <Box component="form" noValidate onSubmit={onSubmit}
+          sx={{mt: 3}}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                type='text'
+                name='name'
+                placeholder='Name'
+                onChange={handleInputChange}
+                required
+                fullWidth
+                autoFocus
+              />
+            </Grid>
+            {/* <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                id="lastName"
+                name="lastName"
+                label="Last Name"
+                type="lastName"
+                autoComplete="family-name"
+              />
+            </Grid> */}
+            <Grid item xs={12}>
+              <TextField
+                type='text'
+                name='email'
+                placeholder='Email'
+                onChange={handleInputChange}
+                required
+                fullWidth
+              />
+            </Grid>
+            {/* <Grid item xs={12}>
+              <TextField
+                // required
+                fullWidth
+                name="phone"
+                label="Phone Number"
+                type="phone"
+                id="phone"
+              />
+            </Grid> */}
+            <Grid item xs={12}>
+              <TextField
+                type='password'
+                name='password'
+                placeholder='Password'
+                onChange={handleInputChange}
+                required
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            value="Submit"
+            fullWidth
+            variant="contained"
+            sx={{mt: 3, mb: 2}}
+            onClick={() => setPageView('Dashboard')}
+          >
+            Sign Up
+          </Button>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link
+                href="#"
+                variant="body2"
+                button onClick={() => setPageView('Sign-In')}>
+                Already have an account?
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </Container>
   );
 }
 
