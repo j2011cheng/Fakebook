@@ -61,7 +61,7 @@ function Login() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component='main' maxWidth='xs'>
       <CssBaseline />
       <Box
         sx={{
@@ -71,23 +71,23 @@ function Login() {
           alignItems: 'center',
         }}
       >
-        <Typography component="h1" variant="h5">
+        <Typography component='h1' variant='h5'>
           Fakebook
         </Typography>
         <Box
-          component="form"
+          component='form'
           onSubmit={onSubmit}
           noValidate sx={{mt: 1}}
         >
           <TextField
-            type='email'
-            name='email'
-            placeholder='Email' // may need to add phone number later
+            // may need to adjust...
+            type={'email' || 'text'}
+            name={'email' || 'phone'}
+            placeholder='Email or Phone Number'
             onChange={handleInputChange}
             required
-            margin="normal"
+            margin='normal'
             fullWidth
-            autoComplete="email"
             autoFocus
           />
           <TextField
@@ -96,15 +96,14 @@ function Login() {
             placeholder='Password'
             onChange={handleInputChange}
             required
-            margin="normal"
+            margin='normal'
             fullWidth
-            autoComplete="current-password"
           />
           <Button
-            type="submit"
-            value="Submit" // maybe remove
+            type='submit'
+            value='Submit' // maybe remove
             fullWidth
-            variant="contained"
+            variant='contained'
             sx={{mt: 3, mb: 2}}
             onClick={() => setPageView('Dashboard')}
           >
@@ -112,7 +111,7 @@ function Login() {
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="#" variant="body2" button onClick={onNewClick}>
+              <Link href='#' variant='body2' button onClick={onNewClick}>
                 {'Create new account'}
               </Link>
             </Grid>

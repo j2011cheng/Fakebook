@@ -5,6 +5,6 @@ import App from '../App';
 
 /**
  */
- test('App Renders', async () => {
+test('App Renders', async () => {
   render(<App />);
 });

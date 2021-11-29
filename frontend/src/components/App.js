@@ -15,7 +15,7 @@ export const GlobalContext = createContext({
  * @return {object} JSX
  */
 function App() {
-  const [pageView, setPageView] = useState('Sign-Up');
+  const [pageView, setPageView] = useState('Sign-In');
 
   return (
     <GlobalContext.Provider value={[pageView, setPageView]}>
@@ -26,6 +26,7 @@ function App() {
           'Sign-Up': <NewUser/>,
         }[pageView]
       }
+      {/* what to do with stuff below... or stuff above? */}
       <BrowserRouter>
         <Switch>
           <Route path='/' exact>

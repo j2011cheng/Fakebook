@@ -79,44 +79,33 @@ function NewUser() {
                 autoFocus
               />
             </Grid>
-            {/* <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                name="lastName"
-                label="Last Name"
-                type="lastName"
-                autoComplete="family-name"
-              />
-            </Grid> */}
             <Grid item xs={12}>
               <TextField
+                required
                 type='text'
                 name='email'
                 placeholder='Email'
                 onChange={handleInputChange}
-                required
                 fullWidth
               />
             </Grid>
-            {/* <Grid item xs={12}>
-              <TextField
-                // required
-                fullWidth
-                name="phone"
-                label="Phone Number"
-                type="phone"
-                id="phone"
-              />
-            </Grid> */}
             <Grid item xs={12}>
               <TextField
+                required
+                type='text' // correct type?
+                name='phone'
+                placeholder='Phone Number'
+                onChange={handleInputChange}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
                 type='password'
                 name='password'
                 placeholder='Password'
                 onChange={handleInputChange}
-                required
                 fullWidth
               />
             </Grid>

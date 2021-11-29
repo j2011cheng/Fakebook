@@ -11,17 +11,10 @@ import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from '@mui/material/ListSubheader';
+import Typography from '@mui/material/Typography';
 
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PeopleIcon from '@mui/icons-material/People';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import LayersIcon from '@mui/icons-material/Layers';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import NewListing, {Subcategory, Category} from './Filters';
+import {Button} from '@mui/material';
 
 const drawerWidth = 400;
 const useStyles = makeStyles((theme) => ({
@@ -47,8 +40,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const mdTheme = createTheme();
-
 /**
  * Dashboard Content.
  *
@@ -60,14 +51,63 @@ function DashboardContent() {
   // const toggleDrawer = () => {
   //   setOpen(!open);
   // };
+  // probably use a 'loggedin' state to show/hide things
 
   return (
-    <ThemeProvider theme={mdTheme}>
+    <ThemeProvider theme={createTheme()}>
       <Box sx={{display: 'flex'}}>
         <CssBaseline />
         <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <h2>Fakebook</h2>
+          <Toolbar
+            sx={{
+              height: 75,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+            }}
+          >
+            <Typography variant="h4" sx={{flexGrow: 1}}>
+              Fakebook
+            </Typography>
+            {/* <Box
+              component='form'
+              onSubmit={onSubmit}
+              noValidate sx={{mt: 1}}
+            >
+              <TextField
+                // may need to adjust...
+                type={'email' || 'text'}
+                name={'email' || 'phone'}
+                placeholder='Email or Phone Number'
+                onChange={handleInputChange}
+                required
+                margin='normal'
+                fullWidth
+                autoFocus
+              />
+              <TextField
+                type='password'
+                name='password'
+                placeholder='Password'
+                onChange={handleInputChange}
+                required
+                margin='normal'
+                fullWidth
+              />
+              <Button
+                type='submit'
+                value='Submit' // maybe remove
+                fullWidth
+                variant='contained'
+                sx={{mt: 3, mb: 2}}
+              >
+                Log In
+              </Button> */}
+            <Button variant="h5" component="div"
+              sx={{justifyContent: 'flex-end'}}>
+              Log In
+            </Button>
+            {/* </Box> */}
           </Toolbar>
         </AppBar>
         <Drawer
@@ -77,73 +117,20 @@ function DashboardContent() {
             paper: classes.drawerPaper,
           }}
         >
-          <Toolbar/>
           <Toolbar
             sx={{
+              height: 75,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
               px: [1],
             }}
-          >
-          </Toolbar>
+          />
+          <NewListing />
           <Divider />
-          <ListItem button>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <ShoppingCartIcon />
-            </ListItemIcon>
-            <ListItemText primary="Orders" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Customers" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <BarChartIcon />
-            </ListItemIcon>
-            <ListItemText primary="Reports" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <LayersIcon />
-            </ListItemIcon>
-            <ListItemText primary="Integrations" />
-          </ListItem>
+          <Subcategory />
           <Divider />
-          <ListSubheader inset>Categories</ListSubheader>
-          <ListItem button>
-            <ListItemIcon>
-              <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="Vehicles" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="Property Rentals" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="Apparel" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="Classifieds" />
-          </ListItem>
+          <Category />
         </Drawer>
         <Box
           component="main"
