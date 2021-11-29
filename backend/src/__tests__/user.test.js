@@ -20,7 +20,7 @@ afterAll((done) => {
 test('POST Login', async () => {
   await request.post('/v0/authenticate')
     .send({
-      email: 'dev@dev.dev',
+      loginName: 'dev@dev.dev',
       password: 'dev',
     })
     .expect(200)
@@ -38,7 +38,7 @@ test('POST Login', async () => {
 test('POST Invalid Login', async () => {
   await request.post('/v0/authenticate')
     .send({
-      email: 'invalid@invalid.invalid',
+      loginName: 'invalid@invalid.invalid',
       password: 'invalid',
     })
     .expect(401)
@@ -46,7 +46,7 @@ test('POST Invalid Login', async () => {
     .then((res) => {
       expect(res).toBeDefined();
       expect(res.text).toBeDefined();
-      expect(res.text).toEqual('Email or password is incorrect')
+      expect(res.text).toEqual('Email or phone or password is incorrect')
     });
 });
 
@@ -57,7 +57,7 @@ test('POST New User', async () => {
       email: 'user@test.com',
       password: '12345',
     })
-    .expect(200);
+    .expect(201);
 });
 
 test('POST New User Already Exists', async () => {
@@ -74,4 +74,21 @@ test('POST New User Already Exists', async () => {
     password: '12345',
   })
   .expect(409);
+});
+
+test('POST New User with Phone', async () => {
+  await request.post('/v0/newuser')
+    .send({
+      name: 'New',
+      email: 'user2@new.com',
+      phone: 'Phone-Number',
+      password: '12345',
+    })
+    .expect(201);
+  await request.post('/v0/authenticate')
+    .send({
+      loginName: 'Phone-Number',
+      password: '12345',
+    })
+    .expect(200);
 });

@@ -11,24 +11,30 @@ exports.create = async (req, res) => {
     name: name,
     email: email,
   };
-  const response = await db.selectUserByEmail(user.email);
+  if (req.body.phone) {
+    user.phone = req.body.phone;
+  }
+  const response = await db.selectUserByLoginName(user.email);
   if (response) {
     res.status(409).send();
   } else {
-    user.hash = bcrypt.hashSync(password, 10);
-    await db.insertUser(user);
-    res.status(200).send();
+    hash = bcrypt.hashSync(password, 10);
+    await db.insertUser(user, hash);
+    res.status(201).send();
   }
 };
 
 exports.authenticate = async (req, res) => {
-  const {email, password} = req.body;
-  const response = await db.selectUserByEmail(email);
-  if (response && bcrypt.compareSync(password, response.person.hash)) {
+  const {loginName, password} = req.body;
+  const response = await db.selectUserByLoginName(loginName);
+  if (response && bcrypt.compareSync(password, response.hash)) {
     const user = {
       name: response.person.name,
       email: response.person.email,
       id: response.id,
+    }
+    if (response.person.phone) {
+      user.phone = response.person.phone;
     }
     const accessToken = jwt.sign(
       {email: user.email},
@@ -41,7 +47,7 @@ exports.authenticate = async (req, res) => {
       accessToken: accessToken,
     });
   } else {
-    res.status(401).send('Email or password is incorrect');
+    res.status(401).send('Email or phone or password is incorrect');
   }
 };
 

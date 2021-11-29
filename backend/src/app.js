@@ -8,6 +8,7 @@ const OpenApiValidator = require('express-openapi-validator');
 
 const auth = require('./auth');
 const category = require('./category');
+const listing = require('./listing');
 
 const dummy = require('./dummy');
 
@@ -35,6 +36,8 @@ app.post('/v0/authenticate', auth.authenticate);
 app.post('/v0/newuser', auth.create);
 
 app.get('/v0/category', category.getCategory);
+app.get('/v0/listings', listing.getListings);
+app.get('/v0/listing/:id', listing.getListing);
 
 app.use((err, req, res, next) => {
   res.status(err.status).json({
