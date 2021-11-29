@@ -25,4 +25,4 @@ exports.selectUserByEmail = async (email) => {
   };
   const {rows} = await pool.query(query);
   return rows[0];
-}
+};
