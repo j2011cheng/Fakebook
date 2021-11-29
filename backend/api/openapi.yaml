@@ -89,13 +89,13 @@ paths:
           description: Invalid search value
         404:
           description: No items found
-  /listing:
+  /listing/{id}:
     get:
       description: Get a specific listing
       parameters:
         - name: id
-          in: query
-          description: Item id
+          in: path
+          description: Listing id
           required: true
           schema:
             type: string
@@ -108,7 +108,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListingFull'
         404:
-          description: Item not found
+          description: Listing not found
   /category:
     get:
       description: Get a category

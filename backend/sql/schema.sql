@@ -13,4 +13,4 @@ CREATE TABLE people(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), hash C
 CREATE TABLE categories(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), category jsonb, parent_id UUID, CONSTRAINT fk_parent FOREIGN KEY(parent_id) REFERENCES categories(id));
 
 -- Listing Table --
-CREATE TABLE listings(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), owner UUID, category UUID, CONSTRAINT fk_owner FOREIGN KEY(owner) REFERENCES people(id), CONSTRAINT fk_category FOREIGN KEY(category) REFERENCES categories(id));
+CREATE TABLE listings(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), listing jsonb, owner UUID, category UUID, CONSTRAINT fk_owner FOREIGN KEY(owner) REFERENCES people(id), CONSTRAINT fk_category FOREIGN KEY(category) REFERENCES categories(id));
