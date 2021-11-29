@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS people;
 DROP TABLE IF EXISTS categories;
 
 -- User Table --
-CREATE TABLE people(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), person jsonb);
+CREATE TABLE people(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), hash CHAR(60), person jsonb);
 
 -- Category Table --
 CREATE TABLE categories(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), category jsonb, parent_id UUID, CONSTRAINT fk_parent FOREIGN KEY(parent_id) REFERENCES categories(id));

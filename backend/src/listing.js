@@ -1,5 +1,5 @@
 
-const db = require('listing.db');
+const db = require('./listing.db');
 
 exports.getListings = async (req, res) => {
   const listings = await db.selectListingsByCategory(req.query.category);

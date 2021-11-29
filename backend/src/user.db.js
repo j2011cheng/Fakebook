@@ -8,20 +8,21 @@ const pool = new Pool({
   password: process.env.POSTGRES_PASSWORD,
 });
 
-exports.insertUser = async (user) => {
-  const insert = 'INSERT INTO people(person) VALUES ($1)';
+exports.insertUser = async (user, hash) => {
+  const insert = 'INSERT INTO people(person, hash) VALUES ($1, $2)';
   const query = {
     text: insert,
-    values: [user],
+    values: [user, hash],
   };
   await pool.query(query);
 };
 
-exports.selectUserByEmail = async (email) => {
-  let select = `SELECT id,person FROM people WHERE person->>'email' = $1`;
+exports.selectUserByLoginName = async (loginName) => {
+  let select = `SELECT id,hash,person FROM people WHERE person->>'email' = $1
+    OR person->>'phone' = $1`;
   const query = {
     text: select,
-    values: [email],
+    values: [loginName],
   };
   const {rows} = await pool.query(query);
   return rows[0];

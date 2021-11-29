@@ -63,7 +63,7 @@ paths:
             schema:
               $ref: '#/components/schemas/NewUser'
       responses:
-        200:
+        201:
           description: User created
         409:
           description: User already exists
@@ -161,6 +161,8 @@ components:
         id:
           type: string
           format: uuid
+        phone:
+          type: string
       required:
         - name
         - email
@@ -177,6 +179,8 @@ components:
           format: email
         password:
           type: string
+        phone:
+          type: string
       required:
         - name
         - email
@@ -186,13 +190,12 @@ components:
     LoginUser:
       type: object
       properties:
-        email:
+        loginName:
           type: string
-          format: email
         password:
           type: string
       required:
-        - email
+        - loginName
         - password
       additionalProperties: false
 
