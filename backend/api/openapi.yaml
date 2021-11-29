@@ -67,24 +67,31 @@ paths:
           description: User created
         409:
           description: User already exists
-  # Unfinished
-  # /items:
-  #   get:
-  #     description: Get listed items
-  #     responses:
-  #       200:
-  #         description: Successful
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/ItemList'
-  #       400:
-  #         description: Invalid search value
-  #       404:
-  #         description: No items found
-  /item:
+  /listings:
     get:
-      description: Get a specific item
+      description: Get listed items
+      parameters:
+        - name: category
+          in: query
+          description: Category of items
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingList'
+        400:
+          description: Invalid search value
+        404:
+          description: No items found
+  /listing:
+    get:
+      description: Get a specific listing
       parameters:
         - name: id
           in: query
@@ -99,7 +106,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Item'
+                $ref: '#/components/schemas/ListingFull'
         404:
           description: Item not found
     # Unfinished
@@ -123,6 +130,26 @@ paths:
     #       description: Unauthorized
     #     409:
     #       description: Item already listed
+  /category:
+    get:
+      description: Get a category
+      parameters:
+        - name: category
+          in: query
+          description: category id
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Got Category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        404:
+          description: Category not found
 
 components:
   schemas:
@@ -198,43 +225,98 @@ components:
         accessToken:
           type: string
 
-    Category:
+    CategoryResponse:
       type: object
       properties:
-        name:
-          type: string
+        category:
+          $ref: '#/components/schemas/Category'
         subcategories:
           type: array
           items:
             $ref: '#/components/schemas/Category'
-        attributeList:
+        filters:
           type: array
           items:
             type: string
             pattern: '^\w+$'
       required:
-        - name
+        - category
       additionalProperties: false
 
-    Item:
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+
+    Listing:
       type: object
       properties:
         category:
           $ref: '#/components/schemas/Category'
+        owner:
+          $ref: '#/components/schemas/User'
         attributes:
           type: object
         id:
           type: string
           format: uuid
+        name:
+          type: string
+        price:
+          type: string
+          pattern: '^\$?(?:\d+)?(?:.\d{2})?$'
+        image:
+          type: string
       required:
         - category
+        - owner
         - attributes
+        - id
+        - name
+        - price
       additionalProperties: false
 
-    ItemList:
+    ListingFull:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/Category'
+        owner:
+          $ref: '#/components/schemas/User'
+        attributes:
+          type: object
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        price:
+          type: string
+          pattern: '^\$?(?:\d+)?(?:.\d{2})?$'
+        description:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+      required:
+        - category
+        - owner
+        - attributes
+        - id
+        - name
+        - price
+        - description
+      additionalProperties: false
+
+    ListingList:
       type: array
       items:
-        $ref: '#/components/schemas/Item'
+        $ref: '#/components/schemas/Listing'
 
   securitySchemes:
     bearerAuth:            # arbitrary name for the security scheme

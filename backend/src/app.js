@@ -7,6 +7,7 @@ const path = require('path');
 const OpenApiValidator = require('express-openapi-validator');
 
 const auth = require('./auth');
+const listing = require('./listing');
 
 const dummy = require('./dummy');
 
@@ -32,6 +33,8 @@ app.get('/v0/dummy', dummy.get);
 // Your routes go here
 app.post('/v0/authenticate', auth.authenticate);
 app.post('/v0/newuser', auth.create);
+
+app.get('/v0/listings', listing.getListings);
 
 app.use((err, req, res, next) => {
   res.status(err.status).json({
