@@ -52,7 +52,6 @@ function Login() {
       .then((json) => {
         console.log('fetch.then2');
         localStorage.setItem('user', JSON.stringify(json));
-        history.push('/');
       })
       .catch((err) => {
         console.log('fetch.catch1');
