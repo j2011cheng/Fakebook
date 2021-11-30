@@ -39,10 +39,10 @@ exports.selectCategory = async (id) => {
   } else if (rows.length > 1) {
     cat.category.name = 'root';
   }
-  for (row in rows){
+  for (const row of rows) {
     cat.subcategories.push({
-      'id': rows[row].id,
-      'name': rows[row].category.name,
+      'id': row.id,
+      'name': row.category.name,
     });
   }
   return cat;

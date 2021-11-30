@@ -39,8 +39,9 @@ test('GET Category', async () => {
 });
 
 test('GET Bad Category', async () => {
-  await request.get('/v0/listings?category=88888888-4444-4444-4444-111111111111')
-    .expect(404)
+  const path = '/v0/listings?category=88888888-4444-4444-4444-111111111111';
+  await request.get(path)
+    .expect(404);
 });
 
 test('GET Listing By Id', async () => {
@@ -57,7 +58,7 @@ test('GET Listing By Id', async () => {
 
 test('GET Bad Listing', async () => {
   await request.get('/v0/listing/88888888-4444-4444-4444-111111111111')
-    .expect(404)
+    .expect(404);
 });
 
 test('POST Listing', async () => {
@@ -69,13 +70,13 @@ test('POST Listing', async () => {
   await request.post('/v0/listing')
     .set('Authorization', `Bearer ${owner.body.accessToken}`)
     .send({
-    category: cat.body.subcategories[0],
-    owner: owner.body.owner,
-    name: 'Test Listing',
-    price: 1,
-    description: 'This is a test listing.',
-    attributes: {},
-  })
+      category: cat.body.subcategories[0],
+      owner: owner.body.owner,
+      name: 'Test Listing',
+      price: 1,
+      description: 'This is a test listing.',
+      attributes: {},
+    })
     .expect(201);
 });
 
@@ -87,17 +88,17 @@ test('POST Bad Listing', async () => {
   await request.post('/v0/listing')
     .set('Authorization', `Bearer ${owner.body.accessToken}`)
     .send({
-    category: {
-      name: 'Bad Category',
-      id: '88888888-4444-4444-4444-111111111111',
-    },
-    owner: owner.body.owner,
-    name: 'Test Listing',
-    price: 1,
-    description: 'This is a test listing.',
-    images: [],
-    attributes: {},
-  })
+      category: {
+        name: 'Bad Category',
+        id: '88888888-4444-4444-4444-111111111111',
+      },
+      owner: owner.body.owner,
+      name: 'Test Listing',
+      price: 1,
+      description: 'This is a test listing.',
+      images: [],
+      attributes: {},
+    })
     .expect(400);
 });
 
@@ -110,13 +111,13 @@ test('GET Listings By Owner', async () => {
   await request.post('/v0/listing')
     .set('Authorization', `Bearer ${owner.body.accessToken}`)
     .send({
-    category: cat.body.subcategories[0],
-    owner: owner.body.owner,
-    name: 'Test Listing',
-    price: 1,
-    description: 'This is a test listing.',
-    attributes: {},
-  });
+      category: cat.body.subcategories[0],
+      owner: owner.body.owner,
+      name: 'Test Listing',
+      price: 1,
+      description: 'This is a test listing.',
+      attributes: {},
+    });
   await request.get(`/v0/listings?owner=${owner.body.owner.id}`)
     .send()
     .expect(200)
@@ -155,7 +156,7 @@ test('GET Listings By Filter', async () => {
         name: 'price',
         type: 'range',
       }],
-      values: [[0,500]],
+      values: [[0, 500]],
     })
     .expect(200)
     .expect('Content-Type', /json/)
@@ -182,9 +183,9 @@ test('GET No Listings By Filter', async () => {
         {
           name: 'fake',
           type: 'bool',
-        }
+        },
       ],
-      values: [[0,500], 'fake', false],
+      values: [[0, 500], 'fake', false],
     })
-    .expect(404)
+    .expect(404);
 });

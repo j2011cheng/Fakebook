@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 const db = require('./user.db');
 
@@ -7,7 +7,7 @@ const secrets = require('../data/secrets');
 
 exports.create = async (req, res) => {
   const {name, email, password} = req.body;
-  let user = {
+  const user = {
     name: name,
     email: email,
   };
@@ -32,7 +32,7 @@ exports.authenticate = async (req, res) => {
       name: response.person.name,
       email: response.person.email,
       id: response.id,
-    }
+    };
     if (response.person.phone) {
       user.phone = response.person.phone;
     }
@@ -40,7 +40,7 @@ exports.authenticate = async (req, res) => {
       {email: user.email},
       secrets.accessToken, {
         expiresIn: '30m',
-        algorithm: 'HS256'
+        algorithm: 'HS256',
       });
     res.status(200).json({
       owner: user,

@@ -46,7 +46,7 @@ test('POST Invalid Login', async () => {
     .then((res) => {
       expect(res).toBeDefined();
       expect(res.text).toBeDefined();
-      expect(res.text).toEqual('Email or phone or password is incorrect')
+      expect(res.text).toEqual('Email or phone or password is incorrect');
     });
 });
 
@@ -68,12 +68,12 @@ test('POST New User Already Exists', async () => {
       password: '12345',
     });
   await request.post('/v0/newuser')
-  .send({
-    name: 'New',
-    email: 'user@new.com',
-    password: '12345',
-  })
-  .expect(409);
+    .send({
+      name: 'New',
+      email: 'user@new.com',
+      password: '12345',
+    })
+    .expect(409);
 });
 
 test('POST New User with Phone', async () => {
@@ -97,20 +97,20 @@ test('POST Listing No Authentication', async () => {
   await request.post('/v0/listing')
     .set('Authorization', 'Bearer bad-token')
     .send({
-    category: {
-      name: 'Category',
-      id: '88888888-4444-4444-4444-111111111111',
-    },
-    owner: {
-      name: 'Bob',
-      email: 'bob@it',
-      id: '88888888-4444-4444-4444-111111111111',
-    },
-    name: 'Test Listing',
-    price: 1,
-    description: 'This is a test listing.',
-    images: [],
-    attributes: {},
-  })
+      category: {
+        name: 'Category',
+        id: '88888888-4444-4444-4444-111111111111',
+      },
+      owner: {
+        name: 'Bob',
+        email: 'bob@it',
+        id: '88888888-4444-4444-4444-111111111111',
+      },
+      name: 'Test Listing',
+      price: 1,
+      description: 'This is a test listing.',
+      images: [],
+      attributes: {},
+    })
     .expect(403);
 });

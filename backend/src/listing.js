@@ -37,7 +37,7 @@ exports.postListing = async (req, res) => {
   if (req.body.images) {
     listing.images = req.body.images;
   }
-  let created = await db.insertListing(ownerId, categoryId, listing);
+  const created = await db.insertListing(ownerId, categoryId, listing);
   if (created) {
     res.status(201).send();
   } else {

@@ -84,10 +84,10 @@ exports.selectListingsByOwner = async (owner) => {
     listings.push(listing);
   }
   return listings;
-}
+};
 
 exports.selectListingById = async (listing) => {
-  let select = `SELECT
+  const select = `SELECT
       listings.id AS id,
       listings.listing AS listing,
       categories.id AS categoryid,
@@ -132,7 +132,7 @@ exports.insertListing = async (ownerId, categoryId, listing) => {
     text: insert,
     values: [ownerId, categoryId, listing],
   };
-  let rowCount
+  let rowCount;
   try {
     ({rowCount} = await pool.query(query));
   } catch (error) {
@@ -143,7 +143,7 @@ exports.insertListing = async (ownerId, categoryId, listing) => {
   } else {
     return false;
   }
-}
+};
 
 exports.selectListingsByKeywords = async (keywords) => {
   let select = `SELECT id, listing FROM listings WHERE 1 = 2`;
@@ -195,7 +195,6 @@ exports.selectListingsByFilters = async (filters, values) => {
     text: select,
     values: valuesList,
   };
-  console.log(query);
   const {rows} = await pool.query(query);
   const listings = [];
   for (const row of rows) {

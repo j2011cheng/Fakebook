@@ -18,7 +18,7 @@ exports.insertUser = async (user, hash) => {
 };
 
 exports.selectUserByLoginName = async (loginName) => {
-  let select = `SELECT id,hash,person FROM people WHERE person->>'email' = $1
+  const select = `SELECT id,hash,person FROM people WHERE person->>'email' = $1
     OR person->>'phone' = $1`;
   const query = {
     text: select,

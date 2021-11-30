@@ -47,6 +47,7 @@ test('Get Category', async () => {
 });
 
 test('Get Bad Category', async () => {
-  await request.get('/v0/category?category=88888888-4444-4444-4444-111111111111')
-    .expect(404)
+  const path = '/v0/category?category=88888888-4444-4444-4444-111111111111';
+  await request.get(path)
+    .expect(404);
 });

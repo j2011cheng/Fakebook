@@ -31,7 +31,6 @@ test('GET Root Category Filter', async () => {
 test('GET Category Filters', async () => {
   const cat = await request.get('/v0/category');
   await request.get('/v0/filters?category=' + cat.body.subcategories[0].id)
-    .send()
     .expect(200)
     .expect('Content-Type', /json/)
     .then((res) => {
@@ -42,6 +41,5 @@ test('GET Category Filters', async () => {
 
 test('GET Bad Category Filters', async () => {
   await request.get('/v0/filters?category=88888888-4444-4444-4444-111111111111')
-    .send()
     .expect(404);
 });

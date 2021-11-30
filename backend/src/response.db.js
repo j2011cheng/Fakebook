@@ -32,13 +32,14 @@ exports.selectResponses = async (listing, owner) => {
     INNER JOIN listings
     ON responses.listing = listings.id
     WHERE listings.owner = $2
-    AND listings.id = $1;`;
+    AND listings.id = $1
+    ORDER BY responses.id ASC;`;
   const query = {
     text: select,
     values: [listing, owner],
   };
   const {rows} = await pool.query(query);
-  let responses = [];
+  const responses = [];
   if (rows.length > 0) {
     for (const row of rows) {
       responses.push(row.message);

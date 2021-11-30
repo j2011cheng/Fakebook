@@ -25,11 +25,10 @@ test('GET No Responses', async () => {
   });
   auth = owner.body;
   listings = await request.get(`/v0/listings?owner=${auth.owner.id}`);
-  const listing = '88888888-4444-4444-4444-111111111111'
+  const listing = '88888888-4444-4444-4444-111111111111';
   const path = `/v0/response/${auth.owner.id}?listing=${listing}`;
   await request.get(path)
     .set('Authorization', `Bearer ${auth.accessToken}`)
-    .send()
     .expect(404);
 });
 
@@ -71,10 +70,9 @@ test('GET Responses', async () => {
   });
   auth = owner.body;
   listings = await request.get(`/v0/listings?owner=${auth.owner.id}`);
-  const path = `/v0/response/${auth.owner.id}?listing=${listings.body[0].id}`
+  const path = `/v0/response/${auth.owner.id}?listing=${listings.body[0].id}`;
   await request.get(path)
     .set('Authorization', `Bearer ${auth.accessToken}`)
-    .send()
     .expect(200)
     .expect('Content-Type', /json/)
     .then((res) => {
