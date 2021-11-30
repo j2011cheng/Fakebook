@@ -2,6 +2,7 @@
 DROP TABLE IF EXISTS dummy;
 CREATE TABLE dummy(created TIMESTAMP WITH TIME ZONE);
 
+DROP TABLE IF EXISTS responses;
 DROP TABLE IF EXISTS filters;
 DROP TABLE IF EXISTS listings;
 DROP TABLE IF EXISTS people;
@@ -18,3 +19,6 @@ CREATE TABLE listings(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), list
 
 -- Filters Table --
 CREATE TABLE filters(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), filter jsonb, category UUID, CONSTRAINT fk_category FOREIGN KEY(category) REFERENCES categories(id));
+
+-- Responses Table --
+CREATE TABLE responses(id SERIAL PRIMARY KEY, listing UUID, message TEXT, CONSTRAINT fk_listing FOREIGN KEY(listing) REFERENCES listings(id));

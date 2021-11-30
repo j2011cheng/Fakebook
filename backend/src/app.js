@@ -10,6 +10,7 @@ const auth = require('./auth');
 const category = require('./category');
 const listing = require('./listing');
 const filters = require('./filters');
+const response = require('./response');
 
 const dummy = require('./dummy');
 
@@ -42,8 +43,10 @@ app.get('/v0/listing/:id', listing.getListing);
 app.get('/v0/filters', filters.getFilters);
 app.get('/v0/search', listing.searchListings);
 app.get('/v0/filter', listing.filterListings);
+app.get('/v0/response/:id', auth.check, response.getResponses);
 
 app.post('/v0/listing', auth.check, listing.postListing);
+app.post('/v0/response/:id', auth.check, response.postResponse);
 
 app.use((err, req, res, next) => {
   res.status(err.status).json({

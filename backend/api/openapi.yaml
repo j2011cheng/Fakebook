@@ -226,6 +226,68 @@ paths:
                 $ref: '#/components/schemas/FilterList'
         404:
           description: Category does not exist
+  /response/{id}:
+    get:
+      description: View responses to a listing
+      parameters:
+        - name: id
+          in: path
+          description: Id of user
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: listing
+          in: query
+          description: Id of listing
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        401:
+          description: Must be logged in to view responses
+        404:
+          description: This listing has no responses
+    post:
+      description: Respond to a listing
+      parameters:
+        - name: id
+          in: path
+          description: Id of listing that is responded to
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Response message
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      security:
+        - bearerAuth: []
+      responses:
+        201:
+          description: Response created
+        401:
+          description: Must be logged in to respond to a listing
+        404:
+          description: Listing not found
 
 components:
   schemas:
