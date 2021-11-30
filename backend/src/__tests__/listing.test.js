@@ -189,3 +189,17 @@ test('GET No Listings By Filter', async () => {
     })
     .expect(404);
 });
+
+test('GET Bad Filter', async () => {
+  await request.get('/v0/filter')
+    .send({
+      filters: [
+        {
+          name: 'price',
+          type: 'range',
+        },
+      ],
+      values: [[0, 500], 'fake', false],
+    })
+    .expect(400);
+});
