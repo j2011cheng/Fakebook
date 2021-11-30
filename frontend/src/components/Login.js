@@ -8,18 +8,14 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-
-import {GlobalContext} from './App';
+import {useHistory} from 'react-router-dom';
 
 /**
  * @return {object} JSX
  */
 function Login() {
   const [user, setUser] = React.useState({email: '', password: ''});
-
-  const {page} = React.useContext(GlobalContext);
-  const [pageView, setPageView] = page;
-  console.log(pageView, setPageView);
+  const history = useHistory();
 
   const handleInputChange = (event) => {
     const {value, name} = event.target;
@@ -41,11 +37,11 @@ function Login() {
         if (!res.ok) {
           throw res;
         }
-        setPageView('Dashboard');
         return res.json();
       })
       .then((json) => {
         localStorage.setItem('user', JSON.stringify(json));
+        history.push('/');
       })
       .catch((err) => {
         console.log(err);
@@ -54,8 +50,7 @@ function Login() {
   };
 
   const onNewClick = (event) => {
-    // history.push('/newuser');
-    setPageView('Sign-Up');
+    history.push('/newuser');
   };
 
   return (
@@ -98,9 +93,11 @@ function Login() {
           />
           <Button
             type='submit'
+            name='submit'
             value='Submit' // maybe remove
             fullWidth
             variant='contained'
+            disabled={(user.email && user.password ? true : false)}
             sx={{mt: 3, mb: 2}}
             onClick={onSubmit}
           >

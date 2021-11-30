@@ -1,34 +1,29 @@
-import React, {useState, createContext} from 'react';
+import React from 'react';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
+import Dummy from './Dummy';
 import Login from './Login';
-import NewUser from './NewUser';
-import Dashboard from './Dashboard';
-
-export const GlobalContext = createContext({
-  pageView: '',
-  setPageView: {},
-  categorySelected: '',
-  setCategorySelected: {},
-});
+// import NewUser from './NewUser';
+// import Dashboard from './Dashboard';
 
 /**
  * @return {object} JSX
  */
 function App() {
-  const [pageView, setPageView] = useState('Dashboard');
-  const [categorySelected, setCategorySelected] = useState('Vehicles');
-
   return (
-    <GlobalContext.Provider value={{page: [pageView, setPageView],
-      category: [categorySelected, setCategorySelected]}}>
-      {
-        {
-          'Dashboard': <Dashboard/>,
-          'Sign-In': <Login/>,
-          'Sign-Up': <NewUser/>,
-        }[pageView]
-      }
-    </GlobalContext.Provider>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" exact>
+          {/* <Dashboard/>*/}
+        </Route>
+        <Route path="/login">
+          <Login/>
+        </Route>
+        <Route path="/dummy">
+          <Dummy/>
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
 

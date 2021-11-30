@@ -1,5 +1,5 @@
 import React from 'react';
-// import {useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,18 +10,13 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
-import {GlobalContext} from './App';
-
 /**
  * @return {object} JSX
  */
 function NewUser() {
   const [user, setUser] =
     React.useState({name: '', phone: '', email: '', password: ''});
-
-  const {page} = React.useContext(GlobalContext);
-  const [pageView, setPageView] = page;
-  console.log(pageView, setPageView);
+  const history = useHistory();
 
   const handleInputChange = (event) => {
     const {value, name} = event.target;
@@ -43,13 +38,17 @@ function NewUser() {
         if (!res.ok) {
           throw res;
         }
-        setPageView('Sign-In');
+        history.push('/');
       })
       .catch((err) => {
         console.log(err);
         alert('Error creating login, please try again');
       });
   };
+
+  const signIn = (event) => {
+    history.push('/login');
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -125,7 +124,7 @@ function NewUser() {
               <Link
                 href="#"
                 variant="body2"
-                button onClick={() => setPageView('Sign-In')}>
+                button onClick={signIn}>
                 Already have an account?
               </Link>
             </Grid>

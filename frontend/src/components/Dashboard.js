@@ -12,9 +12,9 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import {Button} from '@mui/material';
+import {useHistory} from 'react-router-dom';
 
 import NewListing, {Subcategory, Category} from './Filters';
-import {GlobalContext} from './App';
 
 const drawerWidth = 400;
 const useStyles = makeStyles((theme) => ({
@@ -47,10 +47,11 @@ const useStyles = makeStyles((theme) => ({
  */
 function DashboardContent() {
   const classes = useStyles();
+  const history = useHistory();
 
-  const {page} = React.useContext(GlobalContext);
-  const [pageView, setPageView] = page;
-  console.log(pageView, setPageView);
+  const signIn = (event) => {
+    history.push('/login');
+  };
 
   // probably use a 'loggedin' state to show/hide things
 
@@ -104,7 +105,7 @@ function DashboardContent() {
               >
                 Log In
               </Button> */}
-            <Button onClick={() => setPageView('Sign-In')}
+            <Button onClick={signIn}
               variant="h5"
               component="div"
               sx={{justifyContent: 'flex-end'}}>
