@@ -42,6 +42,7 @@ app.get('/v0/listing/:id', listing.getListing);
 app.get('/v0/filters', filters.getFilters);
 
 app.post('/v0/listing', auth.check, listing.postListing);
+app.post('/v0/search', listing.searchListing);
 
 app.use((err, req, res, next) => {
   res.status(err.status).json({
