@@ -10,24 +10,24 @@ const pool = new Pool({
 
 exports.selectListingsByCategory = async (category) => {
   // https://stackoverflow.com/questions/6654774/how-to-traverse-a-tree-work-with-hierarchical-data-in-sql-code
-  // WITH Family As 
-  // ( 
+  // WITH Family As
+  // (
   //     SELECT e.id, e.supervisorid, 0 as Depth
   //     FROM Employee e
-  //     WHERE id = @SupervisorID 
-  //     UNION All 
+  //     WHERE id = @SupervisorID
+  //     UNION All
   //     SELECT e2.ID, e2.supervisorid, Depth + 1
   //     FROM Employee e2
-  //         JOIN Family 
-  //             On Family.id = e2.supervisorid 
-  // ) 
+  //         JOIN Family
+  //             On Family.id = e2.supervisorid
+  // )
   // SELECT*
-  // FROM Family 
+  // FROM Family
 
 
   let select = '';
   if (category) {
-    select += 
+    select +=
       `WITH RECURSIVE CategoryTree AS (
         SELECT c.id, c.parent_id
         FROM Categories c
@@ -99,5 +99,26 @@ exports.selectListingById = async (listing) => {
     return listing;
   } else {
     return undefined;
+  }
+};
+
+exports.insertListing = async (ownerId, categoryId, listing) => {
+  const insert = `INSERT INTO listings(owner, category, listing)
+    VALUES ($1, $2, $3)
+    ON CONFLICT DO NOTHING;`;
+  const query = {
+    text: insert,
+    values: [ownerId, categoryId, listing],
+  };
+  let rowCount
+  try {
+    ({rowCount} = await pool.query(query));
+  } catch (error) {
+    rowCount = 0;
+  }
+  if (rowCount) {
+    return true;
+  } else {
+    return false;
   }
 }

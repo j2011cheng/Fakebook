@@ -109,6 +109,25 @@ paths:
                 $ref: '#/components/schemas/ListingFull'
         404:
           description: Listing not found
+  /listing:
+    post:
+      description: Create a new listing
+      requestBody:
+        description: Listing details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListingNew'
+      security:
+        - bearerAuth: []
+      responses:
+        201:
+          description: Listing created
+        400:
+          description: Invalid listing
+        404:
+          description: Something broke
   /category:
     get:
       description: Get a category
@@ -301,6 +320,35 @@ components:
         - owner
         - attributes
         - id
+        - name
+        - price
+        - description
+      additionalProperties: false
+
+    ListingNew:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/Category'
+        owner:
+          $ref: '#/components/schemas/User'
+        attributes:
+          type: object
+        name:
+          type: string
+        price:
+          type: string
+          pattern: '^\$?(?:\d+)?(?:.\d{2})?$'
+        description:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+      required:
+        - category
+        - owner
+        - attributes
         - name
         - price
         - description

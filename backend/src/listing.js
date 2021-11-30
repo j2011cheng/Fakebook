@@ -17,3 +17,23 @@ exports.getListing = async (req, res) => {
     res.status(404).send();
   }
 };
+
+exports.postListing = async (req, res) => {
+  const ownerId = req.body.owner.id;
+  const categoryId = req.body.category.id;
+  const listing = {
+    name: req.body.name,
+    price: req.body.price,
+    description: req.body.description,
+    attributes: req.body.attributes,
+  };
+  if (req.body.images) {
+    listing.images = req.body.images;
+  }
+  let created = await db.insertListing(ownerId, categoryId, listing);
+  if (created) {
+    res.status(201).send();
+  } else {
+    res.status(400).send();
+  }
+}

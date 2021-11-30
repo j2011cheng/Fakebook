@@ -92,3 +92,25 @@ test('POST New User with Phone', async () => {
     })
     .expect(200);
 });
+
+test('POST Listing No Authentication', async () => {
+  await request.post('/v0/listing')
+    .set('Authorization', 'Bearer bad-token')
+    .send({
+    category: {
+      name: 'Category',
+      id: '88888888-4444-4444-4444-111111111111',
+    },
+    owner: {
+      name: 'Bob',
+      email: 'bob@it',
+      id: '88888888-4444-4444-4444-111111111111',
+    },
+    name: 'Test Listing',
+    price: '$1',
+    description: 'This is a test listing.',
+    images: [],
+    attributes: {},
+  })
+    .expect(403);
+});
