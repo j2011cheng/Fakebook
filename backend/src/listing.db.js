@@ -81,6 +81,9 @@ exports.selectListingsByOwner = async (owner) => {
       name: row.listing.name,
       price: row.listing.attributes.price,
     };
+    if (row.listing.images && row.listing.images[0]) {
+      listing.image = row.listing.images[0];
+    }
     listings.push(listing);
   }
   return listings;
@@ -115,9 +118,7 @@ exports.selectListingById = async (listing) => {
     listing.owner.id = row.ownerid;
     listing.attributes = row.listing.attributes;
     listing.description = row.listing.description;
-    if (row.listing.images && row.listing.images[0]) {
-      listing.image = row.listing.images[0];
-    }
+    console.log(listing);
     return listing;
   } else {
     return undefined;
