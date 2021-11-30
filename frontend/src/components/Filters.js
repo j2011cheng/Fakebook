@@ -5,7 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import ListSubheader from '@mui/material/ListSubheader';
 import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
+// import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -34,29 +34,27 @@ export default function NewListing() {
       </ListItem>
 
       {/* search bar */}
-      <Box component='form'>
-        <ListItem>
-          <TextField
-            type='text'
-            name='search'
-            placeholder='Search Marketplace'
-            margin='normal'
-            fullWidth
-            size="small"
-            sx={{marginBottom: '16px'}}
-            // some form submission func...
-            // for some reason changes scene?
-          />
-          <Button
-            variant="outlined"
-            size="large"
-          >
-            <SearchIcon/>
-            {/* add search functionality */}
-          </Button>
-        </ListItem>
-        {/* want to reduce spacing between the search box... */}
-      </Box>
+      <ListItem component='form'>
+        <TextField
+          type='text'
+          name='search'
+          placeholder='Search Marketplace'
+          margin='normal'
+          fullWidth
+          size="small"
+          sx={{marginBottom: '16px'}}
+          // some form submission func...
+          // for some reason changes scene?
+        />
+        <Button
+          variant="outlined"
+          size="large"
+        >
+          <SearchIcon/>
+          {/* add search functionality */}
+        </Button>
+      </ListItem>
+      {/* want to reduce spacing between the search box... */}
 
       {/* create new listing button */}
       <ListItem>

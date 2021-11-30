@@ -30,26 +30,32 @@ function Login() {
   };
 
   const onSubmit = (event) => {
+    console.log(JSON.stringify(user));
     event.preventDefault();
-    fetch('/v0/authenticate', {
+    fetch('http://localhost:3010/v0/authenticate', {
       method: 'POST',
-      body: JSON.stringify(user),
+      body: JSON.stringify({loginName: user.email, password: user.password}),
       headers: {
         'Content-Type': 'application/json',
       },
     })
       .then((res) => {
+        console.log('fetch.then1');
+        console.log(Object.values(res));
+        console.log(Object.keys(res));
         if (!res.ok) {
           throw res;
         }
-        setPageView('Dashboard'); // maybe move later
+        setPageView('Dashboard');
         return res.json();
       })
       .then((json) => {
+        console.log('fetch.then2');
         localStorage.setItem('user', JSON.stringify(json));
         history.push('/');
       })
       .catch((err) => {
+        console.log('fetch.catch1');
         console.log(err);
         alert('Error logging in, please try again');
       });
@@ -76,7 +82,6 @@ function Login() {
         </Typography>
         <Box
           component='form'
-          onSubmit={onSubmit}
           noValidate sx={{mt: 1}}
         >
           <TextField
@@ -105,13 +110,13 @@ function Login() {
             fullWidth
             variant='contained'
             sx={{mt: 3, mb: 2}}
-            onClick={() => setPageView('Dashboard')}
+            onClick={onSubmit}
           >
             Log In
           </Button>
           <Grid container>
             <Grid item>
-              <Link href='#' variant='body2' button onClick={onNewClick}>
+              <Link href='#' variant='body2' onClick={onNewClick}>
                 {'Create new account'}
               </Link>
             </Grid>
