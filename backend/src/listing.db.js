@@ -67,6 +67,25 @@ exports.selectListingsByCategory = async (category) => {
   return listings;
 };
 
+exports.selectListingsByOwner = async (owner) => {
+  const select = `SELECT id, listing FROM listings WHERE owner = $1;`;
+  const query = {
+    text: select,
+    values: [owner],
+  };
+  const {rows} = await pool.query(query);
+  const listings = [];
+  for (const row of rows) {
+    const listing = {
+      id: row.id,
+      name: row.listing.name,
+      price: row.listing.price,
+    };
+    listings.push(listing);
+  }
+  return listings;
+}
+
 exports.selectListingById = async (listing) => {
   let select = `SELECT
       listings.id AS id,

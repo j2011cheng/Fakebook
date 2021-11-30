@@ -100,3 +100,31 @@ test('POST Bad Listing', async () => {
   })
     .expect(400);
 });
+
+test('GET Listings By Owner', async () => {
+  const cat = await request.get('/v0/category');
+  const owner = await request.post('/v0/authenticate').send({
+    loginName: 'dev@dev.dev',
+    password: 'dev',
+  });
+  await request.post('/v0/listing')
+    .set('Authorization', `Bearer ${owner.body.accessToken}`)
+    .send({
+    category: cat.body.subcategories[0],
+    owner: owner.body.owner,
+    name: 'Test Listing',
+    price: '$1',
+    description: 'This is a test listing.',
+    attributes: {},
+  });
+  await request.get(`/v0/listings?owner=${owner.body.owner.id}`)
+    .send()
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .then((res) => {
+      expect(res).toBeDefined();
+      expect(res.body).toBeDefined();
+      expect(res.body.length).toBeDefined();
+      expect(res.body.length > 0).toBeTruthy();
+    })
+});

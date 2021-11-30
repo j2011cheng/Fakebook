@@ -71,9 +71,16 @@ paths:
     get:
       description: Get listed items
       parameters:
-        - name: category
-          in: query
+        - in: query
+          name: category
           description: Category of items
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: owner
+          description: Owner of items
           required: false
           schema:
             type: string

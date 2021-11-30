@@ -2,7 +2,14 @@
 const db = require('./listing.db');
 
 exports.getListings = async (req, res) => {
-  const listings = await db.selectListingsByCategory(req.query.category);
+  let listings;
+  if (req.query.category) {
+    listings = await db.selectListingsByCategory(req.query.category);
+  } else if (req.query.owner) {
+    listings = await db.selectListingsByOwner(req.query.owner);
+  } else {
+    listings = await db.selectListingsByCategory(undefined);
+  }
   if (listings.length) {
     res.status(200).send(listings);
   }
@@ -36,4 +43,4 @@ exports.postListing = async (req, res) => {
   } else {
     res.status(400).send();
   }
-}
+};
