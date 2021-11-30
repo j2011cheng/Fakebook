@@ -117,10 +117,10 @@ paths:
         404:
           description: Listing not found
   /search:
-    post:
+    get:
       description: Search listings by keyword
       requestBody:
-        description: keywords
+        description: Search string
         required: true
         content:
           application/json:
@@ -139,6 +139,34 @@ paths:
                 $ref: '#/components/schemas/ListingList'
         400:
           description: Invalid search value
+        404:
+          description: No items found
+  /filter:
+    get:
+      description: Filter listings by attributes
+      requestBody:
+        description: Dictionary of filters
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filters:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Filter'
+                values:
+                  type: array
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingList'
+        400:
+          description: Must have same number of filters and values
         404:
           description: No items found
   /listing:
@@ -312,8 +340,8 @@ components:
         name:
           type: string
         price:
-          type: string
-          pattern: '^\$?(?:\d+)?(?:.\d{2})?$'
+          type: number
+          format: float
         image:
           type: string
       required:
@@ -336,9 +364,6 @@ components:
           format: uuid
         name:
           type: string
-        price:
-          type: string
-          pattern: '^\$?(?:\d+)?(?:.\d{2})?$'
         description:
           type: string
         images:
@@ -351,7 +376,6 @@ components:
         - attributes
         - id
         - name
-        - price
         - description
       additionalProperties: false
 
@@ -367,8 +391,8 @@ components:
         name:
           type: string
         price:
-          type: string
-          pattern: '^\$?(?:\d+)?(?:.\d{2})?$'
+          type: number
+          format: float
         description:
           type: string
         images:

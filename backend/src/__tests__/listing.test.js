@@ -72,7 +72,7 @@ test('POST Listing', async () => {
     category: cat.body.subcategories[0],
     owner: owner.body.owner,
     name: 'Test Listing',
-    price: '$1',
+    price: 1,
     description: 'This is a test listing.',
     attributes: {},
   })
@@ -93,7 +93,7 @@ test('POST Bad Listing', async () => {
     },
     owner: owner.body.owner,
     name: 'Test Listing',
-    price: '$1',
+    price: 1,
     description: 'This is a test listing.',
     images: [],
     attributes: {},
@@ -113,7 +113,7 @@ test('GET Listings By Owner', async () => {
     category: cat.body.subcategories[0],
     owner: owner.body.owner,
     name: 'Test Listing',
-    price: '$1',
+    price: 1,
     description: 'This is a test listing.',
     attributes: {},
   });
@@ -130,7 +130,7 @@ test('GET Listings By Owner', async () => {
 });
 
 test('GET Listings By Keyword Search', async () => {
-  await request.post('/v0/search')
+  await request.get('/v0/search')
     .send({search: 'car'})
     .expect(200)
     .expect('Content-Type', /json/)
@@ -143,7 +143,48 @@ test('GET Listings By Keyword Search', async () => {
 });
 
 test('GET No Listings By Keyword Search', async () => {
-  await request.post('/v0/search')
+  await request.get('/v0/search')
     .send({search: '^&'})
     .expect(404);
+});
+
+test('GET Listings By Filter', async () => {
+  await request.get('/v0/filter')
+    .send({
+      filters: [{
+        name: 'price',
+        type: 'range',
+      }],
+      values: [[0,500]],
+    })
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .then((res) => {
+      expect(res).toBeDefined();
+      expect(res.body).toBeDefined();
+      expect(res.body.length).toBeDefined();
+      expect(res.body.length > 0).toBeTruthy();
+    });
+});
+
+test('GET No Listings By Filter', async () => {
+  await request.get('/v0/filter')
+    .send({
+      filters: [
+        {
+          name: 'price',
+          type: 'range',
+        },
+        {
+          name: 'fake',
+          type: 'enum',
+        },
+        {
+          name: 'fake',
+          type: 'bool',
+        }
+      ],
+      values: [[0,500], 'fake', false],
+    })
+    .expect(404)
 });

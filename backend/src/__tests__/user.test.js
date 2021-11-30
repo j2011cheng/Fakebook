@@ -107,7 +107,7 @@ test('POST Listing No Authentication', async () => {
       id: '88888888-4444-4444-4444-111111111111',
     },
     name: 'Test Listing',
-    price: '$1',
+    price: 1,
     description: 'This is a test listing.',
     images: [],
     attributes: {},

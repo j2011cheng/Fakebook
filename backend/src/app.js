@@ -40,9 +40,10 @@ app.get('/v0/category', category.getCategory);
 app.get('/v0/listings', listing.getListings);
 app.get('/v0/listing/:id', listing.getListing);
 app.get('/v0/filters', filters.getFilters);
+app.get('/v0/search', listing.searchListings);
+app.get('/v0/filter', listing.filterListings);
 
 app.post('/v0/listing', auth.check, listing.postListing);
-app.post('/v0/search', listing.searchListing);
 
 app.use((err, req, res, next) => {
   res.status(err.status).json({

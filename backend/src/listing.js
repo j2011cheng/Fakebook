@@ -30,10 +30,10 @@ exports.postListing = async (req, res) => {
   const categoryId = req.body.category.id;
   const listing = {
     name: req.body.name,
-    price: req.body.price,
     description: req.body.description,
     attributes: req.body.attributes,
   };
+  listing.attributes.price = req.body.price;
   if (req.body.images) {
     listing.images = req.body.images;
   }
@@ -45,12 +45,27 @@ exports.postListing = async (req, res) => {
   }
 };
 
-exports.searchListing = async (req, res) => {
+exports.searchListings = async (req, res) => {
   const keywords = req.body.search.split(' ');
-  const listings = await db.selectByKeywords(keywords);
+  const listings = await db.selectListingsByKeywords(keywords);
   if (listings.length) {
     res.status(200).send(listings);
   } else {
     res.status(404).send();
   }
-}
+};
+
+exports.filterListings = async (req, res) => {
+  const filters = req.body.filters;
+  const values = req.body.values;
+  if (filters.length === values.length) {
+    const listings = await db.selectListingsByFilters(filters, values);
+    if (listings.length) {
+      res.status(200).send(listings);
+    } else {
+      res.status(404).send();
+    }
+  } else {
+    res.status(400).send();
+  }
+};

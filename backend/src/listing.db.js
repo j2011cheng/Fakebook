@@ -57,7 +57,7 @@ exports.selectListingsByCategory = async (category) => {
     const listing = {
       id: row.id,
       name: row.listing.name,
-      price: row.listing.price,
+      price: row.listing.attributes.price,
     };
     if (row.listing.images && row.listing.images[0]) {
       listing.image = row.listing.images[0];
@@ -79,7 +79,7 @@ exports.selectListingsByOwner = async (owner) => {
     const listing = {
       id: row.id,
       name: row.listing.name,
-      price: row.listing.price,
+      price: row.listing.attributes.price,
     };
     listings.push(listing);
   }
@@ -145,7 +145,7 @@ exports.insertListing = async (ownerId, categoryId, listing) => {
   }
 }
 
-exports.selectByKeywords = async (keywords) => {
+exports.selectListingsByKeywords = async (keywords) => {
   let select = `SELECT id, listing FROM listings WHERE 1 = 2`;
   for (let i = 1; i <= keywords.length; i++) {
     select += ` OR jsonb_pretty(listing) LIKE ('%' || $${i} || '%')`;
@@ -161,7 +161,48 @@ exports.selectByKeywords = async (keywords) => {
     const listing = {
       id: row.id,
       name: row.listing.name,
-      price: row.listing.price,
+      price: row.listing.attributes.price,
+    };
+    if (row.listing.images && row.listing.images[0]) {
+      listing.image = row.listing.images[0];
+    }
+    listings.push(listing);
+  }
+  return listings;
+};
+
+exports.selectListingsByFilters = async (filters, values) => {
+  let select = `SELECT id, listing FROM listings WHERE 1 = 1`;
+  const valuesList = [];
+  let idx = 1;
+  for (let i = 0; i < filters.length; i++) {
+    valuesList.push(filters[i].name);
+    select += ` AND listing->'attributes' ? $${idx++}`;
+    if (filters[i].type === 'range') {
+      valuesList.push(values[i][0]);
+      valuesList.push(values[i][1]);
+      select += ` AND (listing->'attributes'->>$${idx-1})::float >= $${idx}
+        AND (listing->'attributes'->>$${idx++ -1})::float <= $${idx++}`;
+    } else if (filters[i].type === 'enum') {
+      valuesList.push(values[i]);
+      select += ` AND listing->>$${idx-1} = $${idx++}`;
+    } else if (filters[i].type === 'bool') {
+      valuesList.push(values[i]);
+      select += ` AND (listing->'attributes'->>$${idx-1})::bool = $${idx++}`;
+    }
+  }
+  const query = {
+    text: select,
+    values: valuesList,
+  };
+  console.log(query);
+  const {rows} = await pool.query(query);
+  const listings = [];
+  for (const row of rows) {
+    const listing = {
+      id: row.id,
+      name: row.listing.name,
+      price: row.listing.attributes.price,
     };
     if (row.listing.images && row.listing.images[0]) {
       listing.image = row.listing.images[0];
