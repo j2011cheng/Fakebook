@@ -1,7 +1,5 @@
 import React, {useState, createContext} from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
-import Dummy from './Dummy';
 import Login from './Login';
 import NewUser from './NewUser';
 import Dashboard from './Dashboard';
@@ -9,16 +7,20 @@ import Dashboard from './Dashboard';
 export const GlobalContext = createContext({
   pageView: '',
   setPageView: {},
+  categorySelected: '',
+  setCategorySelected: {},
 });
 
 /**
  * @return {object} JSX
  */
 function App() {
-  const [pageView, setPageView] = useState('Sign-In');
+  const [pageView, setPageView] = useState('Dashboard');
+  const [categorySelected, setCategorySelected] = useState('Vehicles');
 
   return (
-    <GlobalContext.Provider value={[pageView, setPageView]}>
+    <GlobalContext.Provider value={{page: [pageView, setPageView],
+      category: [categorySelected, setCategorySelected]}}>
       {
         {
           'Dashboard': <Dashboard/>,
@@ -26,23 +28,6 @@ function App() {
           'Sign-Up': <NewUser/>,
         }[pageView]
       }
-      {/* what to do with stuff below... or stuff above? */}
-      <BrowserRouter>
-        <Switch>
-          <Route path='/' exact>
-            <Dummy/>
-          </Route>
-          <Route path='/dummy'>
-            <Dummy/>
-          </Route>
-          <Route path='/login'>
-            <Login/>
-          </Route>
-          <Route path='/newuser'>
-            <NewUser/>
-          </Route>
-        </Switch>
-      </BrowserRouter>
     </GlobalContext.Provider>
   );
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,10 +16,10 @@ import {GlobalContext} from './App';
  */
 function Login() {
   const [user, setUser] = React.useState({email: '', password: ''});
-  const history = useHistory();
 
-  const [pageView, setPageView] = React.useContext(GlobalContext);
-  console.log('Login.js: \'pageView\' state -', pageView);
+  const {page} = React.useContext(GlobalContext);
+  const [pageView, setPageView] = page;
+  console.log(pageView, setPageView);
 
   const handleInputChange = (event) => {
     const {value, name} = event.target;
@@ -30,7 +29,6 @@ function Login() {
   };
 
   const onSubmit = (event) => {
-    console.log(JSON.stringify(user));
     event.preventDefault();
     fetch('http://localhost:3010/v0/authenticate', {
       method: 'POST',
@@ -40,9 +38,6 @@ function Login() {
       },
     })
       .then((res) => {
-        console.log('fetch.then1');
-        console.log(Object.values(res));
-        console.log(Object.keys(res));
         if (!res.ok) {
           throw res;
         }
@@ -50,18 +45,16 @@ function Login() {
         return res.json();
       })
       .then((json) => {
-        console.log('fetch.then2');
         localStorage.setItem('user', JSON.stringify(json));
       })
       .catch((err) => {
-        console.log('fetch.catch1');
         console.log(err);
         alert('Error logging in, please try again');
       });
   };
 
   const onNewClick = (event) => {
-    history.push('/newuser');
+    // history.push('/newuser');
     setPageView('Sign-Up');
   };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
+// import {useHistory} from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,11 +16,12 @@ import {GlobalContext} from './App';
  * @return {object} JSX
  */
 function NewUser() {
-  const [user, setUser] = React.useState({name: '', email: '', password: ''});
-  const history = useHistory();
+  const [user, setUser] =
+    React.useState({name: '', phone: '', email: '', password: ''});
 
-  const [pageView, setPageView] = React.useContext(GlobalContext);
-  console.log('Login.js: \'pageView\' state -', pageView);
+  const {page} = React.useContext(GlobalContext);
+  const [pageView, setPageView] = page;
+  console.log(pageView, setPageView);
 
   const handleInputChange = (event) => {
     const {value, name} = event.target;
@@ -42,8 +43,7 @@ function NewUser() {
         if (!res.ok) {
           throw res;
         }
-        history.push('/login');
-        setPageView('Dashboard');
+        setPageView('Sign-In');
       })
       .catch((err) => {
         console.log(err);
@@ -65,7 +65,7 @@ function NewUser() {
         <Typography component="h1" variant="h5">
           Fakebook
         </Typography>
-        <Box component="form" noValidate onSubmit={onSubmit}
+        <Box component="form" noValidate
           sx={{mt: 3}}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -116,7 +116,7 @@ function NewUser() {
             fullWidth
             variant="contained"
             sx={{mt: 3, mb: 2}}
-            onClick={() => setPageView('Dashboard')}
+            onClick={onSubmit}
           >
             Sign Up
           </Button>

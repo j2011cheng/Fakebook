@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {makeStyles} from '@material-ui/core/styles';
-
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,9 +11,10 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import {Button} from '@mui/material';
 
 import NewListing, {Subcategory, Category} from './Filters';
-import {Button} from '@mui/material';
+import {GlobalContext} from './App';
 
 const drawerWidth = 400;
 const useStyles = makeStyles((theme) => ({
@@ -47,10 +47,11 @@ const useStyles = makeStyles((theme) => ({
  */
 function DashboardContent() {
   const classes = useStyles();
-  // const [open, setOpen] = React.useState(true);
-  // const toggleDrawer = () => {
-  //   setOpen(!open);
-  // };
+
+  const {page} = React.useContext(GlobalContext);
+  const [pageView, setPageView] = page;
+  console.log(pageView, setPageView);
+
   // probably use a 'loggedin' state to show/hide things
 
   return (
@@ -103,7 +104,9 @@ function DashboardContent() {
               >
                 Log In
               </Button> */}
-            <Button variant="h5" component="div"
+            <Button onClick={() => setPageView('Sign-In')}
+              variant="h5"
+              component="div"
               sx={{justifyContent: 'flex-end'}}>
               Log In
             </Button>
