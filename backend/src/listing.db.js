@@ -59,7 +59,7 @@ exports.selectListingsByCategory = async (category) => {
       name: row.listing.name,
       price: row.listing.price,
     };
-    if (row.listing.images) {
+    if (row.listing.images && row.listing.images[0]) {
       listing.image = row.listing.images[0];
     }
     listings.push(listing);
@@ -113,8 +113,11 @@ exports.selectListingById = async (listing) => {
     listing.category.id = row.categoryid;
     listing.owner = row.owner;
     listing.owner.id = row.ownerid;
-    listing.attributes = {};
-    listing.description = '';
+    listing.attributes = row.listing.attributes;
+    listing.description = row.listing.description;
+    if (row.listing.images && row.listing.images[0]) {
+      listing.image = row.listing.images[0];
+    }
     return listing;
   } else {
     return undefined;
@@ -141,3 +144,29 @@ exports.insertListing = async (ownerId, categoryId, listing) => {
     return false;
   }
 }
+
+exports.selectByKeywords = async (keywords) => {
+  let select = `SELECT id, listing FROM listings WHERE 1 = 2`;
+  for (let i = 1; i <= keywords.length; i++) {
+    select += ` OR jsonb_pretty(listing) LIKE ('%' || $${i} || '%')`;
+  }
+  select += ';';
+  const query = {
+    text: select,
+    values: keywords,
+  };
+  const {rows} = await pool.query(query);
+  const listings = [];
+  for (const row of rows) {
+    const listing = {
+      id: row.id,
+      name: row.listing.name,
+      price: row.listing.price,
+    };
+    if (row.listing.images && row.listing.images[0]) {
+      listing.image = row.listing.images[0];
+    }
+    listings.push(listing);
+  }
+  return listings;
+};

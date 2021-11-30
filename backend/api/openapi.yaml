@@ -116,6 +116,31 @@ paths:
                 $ref: '#/components/schemas/ListingFull'
         404:
           description: Listing not found
+  /search:
+    post:
+      description: Search listings by keyword
+      requestBody:
+        description: keywords
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                search:
+                  type: string
+                  pattern: '^(?:\S+ )*(?:\S+)$'
+      responses:
+        200:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingList'
+        400:
+          description: Invalid search value
+        404:
+          description: No items found
   /listing:
     post:
       description: Create a new listing
@@ -133,8 +158,6 @@ paths:
           description: Listing created
         400:
           description: Invalid listing
-        404:
-          description: Something broke
   /category:
     get:
       description: Get a category

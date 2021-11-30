@@ -44,3 +44,13 @@ exports.postListing = async (req, res) => {
     res.status(400).send();
   }
 };
+
+exports.searchListing = async (req, res) => {
+  const keywords = req.body.search.split(' ');
+  const listings = await db.selectByKeywords(keywords);
+  if (listings.length) {
+    res.status(200).send(listings);
+  } else {
+    res.status(404).send();
+  }
+}
