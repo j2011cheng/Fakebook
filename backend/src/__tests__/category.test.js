@@ -17,17 +17,30 @@ afterAll((done) => {
   server.close(done);
 });
 
-test('Get Category', async () => {
-  // replace with uuid of vehicles category
-  const cat = await request.get('/v0/category');
-  await request.get('/v0/category?category=' + cat.body.category.id)
+test('Get All', async () => {
+  await request.get('/v0/category')
     .expect(200)
     .expect('Content-Type', /json/)
     .then((res) => {
       expect(res).toBeDefined();
       expect(res.body).toBeDefined();
-      expect(res.body.category.id).toEqual(cat.body.category.id);
-      expect(res.body.category.name).toEqual(cat.body.category.name);
+      expect(res.body.category).toBeDefined();
+      expect(res.body.category.name).toEqual('root');
+      expect(res.body.subcategories).toBeDefined();
+      expect(res.body.filters).toBeDefined();
+    });
+});
+
+test('Get Category', async () => {
+  const cat = await request.get('/v0/category');
+  await request.get('/v0/category?category=' + cat.body.subcategories[0].id)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .then((res) => {
+      expect(res).toBeDefined();
+      expect(res.body).toBeDefined();
+      expect(res.body.category.id).toEqual(cat.body.subcategories[0].id);
+      expect(res.body.category.name).toEqual(cat.body.subcategories[0].name);
       expect(res.body.subcategories).toBeDefined();
       expect(res.body.filters).toBeDefined();
     });

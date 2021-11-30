@@ -29,7 +29,7 @@ test('Get All', async () => {
 
 test('Get Category', async () => {
   const cat = await request.get('/v0/category');
-  await request.get('/v0/listings?category=' + cat.body.category.id)
+  await request.get('/v0/listings?category=' + cat.body.subcategories[0].id)
     .expect(200)
     .expect('Content-Type', /json/)
     .then((res) => {

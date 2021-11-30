@@ -10,10 +10,7 @@ const pool = new Pool({
 
 exports.selectCategory = async (id) => {
   const cat = {
-    'category': {
-      'id': id,
-      'name': '',
-    },
+    'category': {},
     'subcategories': [],
     'filters': [],
   };
@@ -39,12 +36,14 @@ exports.selectCategory = async (id) => {
       values: [id],
     };
     ({rows} = await pool.query(query));
-    for (row in rows){
-      cat.subcategories.push({
-        'id': rows[row].id,
-        'name': rows[row].category.name,
-      });
-    }
+  } else if (rows.length > 1) {
+    cat.category.name = 'root';
+  }
+  for (row in rows){
+    cat.subcategories.push({
+      'id': rows[row].id,
+      'name': rows[row].category.name,
+    });
   }
   return cat;
 };
