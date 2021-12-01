@@ -14,7 +14,7 @@ import {useHistory} from 'react-router-dom';
  * @return {object} JSX
  */
 function Login() {
-  const [user, setUser] = React.useState({email: '', password: ''});
+  const [user, setUser] = React.useState({loginName: '', password: ''});
   const history = useHistory();
 
   const handleInputChange = (event) => {
@@ -26,9 +26,12 @@ function Login() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    fetch('http://localhost:3010/v0/authenticate', {
+    fetch('/v0/authenticate', {
       method: 'POST',
-      body: JSON.stringify({loginName: user.email, password: user.password}),
+      body: JSON.stringify({
+        loginName: user.loginName,
+        password: user.password,
+      }),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -44,8 +47,8 @@ function Login() {
         history.push('/');
       })
       .catch((err) => {
-        console.log(err);
-        alert('Error logging in, please try again');
+        setUser({email: '', password: ''});
+        alert('Invalid login credentials');
       });
   };
 
@@ -72,9 +75,8 @@ function Login() {
           noValidate sx={{mt: 1}}
         >
           <TextField
-            // may need to adjust...
-            type={'email' || 'text'}
-            name={'email' || 'phone'}
+            type={'text'}
+            name={'loginName'}
             placeholder='Email or Phone Number'
             onChange={handleInputChange}
             required
@@ -94,10 +96,9 @@ function Login() {
           <Button
             type='submit'
             name='submit'
-            value='Submit' // maybe remove
+            value='Login'
             fullWidth
             variant='contained'
-            disabled={(user.email && user.password ? true : false)}
             sx={{mt: 3, mb: 2}}
             onClick={onSubmit}
           >

@@ -1,4 +1,4 @@
-import {render, fireEvent} from '@testing-library/react';
+import {render, fireEvent, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import {screen} from '@testing-library/react'; // , waitFor
@@ -7,13 +7,25 @@ import {setupServer} from 'msw/node';
 
 import Login from '../Login';
 
-const URL = '/v0/login';
+const URL = '/v0/authenticate';
 
 const server = setupServer(
-  rest.get(URL, (req, res, ctx) => {
-    return res(ctx.json({message: 'Hello CSE183'}));
+  rest.post(URL, (req, res, ctx) => {
+    return res(
+      ctx.json({key: 'value'}),
+    );
   }),
 );
+
+// https://stackoverflow.com/questions/58524183/
+// how-to-mock-history-push-with-the-new-react-router-hooks-using-jest/59451956
+const mockHistoryPush = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: mockHistoryPush,
+  }),
+}));
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
@@ -26,10 +38,9 @@ test('Correct Accessibility', () => {
   const button = screen.getByRole('button');
   expect(email).toHaveProperty('placeholder', 'Email or Phone Number');
   expect(password).toHaveProperty('placeholder', 'Password');
-  expect(button).toHaveAttribute('disabled');
 });
 
-test('Login with Email and password', () => {
+test('Login with Email and Password', async () => {
   render(<Login />);
   const email = screen.queryByPlaceholderText('Email', {exact: false});
   const password = screen.queryByPlaceholderText('Password', {exact: false});
@@ -37,4 +48,30 @@ test('Login with Email and password', () => {
   userEvent.type(email, 'dev@dev.dev');
   userEvent.type(password, 'dev');
   fireEvent.click(button);
+  await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/'));
 });
+
+test('Login with Email and Bad Password', async () => {
+  server.use(
+    rest.post(URL, (req, res, ctx) => {
+      return res(ctx.status(401));
+    }),
+  );
+  jest.spyOn(window, 'alert').mockImplementation(() => {});
+  render(<Login />);
+  const email = screen.queryByPlaceholderText('Email', {exact: false});
+  const password = screen.queryByPlaceholderText('Password', {exact: false});
+  const button = screen.queryByRole('button');
+  userEvent.type(email, 'dev@dev.dev');
+  userEvent.type(password, 'd');
+  fireEvent.click(button);
+  await waitFor(() => expect(alert)
+    .toHaveBeenCalledWith('Invalid login credentials'));
+});
+
+test('Click New User', async () => {
+  render(<Login />);
+  const button = screen.queryByRole('link');
+  fireEvent.click(button);
+  await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/newuser'));
+})
