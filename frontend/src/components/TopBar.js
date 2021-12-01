@@ -5,6 +5,8 @@ import Typography from '@mui/material/Typography';
 import {Button} from '@mui/material';
 import {useHistory} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 
 // const drawerWidth = 400;
 const useStyles = makeStyles((theme) => ({
@@ -23,9 +25,51 @@ function TopBar() {
   const classes = useStyles();
   const history = useHistory();
 
-  const signIn = (event) => {
-    history.push('/login');
+  // const signIn = (event) => {
+  //   history.push('/login');
+  // };
+
+  const [user, setUser] = React.useState({loginName: '', password: ''});
+  // const history = useHistory();
+
+  const handleInputChange = (event) => {
+    const {value, name} = event.target;
+    const u = user;
+    u[name] = value;
+    setUser(u);
   };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    fetch('/v0/authenticate', {
+      method: 'POST',
+      body: JSON.stringify({
+        loginName: user.loginName,
+        password: user.password,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw res;
+        }
+        return res.json();
+      })
+      .then((json) => {
+        localStorage.setItem('user', JSON.stringify(json));
+        history.push('/');
+      })
+      .catch((err) => {
+        setUser({email: '', password: ''});
+        alert('Invalid login credentials');
+      });
+  };
+
+  // const onNewClick = (event) => {
+  //   history.push('/newuser');
+  // };
 
   // if signed in, show an account badge, otherwise show a fast login...
   // only login button for mobile and fast login for desktop...
@@ -43,47 +87,40 @@ function TopBar() {
         <Typography variant="h4" sx={{flexGrow: 1}}>
           Fakebook
         </Typography>
-        {/* <Box
-              component='form'
-              onSubmit={onSubmit}
-              noValidate sx={{mt: 1}}
-            >
-              <TextField
-                // may need to adjust...
-                type={'email' || 'text'}
-                name={'email' || 'phone'}
-                placeholder='Email or Phone Number'
-                onChange={handleInputChange}
-                required
-                margin='normal'
-                fullWidth
-                autoFocus
-              />
-              <TextField
-                type='password'
-                name='password'
-                placeholder='Password'
-                onChange={handleInputChange}
-                required
-                margin='normal'
-                fullWidth
-              />
-              <Button
-                type='submit'
-                value='Submit' // maybe remove
-                fullWidth
-                variant='contained'
-                sx={{mt: 3, mb: 2}}
-              >
-                Log In
-              </Button> */}
-        <Button onClick={signIn}
-          variant="h5"
-          component="div"
-          sx={{justifyContent: 'flex-end'}}>
-          Log In
-        </Button>
-        {/* </Box> */}
+        <Box
+          component='form'
+        >
+          <TextField
+            type={'email' || 'text'}
+            name={'email' || 'phone'}
+            placeholder='Email or Phone Number'
+            onChange={handleInputChange}
+            required
+            margin='normal'
+            // fullWidth
+            autoFocus
+          />
+          <TextField
+            type='password'
+            name='password'
+            placeholder='Password'
+            onChange={handleInputChange}
+            required
+            margin='normal'
+            // fullWidth
+          />
+          <Button
+            type='submit'
+            value='Submit'
+            // fullWidth
+            variant='contained'
+            margin='normal'
+            sx={{mt: 3, mb: 2, justifyContent: 'flex-end'}}
+            onClick={onSubmit}
+          >
+            Log In
+          </Button>
+        </Box>
       </Toolbar>
     </AppBar>
   );
