@@ -48,7 +48,11 @@ function Login() {
       })
       .catch((err) => {
         setUser({email: '', password: ''});
-        alert('Invalid login credentials');
+        if (err.status === 401) {
+          alert('Invalid login credentials');
+        } else {
+          alert('Server Error');
+        }
       });
   };
 
@@ -72,7 +76,7 @@ function Login() {
         </Typography>
         <Box
           component='form'
-          noValidate sx={{mt: 1}}
+          sx={{mt: 1}}
         >
           <TextField
             type={'text'}
@@ -106,8 +110,8 @@ function Login() {
           </Button>
           <Grid container>
             <Grid item>
-              <Link href='#' variant='body2' onClick={onNewClick}>
-                {'Create new account'}
+              <Link href='' variant='body2' onClick={onNewClick}>
+                Create new account
               </Link>
             </Grid>
           </Grid>

@@ -32,18 +32,16 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 test('Correct Accessibility', () => {
-  render(<Login />);
-  const email = screen.getByPlaceholderText('Email', {exact: false});
-  const password = screen.getByPlaceholderText('Password', {exact: false});
+  render(<Login/>);
+  const email = screen.getByPlaceholderText('Email or Phone Number');
+  const password = screen.getByPlaceholderText('Password');
   const button = screen.getByRole('button');
-  expect(email).toHaveProperty('placeholder', 'Email or Phone Number');
-  expect(password).toHaveProperty('placeholder', 'Password');
 });
 
 test('Login with Email and Password', async () => {
-  render(<Login />);
-  const email = screen.queryByPlaceholderText('Email', {exact: false});
-  const password = screen.queryByPlaceholderText('Password', {exact: false});
+  render(<Login/>);
+  const email = screen.queryByPlaceholderText('Email or Phone Number');
+  const password = screen.queryByPlaceholderText('Password');
   const button = screen.queryByRole('button');
   userEvent.type(email, 'dev@dev.dev');
   userEvent.type(password, 'dev');
@@ -58,9 +56,9 @@ test('Login with Email and Bad Password', async () => {
     }),
   );
   jest.spyOn(window, 'alert').mockImplementation(() => {});
-  render(<Login />);
-  const email = screen.queryByPlaceholderText('Email', {exact: false});
-  const password = screen.queryByPlaceholderText('Password', {exact: false});
+  render(<Login/>);
+  const email = screen.queryByPlaceholderText('Email or Phone Number');
+  const password = screen.queryByPlaceholderText('Password');
   const button = screen.queryByRole('button');
   userEvent.type(email, 'dev@dev.dev');
   userEvent.type(password, 'd');
@@ -69,8 +67,26 @@ test('Login with Email and Bad Password', async () => {
     .toHaveBeenCalledWith('Invalid login credentials'));
 });
 
+test('Login Server Error', async () => {
+  server.use(
+    rest.post(URL, (req, res, ctx) => {
+      return res(ctx.status(500));
+    }),
+  );
+  jest.spyOn(window, 'alert').mockImplementation(() => {});
+  render(<Login/>);
+  const email = screen.queryByPlaceholderText('Email or Phone Number');
+  const password = screen.queryByPlaceholderText('Password');
+  const button = screen.queryByRole('button');
+  userEvent.type(email, 'dev@dev.dev');
+  userEvent.type(password, 'd');
+  fireEvent.click(button);
+  await waitFor(() => expect(alert)
+    .toHaveBeenCalledWith('Server Error'));
+});
+
 test('Click New User', async () => {
-  render(<Login />);
+  render(<Login/>);
   const button = screen.queryByRole('link');
   fireEvent.click(button);
   await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/newuser'));

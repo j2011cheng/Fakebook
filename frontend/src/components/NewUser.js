@@ -41,8 +41,12 @@ function NewUser() {
         history.push('/');
       })
       .catch((err) => {
-        console.log(err);
-        alert('Error creating login, please try again');
+        if (err.status === 409) {
+          setUser({name: '', phone: '', email: '', password: ''});
+          alert('User already exists');
+        } else {
+          alert('Server Error');
+        }
       });
   };
 
@@ -64,7 +68,7 @@ function NewUser() {
         <Typography component="h1" variant="h5">
           Fakebook
         </Typography>
-        <Box component="form" noValidate
+        <Box component="form"
           sx={{mt: 3}}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -90,8 +94,7 @@ function NewUser() {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                required
-                type='text' // correct type?
+                type='text'
                 name='phone'
                 placeholder='Phone Number'
                 onChange={handleInputChange}
@@ -119,12 +122,9 @@ function NewUser() {
           >
             Sign Up
           </Button>
-          <Grid container justifyContent="flex-end">
+          <Grid container justifyContent='flex-end'>
             <Grid item>
-              <Link
-                href="#"
-                variant="body2"
-                button onClick={signIn}>
+              <Link href='' variant='body2' onClick={signIn}>
                 Already have an account?
               </Link>
             </Grid>
