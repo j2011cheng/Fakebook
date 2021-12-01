@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper';
 /**
  * @return {object} JSX
  */
-function TopBar() {
+function Body() {
   // file for body of front end (similar to filters.js)
 
   // buy and sell description area with login button...
@@ -24,7 +24,7 @@ function TopBar() {
 
   return (
     <Box
-      component="main"
+      component='main'
       sx={{
         backgroundColor: (theme) =>
           theme.palette.mode === 'light' ?
@@ -77,4 +77,4 @@ function TopBar() {
   );
 }
 
-export default TopBar;
+export default Body;
