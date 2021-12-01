@@ -13,8 +13,7 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path='/'>
-          <Dashboard/>
+        <Route path='/listing'>
         </Route>
         <Route path='/login'>
           <Login/>
@@ -24,6 +23,9 @@ function App() {
         </Route>
         <Route path='/dummy'>
           <Dummy/>
+        </Route>
+        <Route path='/'>
+          <Dashboard/>
         </Route>
       </Switch>
     </BrowserRouter>
