@@ -1,44 +1,41 @@
 import * as React from 'react';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {makeStyles} from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
+// import {makeStyles} from '@material-ui/core/styles';
+// import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Divider from '@mui/material/Divider';
+// import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import {Button} from '@mui/material';
-import {useHistory} from 'react-router-dom';
 
-import NewListing, {Subcategory, Category} from './Filters';
+import TopBar from './TopBar';
+import SideBar from './SideBar';
 
-const drawerWidth = 400;
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerContainer: {
-    overflow: 'auto',
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(0),
-  },
-}));
+// const drawerWidth = 400;
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     display: 'flex',
+//   },
+//   appBar: {
+//     zIndex: theme.zIndex.drawer + 1,
+//   },
+//   drawer: {
+//     width: drawerWidth,
+//     flexShrink: 0,
+//   },
+//   drawerPaper: {
+//     width: drawerWidth,
+//   },
+//   drawerContainer: {
+//     overflow: 'auto',
+//   },
+//   content: {
+//     flexGrow: 1,
+//     padding: theme.spacing(0),
+//   },
+// }));
 
 /**
  * Dashboard Content.
@@ -46,96 +43,14 @@ const useStyles = makeStyles((theme) => ({
  * @return {object} JSX
  */
 function DashboardContent() {
-  const classes = useStyles();
-  const history = useHistory();
-
-  const signIn = (event) => {
-    history.push('/login');
-  };
-
   // probably use a 'loggedin' state to show/hide things
 
   return (
     <ThemeProvider theme={createTheme()}>
       <Box sx={{display: 'flex'}}>
         <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar
-            sx={{
-              height: 75,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-            }}
-          >
-            <Typography variant="h4" sx={{flexGrow: 1}}>
-              Fakebook
-            </Typography>
-            {/* <Box
-              component='form'
-              onSubmit={onSubmit}
-              noValidate sx={{mt: 1}}
-            >
-              <TextField
-                // may need to adjust...
-                type={'email' || 'text'}
-                name={'email' || 'phone'}
-                placeholder='Email or Phone Number'
-                onChange={handleInputChange}
-                required
-                margin='normal'
-                fullWidth
-                autoFocus
-              />
-              <TextField
-                type='password'
-                name='password'
-                placeholder='Password'
-                onChange={handleInputChange}
-                required
-                margin='normal'
-                fullWidth
-              />
-              <Button
-                type='submit'
-                value='Submit' // maybe remove
-                fullWidth
-                variant='contained'
-                sx={{mt: 3, mb: 2}}
-              >
-                Log In
-              </Button> */}
-            <Button onClick={signIn}
-              variant="h5"
-              component="div"
-              sx={{justifyContent: 'flex-end'}}>
-              Log In
-            </Button>
-            {/* </Box> */}
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          className={classes.drawer}
-          variant="permanent"
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <Toolbar
-            sx={{
-              height: 75,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-            }}
-          />
-          <NewListing />
-          <Divider />
-          <Subcategory />
-          <Divider />
-          <Category />
-        </Drawer>
+        <TopBar/>
+        <SideBar/>
         <Box
           component="main"
           sx={{

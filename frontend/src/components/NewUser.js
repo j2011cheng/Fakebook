@@ -48,7 +48,7 @@ function NewUser() {
 
   const signIn = (event) => {
     history.push('/login');
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">

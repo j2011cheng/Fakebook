@@ -1,19 +1,19 @@
 import {render, fireEvent} from '@testing-library/react';
-import userEvent from '@testing-library/user-event'
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import {screen, waitFor} from '@testing-library/react';
-import {rest} from 'msw'
-import {setupServer} from 'msw/node'
+import {screen} from '@testing-library/react'; // , waitFor
+import {rest} from 'msw';
+import {setupServer} from 'msw/node';
 
 import Login from '../Login';
 
-const URL = '/v0/login'
+const URL = '/v0/login';
 
 const server = setupServer(
   rest.get(URL, (req, res, ctx) => {
-    return res(ctx.json({message: 'Hello CSE183'}))
+    return res(ctx.json({message: 'Hello CSE183'}));
   }),
-)
+);
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
