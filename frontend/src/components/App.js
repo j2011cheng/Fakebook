@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
 import Dummy from './Dummy';
 import Login from './Login';
-// import NewUser from './NewUser';
+import NewUser from './NewUser';
 // import Dashboard from './Dashboard';
 
 /**
@@ -18,6 +18,9 @@ function App() {
         </Route>
         <Route path="/login">
           <Login/>
+        </Route>
+        <Route path='/newuser'>
+          <NewUser/>
         </Route>
         <Route path="/dummy">
           <Dummy/>
