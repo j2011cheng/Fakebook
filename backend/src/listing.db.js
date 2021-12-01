@@ -59,9 +59,7 @@ exports.selectListingsByCategory = async (category) => {
       name: row.listing.name,
       price: row.listing.attributes.price,
     };
-    if (row.listing.images && row.listing.images[0]) {
-      listing.image = row.listing.images[0];
-    }
+    listing.image = row.listing.images[0];
     listings.push(listing);
   }
   return listings;
@@ -81,9 +79,7 @@ exports.selectListingsByOwner = async (owner) => {
       name: row.listing.name,
       price: row.listing.attributes.price,
     };
-    if (row.listing.images && row.listing.images[0]) {
-      listing.image = row.listing.images[0];
-    }
+    listing.image = row.listing.images[0];
     listings.push(listing);
   }
   return listings;
@@ -118,7 +114,7 @@ exports.selectListingById = async (listing) => {
     listing.owner.id = row.ownerid;
     listing.attributes = row.listing.attributes;
     listing.description = row.listing.description;
-    console.log(listing);
+    // console.log(listing);
     return listing;
   } else {
     return undefined;
@@ -164,9 +160,7 @@ exports.selectListingsByKeywords = async (keywords) => {
       name: row.listing.name,
       price: row.listing.attributes.price,
     };
-    if (row.listing.images && row.listing.images[0]) {
-      listing.image = row.listing.images[0];
-    }
+    listing.image = row.listing.images[0];
     listings.push(listing);
   }
   return listings;
@@ -179,17 +173,21 @@ exports.selectListingsByFilters = async (filters, values) => {
   for (let i = 0; i < filters.length; i++) {
     valuesList.push(filters[i].name);
     select += ` AND listing->'attributes' ? $${idx++}`;
-    if (filters[i].type === 'range') {
-      valuesList.push(values[i][0]);
-      valuesList.push(values[i][1]);
-      select += ` AND (listing->'attributes'->>$${idx-1})::float >= $${idx}
-        AND (listing->'attributes'->>$${idx++ -1})::float <= $${idx++}`;
-    } else if (filters[i].type === 'enum') {
-      valuesList.push(values[i]);
-      select += ` AND listing->>$${idx-1} = $${idx++}`;
-    } else if (filters[i].type === 'bool') {
-      valuesList.push(values[i]);
-      select += ` AND (listing->'attributes'->>$${idx-1})::bool = $${idx++}`;
+    switch (filters[i].type) {
+      case 'range':
+        valuesList.push(values[i][0]);
+        valuesList.push(values[i][1]);
+        select += ` AND (listing->'attributes'->>$${idx-1})::float >= $${idx}
+          AND (listing->'attributes'->>$${idx++ -1})::float <= $${idx++}`;
+        break;
+      case 'enum':
+        valuesList.push(values[i]);
+        select += ` AND listing->>$${idx-1} = $${idx++}`;
+        break;
+      case 'bool':
+        valuesList.push(values[i]);
+        select += ` AND (listing->'attributes'->>$${idx-1})::bool = $${idx++}`;
+        break;
     }
   }
   const query = {

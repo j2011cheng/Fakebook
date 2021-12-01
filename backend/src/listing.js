@@ -34,9 +34,7 @@ exports.postListing = async (req, res) => {
     attributes: req.body.attributes,
   };
   listing.attributes.price = req.body.price;
-  if (req.body.images) {
-    listing.images = req.body.images;
-  }
+  listing.images = req.body.images;
   const created = await db.insertListing(ownerId, categoryId, listing);
   if (created) {
     res.status(201).send();
