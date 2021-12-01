@@ -1,8 +1,5 @@
 import * as React from 'react';
 import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import ListSubheader from '@mui/material/ListSubheader';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
@@ -14,6 +11,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 
 import Filters from './Filters';
+import Categories from './Categories';
 
 /**
  * Search Bar
@@ -67,32 +65,6 @@ function NewListing() {
           + Create New Listing
           {/* need to add functionality */}
         </Button>
-      </ListItem>
-    </div>
-  );
-}
-
-/**
- * Primary filter
- *
- * @return {object} JSX
- */
-function Categories() {
-  // return (<div></div>);
-  return (
-    <div>
-      <ListSubheader>Categories</ListSubheader>
-      <ListItem>
-        <ListItemIcon>
-          <AssignmentIcon />
-        </ListItemIcon>
-        <ListItemText primary="Vehicles" />
-      </ListItem>
-      <ListItem>
-        <ListItemIcon>
-          <AssignmentIcon />
-        </ListItemIcon>
-        <ListItemText primary="Computers" />
       </ListItem>
     </div>
   );
