@@ -8,17 +8,12 @@ import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
-import Box from '@mui/material/Box';
 import {makeStyles} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
+
+import Filters from './Filters';
 
 /**
  * Search Bar
@@ -78,155 +73,28 @@ function NewListing() {
 }
 
 /**
- * Secondary Filter
- * Populate data based on category selected
- *
- * @return {object} JSX
- */
-function Subcategory() {
-  let x;
-  // return (<div></div>);
-
-  if (x === 'Computers') { // x === categorySelected
-    return (
-      <div>
-        <ListItem sx={{marginBottom: '-15px'}}>
-          <ListItemText primary="Filters" />
-          {/* add by distance functionality*/}
-        </ListItem>
-        <ListItem sx={{marginBottom: '-15px'}}>
-          <ListItemText primary="Price" />
-          <MinMax/>
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="OS" />
-          <DropDown/>
-        </ListItem>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <ListItem sx={{marginBottom: '-15px'}}>
-          <ListItemText primary="Filters" />
-          {/* add by distance functionality*/}
-        </ListItem>
-        <ListItem sx={{marginBottom: '-15px'}}>
-          <ListItemText primary="Price" />
-          <MinMax/>
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="Year" />
-          <MinMax/>
-        </ListItem>
-      </div>
-    );
-  }
-}
-
-/**
  * Primary filter
  *
  * @return {object} JSX
  */
-function Category() {
+function Categories() {
   // return (<div></div>);
   return (
     <div>
       <ListSubheader>Categories</ListSubheader>
-      <ListItem> {/* button onClick={() => setCategorySelected('Vehicles')} */}
+      <ListItem>
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary="Vehicles" />
       </ListItem>
-      <ListItem> {/* button onClick={() => setCategorySelected('Computers')} */}
+      <ListItem>
         <ListItemIcon>
           <AssignmentIcon />
         </ListItemIcon>
         <ListItemText primary="Computers" />
       </ListItem>
     </div>
-  );
-}
-
-/**
- * Dropdown Menu - helper function
- *
- * @return {object} JSX
- */
-function DropDown() {
-  // prob have an onsubmit func here
-
-  const [personName, setPersonName] = React.useState([]);
-  const names = ['Windows', 'Mac', 'Linux'];
-
-  const handleChange = (event) => {
-    const {
-      target: {value},
-    } = event;
-    setPersonName(
-      // On autofill we get a the stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
-
-  return (
-    <div>
-      <FormControl sx={{m: 1, width: 300}}>
-        <InputLabel id="demo-multiple-checkbox-label">Brand</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<OutlinedInput label="Tag" />}
-          renderValue={(selected) => selected.join(', ')}
-        >
-          {names.map((name) => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
-  );
-}
-
-/**
- * Price Range - helper function
- *
- * @return {object} JSX
- */
-function MinMax() {
-  // prob have an onsubmit func here
-
-  return (
-    <Box
-      component="form"
-      noValidate
-      autoComplete="off"
-    >
-      <ListItem>
-        <TextField
-          id="filled-basic"
-          label="Min"
-          variant="filled"
-          sx={{width: '125px', marginLeft: '45px'}}/>
-        <ListItemText
-          sx={{width: '45px', textAlign: 'center'}}>
-          to
-        </ListItemText>
-        <TextField
-          id="filled-basic"
-          label="Max"
-          variant="filled"
-          sx={{width: '125px'}}/>
-      </ListItem>
-    </Box>
   );
 }
 
@@ -269,11 +137,11 @@ function SideBar() {
           px: [1],
         }}
       />
-      <NewListing />
-      <Divider />
-      <Subcategory />
-      <Divider />
-      <Category />
+      <NewListing/>
+      <Divider/>
+      <Filters/>
+      <Divider/>
+      <Categories/>
     </Drawer>
   );
 }
