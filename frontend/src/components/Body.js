@@ -12,6 +12,8 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import {Typography} from '@mui/material';
 
+import ListingList from './ListingList';
+
 /**
  * Advertisement section of body
  *
@@ -115,27 +117,6 @@ function BodyCategory() {
 }
 
 /**
- * Show listings section of body
- *
- * @return {object} JSX
- */
-function ShowListings() {
-  // listings shown
-
-  return (
-    <Grid item xs={12}>
-      <Paper
-        sx={{
-          p: 2,
-          display: 'sflex',
-          flexDirection: 'column',
-        }}>
-      </Paper>
-    </Grid>
-  );
-}
-
-/**
  *
  * @return {object} JSX
  */
@@ -147,7 +128,7 @@ function Body() {
         <Grid container spacing={3}>
           <Advertisement/>
           <BodyCategory/>
-          <ShowListings/>
+          <ListingList/>
         </Grid>
       </Container>
     </Box>
