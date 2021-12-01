@@ -4,7 +4,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Dummy from './Dummy';
 import Login from './Login';
 import NewUser from './NewUser';
-// import Dashboard from './Dashboard';
+import Dashboard from './Dashboard';
 
 /**
  * @return {object} JSX
@@ -13,16 +13,16 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" exact>
-          {/* <Dashboard/>*/}
+        <Route path='/' exact>
+          <Dashboard/>
         </Route>
-        <Route path="/login">
+        <Route path='/login'>
           <Login/>
         </Route>
         <Route path='/newuser'>
           <NewUser/>
         </Route>
-        <Route path="/dummy">
+        <Route path='/dummy'>
           <Dummy/>
         </Route>
       </Switch>
