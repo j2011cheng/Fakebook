@@ -1,74 +1,12 @@
-import * as React from 'react';
-import ListItem from '@mui/material/ListItem';
-import ListSubheader from '@mui/material/ListSubheader';
-import TextField from '@mui/material/TextField';
-import SearchIcon from '@mui/icons-material/Search';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 
-import Filters from './Filters';
+import SideBarTopContent from './SideBarTopContent';
+// import Filters from './Filters';
 import Categories from './Categories';
-
-/**
- * Search Bar
- * Also create listings
- *
- * @return {object} JSX
- */
-function NewListing() {
-  // return (<div></div>);
-  let x;
-
-  return (
-    <div>
-      {/* potentially swap to breadcrumbs component */}
-      {/* swap to breadcrumbs api later if needed */}
-      <ListSubheader sx={{marginBottom: '-15px'}}>
-        {`Marketplace > ${x}`}
-        {/* | x = categorySelected */}
-      </ListSubheader>
-      <ListItem sx={{marginBottom: '-20px'}}>
-        <Typography variant="h5">
-          {`${x}`}
-          {/* | x = categorySelected */}
-        </Typography>
-      </ListItem>
-      <ListItem component='form' sx={{marginBottom: '-15px'}}>
-        <TextField
-          type='text'
-          name='search'
-          placeholder='Search Marketplace'
-          margin='normal'
-          fullWidth
-          size="small"
-          sx={{marginBottom: '16px'}}
-          // some form submission func...
-          // for some reason changes scene?
-        />
-        <Button
-          variant="outlined"
-          size="large"
-        >
-          <SearchIcon/>
-          {/* search icon press calls search functionality */}
-        </Button>
-      </ListItem>
-      <ListItem sx={{marginBottom: '10px'}}>
-        <Button
-          variant="contained"
-          fullWidth
-        >
-          + Create New Listing
-          {/* need to add functionality */}
-        </Button>
-      </ListItem>
-    </div>
-  );
-}
 
 const drawerWidth = 400;
 const useStyles = makeStyles((theme) => ({
@@ -109,9 +47,9 @@ function SideBar() {
           px: [1],
         }}
       />
-      <NewListing/>
+      <SideBarTopContent/>
       <Divider/>
-      <Filters/>
+      {/* <Filters/>*/}
       <Divider/>
       <Categories/>
     </Drawer>
