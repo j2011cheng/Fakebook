@@ -26,7 +26,16 @@ exports.selectListingsByCategory = async (category) => {
 
 
   let select = '';
+  let query;
   if (category) {
+    query = {
+      text: `SELECT id FROM Categories`,
+      values: [],
+    };
+    let {rows} = await pool.query(query);
+    if (!rows.some(cat => cat.id == category)){
+      return undefined;
+    }
     select +=
       `WITH RECURSIVE CategoryTree AS (
         SELECT c.id, c.parent_id
@@ -47,11 +56,11 @@ exports.selectListingsByCategory = async (category) => {
   } else {
     select = 'SELECT id, listing FROM listings';
   }
-  const query = {
+  query = {
     text: select,
     values: category ? [category] : [],
   };
-  const {rows} = await pool.query(query);
+  let {rows} = await pool.query(query);
   const listings = [];
   for (const row of rows) {
     const listing = {
@@ -143,7 +152,7 @@ exports.insertListing = async (ownerId, categoryId, listing) => {
 };
 
 exports.selectListingsByKeywords = async (keywords) => {
-  let select = `SELECT id, listing FROM listings WHERE 1 = 2`;
+  let select = `SELECT id, listing FROM listings WHERE FALSE`;
   for (let i = 1; i <= keywords.length; i++) {
     select += ` OR jsonb_pretty(listing) LIKE ('%' || $${i} || '%')`;
   }

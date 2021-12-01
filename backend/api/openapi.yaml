@@ -85,6 +85,13 @@ paths:
           schema:
             type: string
             format: uuid
+        - in: query
+          name: search
+          description: Search keyword(s)
+          required: false
+          schema:
+            type: string
+            pattern: '^(?:\S+ )*(?:\S+)$'
       responses:
         200:
           description: Successful
@@ -116,31 +123,6 @@ paths:
                 $ref: '#/components/schemas/ListingFull'
         404:
           description: Listing not found
-  /search:
-    get:
-      description: Search listings by keyword
-      requestBody:
-        description: Search string
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                search:
-                  type: string
-                  pattern: '^(?:\S+ )*(?:\S+)$'
-      responses:
-        200:
-          description: Successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListingList'
-        400:
-          description: Invalid search value
-        404:
-          description: No items found
   /filter:
     get:
       description: Filter listings by attributes

@@ -3,15 +3,18 @@ const db = require('./listing.db');
 
 exports.getListings = async (req, res) => {
   let listings;
-  if (req.query.category) {
+  if (req.query.search) {
+    const keywords = req.query.search.split(' ');
+    listings = await db.selectListingsByKeywords(keywords);
+  } else if (req.query.category) {
     listings = await db.selectListingsByCategory(req.query.category);
   } else if (req.query.owner) {
     listings = await db.selectListingsByOwner(req.query.owner);
   } else {
     listings = await db.selectListingsByCategory(undefined);
   }
-  if (listings.length) {
-    res.status(200).send(listings);
+  if (listings) {
+    res.status(200).json(listings);
   }
   res.status(404).send();
 };
@@ -40,16 +43,6 @@ exports.postListing = async (req, res) => {
     res.status(201).send();
   } else {
     res.status(400).send();
-  }
-};
-
-exports.searchListings = async (req, res) => {
-  const keywords = req.body.search.split(' ');
-  const listings = await db.selectListingsByKeywords(keywords);
-  if (listings.length) {
-    res.status(200).send(listings);
-  } else {
-    res.status(404).send();
   }
 };
 

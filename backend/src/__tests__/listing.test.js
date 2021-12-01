@@ -29,7 +29,7 @@ test('GET All', async () => {
 
 test('GET Category', async () => {
   const cat = await request.get('/v0/category');
-  await request.get('/v0/listings?category=' + cat.body.subcategories[0].id)
+  await request.get(`/v0/listings?category=${cat.body.subcategories[0].id}`)
     .expect(200)
     .expect('Content-Type', /json/)
     .then((res) => {
@@ -132,9 +132,8 @@ test('GET Listings By Owner', async () => {
     });
 });
 
-test('GET Listings By Keyword Search', async () => {
-  await request.get('/v0/search')
-    .send({search: 'car'})
+test('GET Listings By Keyword', async () => {
+  await request.get('/v0/listings?search=toyota')
     .expect(200)
     .expect('Content-Type', /json/)
     .then((res) => {
@@ -145,10 +144,21 @@ test('GET Listings By Keyword Search', async () => {
     });
 });
 
-test('GET No Listings By Keyword Search', async () => {
-  await request.get('/v0/search')
-    .send({search: '^&'})
-    .expect(404);
+test('GET No Listings By Keyword', async () => {
+  await request.get('/v0/listings?search=therereallyshouldnotbeanylistingswiththisweirdstring')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .then((res) => {
+      expect(res).toBeDefined();
+      expect(res.body).toBeDefined();
+      expect(res.body.length).toBeDefined();
+      expect(res.body.length === 0).toBeTruthy();
+    });
+});
+
+test('GET Listings By Bad Keyword', async () => {
+  await request.get('/v0/listings?search=')
+    .expect(400)
 });
 
 test('GET Listings By Filter', async () => {
