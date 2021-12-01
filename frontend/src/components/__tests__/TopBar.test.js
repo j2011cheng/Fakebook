@@ -5,7 +5,7 @@ import {screen} from '@testing-library/react';
 import {rest} from 'msw';
 import {setupServer} from 'msw/node';
 
-import Login from '../Login';
+import TopBar from '../TopBar';
 
 const URL = '/v0/authenticate';
 
@@ -32,14 +32,14 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 test('Correct Accessibility', () => {
-  render(<Login/>);
+  render(<TopBar/>);
   const email = screen.getByPlaceholderText('Email or Phone Number');
   const password = screen.getByPlaceholderText('Password');
   const button = screen.getByRole('button');
 });
 
-test('Login with Email and Password', async () => {
-  render(<Login/>);
+test('TopBar with Email and Password', async () => {
+  render(<TopBar/>);
   const email = screen.queryByPlaceholderText('Email or Phone Number');
   const password = screen.queryByPlaceholderText('Password');
   const button = screen.queryByRole('button');
@@ -49,14 +49,14 @@ test('Login with Email and Password', async () => {
   await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/'));
 });
 
-test('Login with Email and Bad Password', async () => {
+test('TopBar with Email and Bad Password', async () => {
   server.use(
     rest.post(URL, (req, res, ctx) => {
       return res(ctx.status(401));
     }),
   );
   jest.spyOn(window, 'alert').mockImplementation(() => {});
-  render(<Login/>);
+  render(<TopBar/>);
   const email = screen.queryByPlaceholderText('Email or Phone Number');
   const password = screen.queryByPlaceholderText('Password');
   const button = screen.queryByRole('button');
@@ -67,14 +67,14 @@ test('Login with Email and Bad Password', async () => {
     .toHaveBeenCalledWith('Invalid login credentials'));
 });
 
-test('Login Server Error', async () => {
+test('TopBar Server Error', async () => {
   server.use(
     rest.post(URL, (req, res, ctx) => {
       return res(ctx.status(500));
     }),
   );
   jest.spyOn(window, 'alert').mockImplementation(() => {});
-  render(<Login/>);
+  render(<TopBar/>);
   const email = screen.queryByPlaceholderText('Email or Phone Number');
   const password = screen.queryByPlaceholderText('Password');
   const button = screen.queryByRole('button');
@@ -83,11 +83,4 @@ test('Login Server Error', async () => {
   fireEvent.click(button);
   await waitFor(() => expect(alert)
     .toHaveBeenCalledWith('Server Error'));
-});
-
-test('Click New User', async () => {
-  render(<Login/>);
-  const button = screen.queryByRole('link');
-  fireEvent.click(button);
-  await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/newuser'));
 });

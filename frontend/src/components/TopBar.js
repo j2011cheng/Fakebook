@@ -30,7 +30,6 @@ function TopBar() {
   // };
 
   const [user, setUser] = React.useState({loginName: '', password: ''});
-  // const history = useHistory();
 
   const handleInputChange = (event) => {
     const {value, name} = event.target;
@@ -63,13 +62,13 @@ function TopBar() {
       })
       .catch((err) => {
         setUser({email: '', password: ''});
-        alert('Invalid login credentials');
+        if (err.status === 401) {
+          alert('Invalid login credentials');
+        } else {
+          alert('Server Error');
+        }
       });
   };
-
-  // const onNewClick = (event) => {
-  //   history.push('/newuser');
-  // };
 
   // if signed in, show an account badge, otherwise show a fast login...
   // only login button for mobile and fast login for desktop...
@@ -91,13 +90,12 @@ function TopBar() {
           component='form'
         >
           <TextField
-            type={'email' || 'text'}
-            name={'email' || 'phone'}
+            type={'text'}
+            name={'loginName'}
             placeholder='Email or Phone Number'
             onChange={handleInputChange}
             required
             margin='normal'
-            // fullWidth
             autoFocus
           />
           <TextField
@@ -107,12 +105,10 @@ function TopBar() {
             onChange={handleInputChange}
             required
             margin='normal'
-            // fullWidth
           />
           <Button
             type='submit'
             value='Submit'
-            // fullWidth
             variant='contained'
             margin='normal'
             sx={{mt: 3, mb: 2, justifyContent: 'flex-end'}}
