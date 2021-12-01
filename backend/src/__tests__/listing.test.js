@@ -72,10 +72,11 @@ test('POST Listing', async () => {
     .send({
       category: cat.body.subcategories[0],
       owner: owner.body.owner,
-      name: 'Test Listing',
+      name: 'Post Test Listing',
       price: 1,
       description: 'This is a test listing.',
       attributes: {},
+      images: [''],
     })
     .expect(201);
 });
@@ -93,7 +94,7 @@ test('POST Bad Listing', async () => {
         id: '88888888-4444-4444-4444-111111111111',
       },
       owner: owner.body.owner,
-      name: 'Test Listing',
+      name: 'Post Bad Test Listing',
       price: 1,
       description: 'This is a test listing.',
       images: [],
@@ -113,13 +114,14 @@ test('GET Listings By Owner', async () => {
     .send({
       category: cat.body.subcategories[0],
       owner: owner.body.owner,
-      name: 'Test Listing',
+      name: 'Get By Owner Test Listing',
       price: 1,
       description: 'This is a test listing.',
       attributes: {},
+      images: [''],
     });
+  // console.log(`/v0/listings?owner=${owner.body.owner.id}`);
   await request.get(`/v0/listings?owner=${owner.body.owner.id}`)
-    .send()
     .expect(200)
     .expect('Content-Type', /json/)
     .then((res) => {

@@ -158,6 +158,9 @@ paths:
                     $ref: '#/components/schemas/Filter'
                 values:
                   type: array
+              required:
+                - filters
+                - values
       responses:
         200:
           description: Successful
@@ -410,6 +413,7 @@ components:
         - id
         - name
         - price
+        - image
       additionalProperties: false
 
     ListingFull:
@@ -432,6 +436,7 @@ components:
           type: array
           items:
             type: string
+          minItems: 1
       required:
         - category
         - owner
@@ -439,6 +444,7 @@ components:
         - id
         - name
         - description
+        - images
       additionalProperties: false
 
     ListingNew:
@@ -468,6 +474,7 @@ components:
         - name
         - price
         - description
+        - images
       additionalProperties: false
 
     ListingList:
