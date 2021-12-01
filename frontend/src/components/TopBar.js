@@ -74,16 +74,17 @@ function TopBar() {
   // only login button for mobile and fast login for desktop...
 
   return (
-    <AppBar position="fixed" className={classes.appBar}>
+    <AppBar position='fixed' elevation={1} className={classes.appBar}>
       <Toolbar
         sx={{
+          backgroundColor: 'white',
           height: 75,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'flex-start',
         }}
       >
-        <Typography variant="h4" sx={{flexGrow: 1}}>
+        <Typography variant='h4' sx={{flexGrow: 1, color: '#1976d2'}}>
           Fakebook
         </Typography>
         <Box
@@ -96,7 +97,8 @@ function TopBar() {
             onChange={handleInputChange}
             required
             margin='normal'
-            autoFocus
+            size='small'
+            sx={{mt: 2, mb: 2, ml: 1, mr: 1, justifyContent: 'flex-end'}}
           />
           <TextField
             type='password'
@@ -105,13 +107,15 @@ function TopBar() {
             onChange={handleInputChange}
             required
             margin='normal'
+            size='small'
+            sx={{mt: 2, mb: 2, ml: 1, mr: 1, justifyContent: 'flex-end'}}
           />
           <Button
             type='submit'
             value='Submit'
             variant='contained'
             margin='normal'
-            sx={{mt: 3, mb: 2, justifyContent: 'flex-end'}}
+            sx={{mt: 2, mb: 2, ml: 1, justifyContent: 'flex-end'}}
             onClick={onSubmit}
           >
             Log In
