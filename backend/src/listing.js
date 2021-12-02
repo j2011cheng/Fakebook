@@ -2,17 +2,7 @@
 const db = require('./listing.db');
 
 exports.getListings = async (req, res) => {
-  let listings;
-  if (req.query.search) {
-    const keywords = req.query.search.split(' ');
-    listings = await db.selectListingsByKeywords(keywords);
-  } else if (req.query.category) {
-    listings = await db.selectListingsByCategory(req.query.category);
-  } else if (req.query.owner) {
-    listings = await db.selectListingsByOwner(req.query.owner);
-  } else {
-    listings = await db.selectListingsByCategory(undefined);
-  }
+  const listings = await db.selectListings(req.query);
   if (listings) {
     res.status(200).json(listings);
   }
@@ -41,21 +31,6 @@ exports.postListing = async (req, res) => {
   const created = await db.insertListing(ownerId, categoryId, listing);
   if (created) {
     res.status(201).send();
-  } else {
-    res.status(400).send();
-  }
-};
-
-exports.filterListings = async (req, res) => {
-  const filters = req.body.filters;
-  const values = req.body.values;
-  if (filters.length === values.length) {
-    const listings = await db.selectListingsByFilters(filters, values);
-    if (listings.length) {
-      res.status(200).send(listings);
-    } else {
-      res.status(404).send();
-    }
   } else {
     res.status(400).send();
   }

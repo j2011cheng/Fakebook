@@ -8,7 +8,7 @@ const pool = new Pool({
   password: process.env.POSTGRES_PASSWORD,
 });
 
-exports.selectListingsByCategory = async (category) => {
+exports.selectListings = async (q) => {
   // https://stackoverflow.com/questions/6654774/how-to-traverse-a-tree-work-with-hierarchical-data-in-sql-code
   // WITH Family As
   // (
@@ -25,62 +25,92 @@ exports.selectListingsByCategory = async (category) => {
   // FROM Family
 
 
-  let select = '';
+  let select = 'SELECT id, listing FROM listings';
   let query;
-  if (category) {
-    query = {
-      text: `SELECT id FROM Categories`,
-      values: [],
-    };
-    let {rows} = await pool.query(query);
-    if (!rows.some(cat => cat.id == category)){
-      return undefined;
+  const valuesList = [];
+  let idx = 1;
+  for (param in q) {
+    if (param == 'category') {
+      query = {
+        text: `SELECT id FROM Categories`,
+        values: [],
+      };
+      valuesList.push(q[param]);
+      idx++;
+      let {rows} = await pool.query(query);
+      if (!rows.some(cat => cat.id == q[param])){
+        return undefined;
+      }
+      select =
+        `WITH RECURSIVE CategoryTree AS (
+          SELECT c.id, c.parent_id
+          FROM Categories c
+          WHERE id = $1
+          UNION ALL
+          SELECT c2.id, c2.parent_id
+          FROM Categories c2
+            JOIN CategoryTree
+              ON CategoryTree.id = c2.parent_id
+        )
+        SELECT DISTINCT listings.id, listings.listing
+        FROM listings
+        WHERE listings.category IN (
+          SELECT id FROM CategoryTree
+        )
+        `;
+    } else if (param == 'owner') {
+      select += (!q.category && idx == 1) ? ` WHERE owner = $${idx}` : ` AND owner = $${idx}`;
+      valuesList.push(q[param]);
+      idx++;
+    } else if (param == 'search') {
+      const keywords = q.search.split(' ');
+      select += (!q.category && idx == 1) ?
+        ` WHERE (jsonb_pretty(listing) LIKE ('%' || $${idx++} || '%')` :
+        ` AND (jsonb_pretty(listing) LIKE ('%' || $${idx++} || '%')`;
+      valuesList.push(keywords[0]);
+      for (let i = 1; i < keywords.length; i++) {
+        select += ` OR jsonb_pretty(listing) LIKE ('%' || $${idx++ +i-1} || '%')`;
+        valuesList.push(keywords[i]);
+      }
+      select += ')';
+    } else {
+      query = {
+        text: `SELECT filter->>'name' FROM Filters`,
+        values: [],
+      };
+      let {rows} = await pool.query(query);
+      if (!rows.some(row => row['?column?'] == param || row['?column?'] == param.slice(3))){
+        return undefined;
+      }
+      select += (!q.category && idx == 1) ? ` WHERE` : ` AND`;
+      let type;
+      if (!isNaN(Number(q[param])) && typeof Number(q.param) === "number") {
+        valuesList.push(param.slice(3));
+        idx++;
+        switch (true){
+          case /^MAX.+$/.test(param):
+            valuesList.push(q[param]);
+            select += ` (listing->'attributes'->>$${idx-1})::float <= $${idx++}`;
+            break;
+          case /^MIN.+$/.test(param):
+            valuesList.push(q[param]);
+            select += ` (listing->'attributes'->>$${idx-1})::float >= $${idx++}`;
+            break;
+        }
+      } else {
+        valuesList.push(param);
+        idx++;
+        valuesList.push(q[param]);
+        select += ` listing->'attributes'->>$${idx-1} = $${idx++}`;
+      }
     }
-    select +=
-      `WITH RECURSIVE CategoryTree AS (
-        SELECT c.id, c.parent_id
-        FROM Categories c
-        WHERE id = $1
-        UNION ALL
-        SELECT c2.id, c2.parent_id
-        FROM Categories c2
-          JOIN CategoryTree
-            ON CategoryTree.id = c2.parent_id
-      )
-      SELECT DISTINCT listings.id, listings.listing
-      FROM listings
-      WHERE listings.category IN (
-        SELECT id FROM CategoryTree
-      )
-      `;
-  } else {
-    select = 'SELECT id, listing FROM listings';
   }
   query = {
     text: select,
-    values: category ? [category] : [],
+    values: valuesList,
   };
+  // console.log(query);
   let {rows} = await pool.query(query);
-  const listings = [];
-  for (const row of rows) {
-    const listing = {
-      id: row.id,
-      name: row.listing.name,
-      price: row.listing.attributes.price,
-    };
-    listing.image = row.listing.images[0];
-    listings.push(listing);
-  }
-  return listings;
-};
-
-exports.selectListingsByOwner = async (owner) => {
-  const select = `SELECT id, listing FROM listings WHERE owner = $1;`;
-  const query = {
-    text: select,
-    values: [owner],
-  };
-  const {rows} = await pool.query(query);
   const listings = [];
   for (const row of rows) {
     const listing = {
@@ -123,7 +153,6 @@ exports.selectListingById = async (listing) => {
     listing.owner.id = row.ownerid;
     listing.attributes = row.listing.attributes;
     listing.description = row.listing.description;
-    // console.log(listing);
     return listing;
   } else {
     return undefined;
@@ -149,70 +178,4 @@ exports.insertListing = async (ownerId, categoryId, listing) => {
   } else {
     return false;
   }
-};
-
-exports.selectListingsByKeywords = async (keywords) => {
-  let select = `SELECT id, listing FROM listings WHERE FALSE`;
-  for (let i = 1; i <= keywords.length; i++) {
-    select += ` OR jsonb_pretty(listing) LIKE ('%' || $${i} || '%')`;
-  }
-  select += ';';
-  const query = {
-    text: select,
-    values: keywords,
-  };
-  const {rows} = await pool.query(query);
-  const listings = [];
-  for (const row of rows) {
-    const listing = {
-      id: row.id,
-      name: row.listing.name,
-      price: row.listing.attributes.price,
-    };
-    listing.image = row.listing.images[0];
-    listings.push(listing);
-  }
-  return listings;
-};
-
-exports.selectListingsByFilters = async (filters, values) => {
-  let select = `SELECT id, listing FROM listings WHERE 1 = 1`;
-  const valuesList = [];
-  let idx = 1;
-  for (let i = 0; i < filters.length; i++) {
-    valuesList.push(filters[i].name);
-    select += ` AND listing->'attributes' ? $${idx++}`;
-    switch (filters[i].type) {
-      case 'range':
-        valuesList.push(values[i][0]);
-        valuesList.push(values[i][1]);
-        select += ` AND (listing->'attributes'->>$${idx-1})::float >= $${idx}
-          AND (listing->'attributes'->>$${idx++ -1})::float <= $${idx++}`;
-        break;
-      case 'enum':
-        valuesList.push(values[i]);
-        select += ` AND listing->>$${idx-1} = $${idx++}`;
-        break;
-      case 'bool':
-        valuesList.push(values[i]);
-        select += ` AND (listing->'attributes'->>$${idx-1})::bool = $${idx++}`;
-        break;
-    }
-  }
-  const query = {
-    text: select,
-    values: valuesList,
-  };
-  const {rows} = await pool.query(query);
-  const listings = [];
-  for (const row of rows) {
-    const listing = {
-      id: row.id,
-      name: row.listing.name,
-      price: row.listing.attributes.price,
-    };
-    listing.image = row.listing.images[0];
-    listings.push(listing);
-  }
-  return listings;
 };

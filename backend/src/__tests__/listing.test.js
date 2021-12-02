@@ -17,7 +17,7 @@ afterAll((done) => {
   server.close(done);
 });
 
-test('GET All', async () => {
+test('GET All Listings', async () => {
   await request.get('/v0/listings')
     .expect(200)
     .expect('Content-Type', /json/)
@@ -27,7 +27,7 @@ test('GET All', async () => {
     });
 });
 
-test('GET Category', async () => {
+test('GET Listings By Category', async () => {
   const cat = await request.get('/v0/category');
   await request.get(`/v0/listings?category=${cat.body.subcategories[0].id}`)
     .expect(200)
@@ -38,7 +38,7 @@ test('GET Category', async () => {
     });
 });
 
-test('GET Bad Category', async () => {
+test('GET Listings Bad Category', async () => {
   const path = '/v0/listings?category=88888888-4444-4444-4444-111111111111';
   await request.get(path)
     .expect(404);
@@ -120,7 +120,6 @@ test('GET Listings By Owner', async () => {
       attributes: {},
       images: [''],
     });
-  // console.log(`/v0/listings?owner=${owner.body.owner.id}`);
   await request.get(`/v0/listings?owner=${owner.body.owner.id}`)
     .expect(200)
     .expect('Content-Type', /json/)
@@ -132,8 +131,25 @@ test('GET Listings By Owner', async () => {
     });
 });
 
-test('GET Listings By Keyword', async () => {
-  await request.get('/v0/listings?search=toyota')
+test('GET Listings By Category and Owner', async () => {
+  const cat = await request.get('/v0/category');
+  const owner = await request.post('/v0/authenticate').send({
+    loginName: 'dev@dev.dev',
+    password: 'dev',
+  });
+  await request.post('/v0/listing')
+    .set('Authorization', `Bearer ${owner.body.accessToken}`)
+    .send({
+      category: cat.body.subcategories[0],
+      owner: owner.body.owner,
+      name: 'Get By Owner Test Listing',
+      price: 1,
+      description: 'This is a test listing.',
+      attributes: {},
+      images: [''],
+    });
+  console.log(owner.body.owner.id, cat.body.subcategories[0].id);
+  await request.get(`/v0/listings?category=${cat.body.subcategories[0].id}&owner=${owner.body.owner.id}`)
     .expect(200)
     .expect('Content-Type', /json/)
     .then((res) => {
@@ -143,6 +159,30 @@ test('GET Listings By Keyword', async () => {
       expect(res.body.length > 0).toBeTruthy();
     });
 });
+
+test('GET Listings By Keyword', async () => {
+  await request.get('/v0/listings?search=a%20m')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .then((res) => {
+      expect(res).toBeDefined();
+      expect(res.body).toBeDefined();
+      expect(res.body.length).toBeDefined();
+      expect(res.body.length > 0).toBeTruthy();
+    });
+});
+
+test('GET Listings By Category and Keyword', async () => {
+  const cat = await request.get('/v0/category');
+  await request.get(`/v0/listings?category=${cat.body.subcategories[0].id}&search=e`)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .then((res) => {
+      expect(res).toBeDefined();
+      expect(res.body).toBeDefined();
+    });
+});
+
 
 test('GET No Listings By Keyword', async () => {
   await request.get('/v0/listings?search=therereallyshouldnotbeanylistingswiththisweirdstring')
@@ -161,15 +201,13 @@ test('GET Listings By Bad Keyword', async () => {
     .expect(400)
 });
 
-test('GET Listings By Filter', async () => {
-  await request.get('/v0/filter')
-    .send({
-      filters: [{
-        name: 'price',
-        type: 'range',
-      }],
-      values: [[0, 500]],
-    })
+test('GET Listings By Range', async () => {
+  const q = {
+    'MINprice': 1000,
+    'MAXprice': 10000
+  };
+  const str = new URLSearchParams(q).toString();
+  await request.get(`/v0/listings?${str}`)
     .expect(200)
     .expect('Content-Type', /json/)
     .then((res) => {
@@ -180,38 +218,46 @@ test('GET Listings By Filter', async () => {
     });
 });
 
-test('GET No Listings By Filter', async () => {
-  await request.get('/v0/filter')
-    .send({
-      filters: [
-        {
-          name: 'price',
-          type: 'range',
-        },
-        {
-          name: 'fake',
-          type: 'enum',
-        },
-        {
-          name: 'fake',
-          type: 'bool',
-        },
-      ],
-      values: [[0, 500], 'fake', false],
-    })
+test('GET Listings By Bool', async () => {
+  const q = {
+    'electric': true
+  };
+  const str = new URLSearchParams(q).toString();
+  await request.get(`/v0/listings?${str}`)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .then((res) => {
+      expect(res).toBeDefined();
+      expect(res.body).toBeDefined();
+      expect(res.body.length).toBeDefined();
+      expect(res.body.length > 0).toBeTruthy();
+    });
+});
+
+test('GET Listings By Enum', async () => {
+  const q = {
+    'os': 'Mac'
+  };
+  const str = new URLSearchParams(q).toString();
+  await request.get(`/v0/listings?${str}`)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .then((res) => {
+      expect(res).toBeDefined();
+      expect(res.body).toBeDefined();
+      expect(res.body.length).toBeDefined();
+      expect(res.body.length > 0).toBeTruthy();
+    });
+});
+
+test('GET Listings By Bad Filter', async () => {
+  const q = {
+    'MINnotafilter': 1000,
+    'alsonotafilter': "fake",
+    'stillnotafilter': false
+  };
+  const str = new URLSearchParams(q).toString();
+  await request.get(`/v0/listings?${str}`)
     .expect(404);
 });
 
-test('GET Bad Filter', async () => {
-  await request.get('/v0/filter')
-    .send({
-      filters: [
-        {
-          name: 'price',
-          type: 'range',
-        },
-      ],
-      values: [[0, 500], 'fake', false],
-    })
-    .expect(400);
-});

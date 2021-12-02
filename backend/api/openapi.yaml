@@ -92,6 +92,13 @@ paths:
           schema:
             type: string
             pattern: '^(?:\S+ )*(?:\S+)$'
+        - in: query
+          name: filters
+          description: Dictionary of filters
+          required: false
+          schema:
+            type: object
+            additionalProperties: true
       responses:
         200:
           description: Successful
@@ -123,37 +130,37 @@ paths:
                 $ref: '#/components/schemas/ListingFull'
         404:
           description: Listing not found
-  /filter:
-    get:
-      description: Filter listings by attributes
-      requestBody:
-        description: Dictionary of filters
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                filters:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Filter'
-                values:
-                  type: array
-              required:
-                - filters
-                - values
-      responses:
-        200:
-          description: Successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListingList'
-        400:
-          description: Must have same number of filters and values
-        404:
-          description: No items found
+  # /filter:
+  #   get:
+  #     description: Filter listings by attributes
+  #     requestBody:
+  #       description: Dictionary of filters
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               filters:
+  #                 type: array
+  #                 items:
+  #                   $ref: '#/components/schemas/Filter'
+  #               values:
+  #                 type: array
+  #             required:
+  #               - filters
+  #               - values
+  #     responses:
+  #       200:
+  #         description: Successful
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/ListingList'
+  #       400:
+  #         description: Must have same number of filters and values
+  #       404:
+  #         description: No items found
   /listing:
     post:
       description: Create a new listing
