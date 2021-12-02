@@ -52,7 +52,7 @@ test('Button is Clickable', async () => {
   const button = screen.getByText('Vehicles');
   fireEvent.click(button);
   await waitFor(() => expect(mockHistoryPush)
-    .toHaveBeenCalledWith('/listings?category=1'));
+    .toHaveBeenCalledWith('/?category=1'));
 });
 
 test('Not Found', async () => {

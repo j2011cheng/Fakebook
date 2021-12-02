@@ -5,7 +5,7 @@ import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 
 import SideBarTopContent from './SideBarTopContent';
-// import Filters from './Filters';
+import Filters from './Filters';
 import Categories from './Categories';
 
 
@@ -62,12 +62,11 @@ function SideBar(props) {
             width: drawerWidth,
           },
         }}
-        open
       >
         <Toolbar sx={{mb: 1}}/>
         <SideBarTopContent/>
         <Divider/>
-        {/* <Filters/>*/}
+        <Filters/>
         <Divider/>
         <Categories/>
       </Drawer>

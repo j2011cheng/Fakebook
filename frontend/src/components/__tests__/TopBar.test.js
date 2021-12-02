@@ -27,12 +27,14 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
+beforeEach(() => localStorage.removeItem('user'));
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test('Correct Accessibility', () => {
+test('Correct Accessibility', async () => {
   render(<TopBar/>);
+  await waitFor(() => screen.getByRole('button'));
   screen.getByPlaceholderText('Email or Phone Number');
   screen.getByPlaceholderText('Password');
   screen.getByRole('button');
@@ -40,13 +42,15 @@ test('Correct Accessibility', () => {
 
 test('TopBar with Email and Password', async () => {
   render(<TopBar/>);
-  const email = screen.queryByPlaceholderText('Email or Phone Number');
-  const password = screen.queryByPlaceholderText('Password');
-  const button = screen.queryByRole('button');
+  await waitFor(() => screen.getByRole('button'));
+  const email = screen.getByPlaceholderText('Email or Phone Number');
+  const password = screen.getByPlaceholderText('Password');
+  const button = screen.getByRole('button');
   userEvent.type(email, 'dev@dev.dev');
   userEvent.type(password, 'dev');
   fireEvent.click(button);
   await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/'));
+  fireEvent.click(screen.getByText('Log Out'));
 });
 
 test('TopBar with Email and Bad Password', async () => {
@@ -57,9 +61,10 @@ test('TopBar with Email and Bad Password', async () => {
   );
   jest.spyOn(window, 'alert').mockImplementation(() => {});
   render(<TopBar/>);
-  const email = screen.queryByPlaceholderText('Email or Phone Number');
-  const password = screen.queryByPlaceholderText('Password');
-  const button = screen.queryByRole('button');
+  await waitFor(() => screen.getByRole('button'));
+  const email = screen.getByPlaceholderText('Email or Phone Number');
+  const password = screen.getByPlaceholderText('Password');
+  const button = screen.getByRole('button');
   userEvent.type(email, 'dev@dev.dev');
   userEvent.type(password, 'd');
   fireEvent.click(button);
@@ -75,12 +80,21 @@ test('TopBar Server Error', async () => {
   );
   jest.spyOn(window, 'alert').mockImplementation(() => {});
   render(<TopBar/>);
-  const email = screen.queryByPlaceholderText('Email or Phone Number');
-  const password = screen.queryByPlaceholderText('Password');
-  const button = screen.queryByRole('button');
+  await waitFor(() => screen.getByRole('button'));
+  const email = screen.getByPlaceholderText('Email or Phone Number');
+  const password = screen.getByPlaceholderText('Password');
+  const button = screen.getByRole('button');
   userEvent.type(email, 'dev@dev.dev');
   userEvent.type(password, 'd');
   fireEvent.click(button);
   await waitFor(() => expect(alert)
     .toHaveBeenCalledWith('Server Error'));
 });
+
+test('TopBar Empty Form', async () => {
+  render(<TopBar/>);
+  await waitFor(() => screen.getByRole('button'));
+  const button = screen.getByRole('button');
+  fireEvent.click(button);
+  await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/login'));
+})

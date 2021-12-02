@@ -24,50 +24,64 @@ function TopBar() {
   const classes = useStyles();
   const history = useHistory();
 
-  const [user, setUser] = React.useState({loginName: '', password: ''});
+  const [loginName, setLoginName] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [user, setUser] = React.useState(
+    localStorage.getItem('user') ? true : false);
 
-  const handleInputChange = (event) => {
-    const {value, name} = event.target;
-    const u = user;
-    u[name] = value;
-    setUser(u);
+  const handleLoginNameChange = (event) => {
+    const {value} = event.target;
+    setLoginName(value);
+  };
+
+  const handlePasswordChange = (event) => {
+    const {value} = event.target;
+    setPassword(value);
   };
 
   const logout = (event) => {
     localStorage.removeItem('user');
-    setUser({loginName: '', password: ''});
+    setUser(false);
+    setLoginName('');
+    setPassword('');
   };
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    await fetch('/v0/authenticate', {
-      method: 'POST',
-      body: JSON.stringify({
-        loginName: user.loginName,
-        password: user.password,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw res;
-        }
-        return res.json();
+    if (loginName === '' || password === '') {
+      history.push('/login');
+    } else {
+      await fetch('/v0/authenticate', {
+        method: 'POST',
+        body: JSON.stringify({
+          loginName: loginName,
+          password: password,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-      .then((json) => {
-        localStorage.setItem('user', JSON.stringify(json));
-        history.push('/');
-      })
-      .catch((err) => {
-        if (err.status === 401) {
-          alert('Invalid login credentials');
-        } else {
-          alert('Server Error');
-        }
-      });
-    setUser({email: '', password: ''});
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          localStorage.setItem('user', JSON.stringify(json));
+          setUser(true);
+          history.push('/');
+        })
+        .catch((err) => {
+          if (err.status === 401) {
+            alert('Invalid login credentials');
+          } else {
+            alert('Server Error');
+          }
+        });
+      setLoginName('');
+      setPassword('');
+    }
   };
 
   // if signed in, show an account badge, otherwise show a fast login...
@@ -88,7 +102,7 @@ function TopBar() {
           Fakebook
         </Typography>
         {
-          localStorage.getItem('user') ? (
+          user ? (
             <Button
               type='submit'
               value='Submit'
@@ -104,10 +118,11 @@ function TopBar() {
               component='form'
             >
               <TextField
-                type={'text'}
-                name={'loginName'}
+                type='text'
+                name='loginName'
                 placeholder='Email or Phone Number'
-                onChange={handleInputChange}
+                onChange={handleLoginNameChange}
+                value={loginName}
                 required
                 margin='normal'
                 size='small'
@@ -120,7 +135,8 @@ function TopBar() {
                 type='password'
                 name='password'
                 placeholder='Password'
-                onChange={handleInputChange}
+                onChange={handlePasswordChange}
+                value={password}
                 required
                 margin='normal'
                 size='small'
