@@ -67,7 +67,7 @@ function Subcategories() {
       setData(disp);
     };
     getData();
-  }, [location.display]);
+  }, [location.search]);
 
   const subcategory = ({name, id}) => {
     return (

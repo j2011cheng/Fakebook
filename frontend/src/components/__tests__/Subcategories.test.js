@@ -15,11 +15,11 @@ const server = setupServer(
       ctx.json({subcategories: [
         {
           name: 'Vehicles',
-          id: 1,
+          id: '1',
         },
         {
           name: 'Electronics',
-          id: 2,
+          id: '2',
         },
       ]}),
     );

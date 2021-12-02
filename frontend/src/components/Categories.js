@@ -15,7 +15,7 @@ function Categories() {
   const setCategory = (id) => {
     return () => {
       const params = new URLSearchParams(location.search);
-      if (params.get('category') == id) {
+      if (params.get('category') === id) {
         params.delete('category');
       } else {
         params.set('category', id);
