@@ -4,7 +4,6 @@ import '@testing-library/jest-dom';
 import {screen} from '@testing-library/react';
 import {rest} from 'msw';
 import {setupServer} from 'msw/node';
-import {setNarrow} from './Common';
 
 import NewUser from '../NewUser';
 
@@ -34,16 +33,6 @@ afterAll(() => server.close());
 
 test('Correct Accessibility', () => {
   render(<NewUser/>);
-  const name = screen.getByPlaceholderText('Name');
-  const email = screen.getByPlaceholderText('Email');
-  const phone = screen.getByPlaceholderText('Phone Number');
-  const password = screen.getByPlaceholderText('Password');
-  const button = screen.getByRole('button');
-});
-
-test('Mobile Test', async () => {
-  render(<NewUser/>);
-  setNarrow();
   const name = screen.getByPlaceholderText('Name');
   const email = screen.getByPlaceholderText('Email');
   const phone = screen.getByPlaceholderText('Phone Number');
