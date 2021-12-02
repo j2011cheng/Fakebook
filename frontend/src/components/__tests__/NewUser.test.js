@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 import {screen} from '@testing-library/react';
 import {rest} from 'msw';
 import {setupServer} from 'msw/node';
+import {setNarrow} from './common';
 
 import NewUser from '../NewUser';
 
@@ -33,7 +34,17 @@ afterAll(() => server.close());
 
 test('Correct Accessibility', () => {
   render(<NewUser/>);
-  const name = screen.getByPlaceholderText('Name')
+  const name = screen.getByPlaceholderText('Name');
+  const email = screen.getByPlaceholderText('Email');
+  const phone = screen.getByPlaceholderText('Phone Number');
+  const password = screen.getByPlaceholderText('Password');
+  const button = screen.getByRole('button');
+});
+
+test('Mobile Test', async () => {
+  render(<NewUser/>);
+  setNarrow();
+  const name = screen.getByPlaceholderText('Name');
   const email = screen.getByPlaceholderText('Email');
   const phone = screen.getByPlaceholderText('Phone Number');
   const password = screen.getByPlaceholderText('Password');
@@ -42,7 +53,7 @@ test('Correct Accessibility', () => {
 
 test('Create User with Name, Email, and Password', async () => {
   render(<NewUser/>);
-  const name = screen.getByPlaceholderText('Name')
+  const name = screen.getByPlaceholderText('Name');
   const email = screen.getByPlaceholderText('Email');
   const phone = screen.getByPlaceholderText('Phone Number');
   const password = screen.getByPlaceholderText('Password');
@@ -62,7 +73,7 @@ test('Create User already Exists', async () => {
   );
   jest.spyOn(window, 'alert').mockImplementation(() => {});
   render(<NewUser/>);
-  const name = screen.getByPlaceholderText('Name')
+  const name = screen.getByPlaceholderText('Name');
   const email = screen.getByPlaceholderText('Email');
   const phone = screen.getByPlaceholderText('Phone Number');
   const password = screen.getByPlaceholderText('Password');
@@ -83,7 +94,7 @@ test('New User Server Error', async () => {
   );
   jest.spyOn(window, 'alert').mockImplementation(() => {});
   render(<NewUser/>);
-  const name = screen.getByPlaceholderText('Name')
+  const name = screen.getByPlaceholderText('Name');
   const email = screen.getByPlaceholderText('Email');
   const phone = screen.getByPlaceholderText('Phone Number');
   const password = screen.getByPlaceholderText('Password');
