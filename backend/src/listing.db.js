@@ -69,7 +69,7 @@ exports.selectListings = async (q) => {
         ` AND (jsonb_pretty(listing) LIKE ('%' || $${idx++} || '%')`;
       valuesList.push(keywords[0]);
       for (let i = 1; i < keywords.length; i++) {
-        select += ` OR jsonb_pretty(listing) LIKE ('%' || $${idx++ +i-1} || '%')`;
+        select += ` OR jsonb_pretty(listing) LIKE ('%' || $${idx++} || '%')`;
         valuesList.push(keywords[i]);
       }
       select += ')';
@@ -105,6 +105,8 @@ exports.selectListings = async (q) => {
       }
     }
   }
+  console.log(select);
+  console.log(valuesList);
   query = {
     text: select,
     values: valuesList,
