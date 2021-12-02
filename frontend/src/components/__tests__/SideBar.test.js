@@ -20,7 +20,7 @@ jest.mock('react-router-dom', () => ({
 test('Correct Accessibility', () => {
   render(<SideBar/>);
   screen.getByPlaceholderText('Search Marketplace');
-  getOnlyVisible('+ Create New Listing');
+  // getOnlyVisible('+ Create New Listing');
   getOnlyVisible('Categories');
 });
 
@@ -28,7 +28,7 @@ test('Set mobile view', () => {
   render(<SideBar/>);
   setNarrow();
   screen.getByPlaceholderText('Search Marketplace');
-  getOnlyVisible('+ Create New Listing');
+  // getOnlyVisible('+ Create New Listing');
   getOnlyVisible('Categories');
 });
 
@@ -37,7 +37,7 @@ test('Set mobile view then desktop view', () => {
   setNarrow();
   setWide();
   screen.getByPlaceholderText('Search Marketplace');
-  getOnlyVisible('+ Create New Listing');
+  // getOnlyVisible('+ Create New Listing');
   getOnlyVisible('Categories');
 });
 

@@ -28,9 +28,7 @@ function SideBarTopContent() {
     history.push(`${location.pathname}?${params.toString()}`);
   };
 
-  const newListing = () => {
-    console.log('Creating listings not supported');
-  };
+  // const newListing = () => {};
 
   return (
     <div>
@@ -53,14 +51,16 @@ function SideBarTopContent() {
       >
         <SearchIcon/>
       </Button>
-      <Button
-        variant='contained'
-        name='new listing'
-        onClick={newListing}
-        sx={{ml: 1, mb: 1, width: '95%'}}
-      >
-        + Create New Listing
-      </Button>
+      {/* localStorage.getItem('user') ? (
+        <Button
+          variant='contained'
+          name='new listing'
+          onClick={newListing}
+          sx={{ml: 1, mb: 1, width: '95%'}}
+        >
+          + Create New Listing
+        </Button>
+      ) : ''*/}
     </div>
   );
 };

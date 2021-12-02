@@ -36,10 +36,10 @@ afterAll(() => server.close());
 test('Components are there', () => {
   render(<SideBarTopContent/>);
   const search = screen.getByRole('button', {name: ''});
-  const add = screen.getByRole('button', {name: '+ Create New Listing'});
+  // const add = screen.getByRole('button', {name: '+ Create New Listing'});
   const textField = screen.getByPlaceholderText('Search Marketplace');
   expect(search).toBeDefined();
-  expect(add).toBeDefined();
+  // expect(add).toBeDefined();
   expect(textField).toBeDefined();
 });
 
