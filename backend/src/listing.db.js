@@ -211,9 +211,7 @@ exports.selectListingsByFilters = async (filters, values) => {
       name: row.listing.name,
       price: row.listing.attributes.price,
     };
-    if (row.listing.images && row.listing.images[0]) {
-      listing.image = row.listing.images[0];
-    }
+    listing.image = row.listing.images[0];
     listings.push(listing);
   }
   return listings;
