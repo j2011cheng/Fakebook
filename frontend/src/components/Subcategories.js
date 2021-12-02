@@ -24,7 +24,6 @@ function Subcategories() {
   // --- Desktop ---
   // Shop by category text
   // category chips
-
   const location = useLocation();
 
   const history = useHistory();
@@ -34,6 +33,11 @@ function Subcategories() {
       params.set('category', id);
       history.push(`/?${params.toString()}`);
     };
+  };
+  const allCategories = () => {
+    const params = new URLSearchParams();
+    params.delete('category');
+    history.push(`/?${params.toString()}`);
   };
 
   const [data, setData] = React.useState([]);
@@ -93,6 +97,10 @@ function Subcategories() {
           <Typography variant='h5'>Shop by Category</Typography>
         </ListItemText>
         <Stack direction='row' spacing={1}>
+          <Chip
+            label={'All Categories'}
+            onClick={allCategories}
+          />
           {data.map(subcategory)}
         </Stack>
       </Paper>

@@ -78,3 +78,12 @@ test('Server Error', async () => {
   await waitFor(() => expect(alert)
     .toHaveBeenCalledWith('Subcategories Server Error'));
 });
+
+test('All Categories', async () => {
+  render(<Subcategories/>);
+  await waitFor(() => screen.getByText('All Categories'));
+  const button = screen.getByText('All Categories');
+  fireEvent.click(button);
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith('/?'));
+})
