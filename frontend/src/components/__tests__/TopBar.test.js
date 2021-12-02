@@ -12,7 +12,7 @@ const URL = '/v0/authenticate';
 const server = setupServer(
   rest.post(URL, (req, res, ctx) => {
     return res(
-      ctx.json({key: 'value'}),
+      ctx.json({owner: {id: 'value'}}),
     );
   }),
 );
@@ -24,6 +24,10 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useHistory: () => ({
     push: mockHistoryPush,
+  }),
+  useLocation: () => ({
+    search: '?',
+    pathname: '/',
   }),
 }));
 
@@ -97,4 +101,20 @@ test('TopBar Empty Form', async () => {
   const button = screen.getByRole('button');
   fireEvent.click(button);
   await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/login'));
-})
+});
+
+test('TopBar My Listings', async () => {
+  render(<TopBar/>);
+  await waitFor(() => screen.getByRole('button'));
+  const email = screen.getByPlaceholderText('Email or Phone Number');
+  const password = screen.getByPlaceholderText('Password');
+  const button = screen.getByRole('button');
+  userEvent.type(email, 'dev@dev.dev');
+  userEvent.type(password, 'dev');
+  fireEvent.click(button);
+  await waitFor(() => screen.getByText('My Listings'));
+  const id = JSON.parse(localStorage.getItem('user')).owner.id;
+  fireEvent.click(screen.getByText('My Listings'));
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith(`/?owner=${id}`));
+});

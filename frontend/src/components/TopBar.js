@@ -3,7 +3,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import {Button} from '@mui/material';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 function TopBar() {
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation();
 
   const [loginName, setLoginName] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -44,6 +45,18 @@ function TopBar() {
     setUser(false);
     setLoginName('');
     setPassword('');
+    myListings(false);
+  };
+
+  const myListings = (event) => {
+    const params = new URLSearchParams(location.search);
+    if (event) {
+      params.set('owner', JSON.parse(localStorage.getItem('user')).owner.id);
+      params.delete('category');
+    } else {
+      params.delete('owner');
+    }
+    history.push(`${location.pathname}?${params.toString()}`);
   };
 
   const onSubmit = async (event) => {
@@ -103,16 +116,28 @@ function TopBar() {
         </Typography>
         {
           user ? (
-            <Button
-              type='submit'
-              value='Submit'
-              variant='contained'
-              margin='normal'
-              sx={{mt: 2, mb: 2, ml: 1, justifyContent: 'flex-end'}}
-              onClick={logout}
-            >
-              Log Out
-            </Button>
+            <div>
+              <Button
+                type='submit'
+                value='Submit'
+                variant='contained'
+                margin='normal'
+                sx={{mt: 2, mb: 2, ml: 1, justifyContent: 'flex-end'}}
+                onClick={myListings}
+              >
+                My Listings
+              </Button>
+              <Button
+                type='submit'
+                value='Submit'
+                variant='contained'
+                margin='normal'
+                sx={{mt: 2, mb: 2, ml: 1, justifyContent: 'flex-end'}}
+                onClick={logout}
+              >
+                Log Out
+              </Button>
+            </div>
           ) : (
             <Box
               component='form'
