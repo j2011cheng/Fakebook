@@ -32,6 +32,9 @@ jest.mock('react-router-dom', () => ({
   useHistory: () => ({
     push: mockHistoryPush,
   }),
+  useLocation: () => ({
+    pathname: '/2'
+  })
 }));
 
 beforeAll(() => server.listen());
@@ -72,5 +75,13 @@ test('Server Error', async () => {
   jest.spyOn(window, 'alert').mockImplementation(() => {});
   render(<Categories/>);
   await waitFor(() => expect(alert)
-    .toHaveBeenCalledWith('Server Error'));
+    .toHaveBeenCalledWith('Categories Server Error'));
+});
+
+test('Click category then click back', async () => {
+  render(<Categories/>);
+  await waitFor(() => screen.getByText('Electronics'));
+  const button = screen.getByText('Electronics');
+  fireEvent.click(button);
+  await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/'));
 });

@@ -5,25 +5,27 @@ import {screen} from '@testing-library/react';
 import {rest} from 'msw';
 import {setupServer} from 'msw/node';
 
-import ListingList from '../ListingList';
+import Subcategories from '../Subcategories';
 
-const URL = '/v0/listings';
+const URL = '/v0/category';
 
 const server = setupServer(
   rest.get(URL, (req, res, ctx) => {
     return res(
-      ctx.json([{
-        name: 'item',
-        price: 1,
-        id: 1,
-        image: '',
-      }]),
+      ctx.json({subcategories: [
+        {
+          name: 'Vehicles',
+          id: 1,
+        },
+        {
+          name: 'Electronics',
+          id: 2,
+        },
+      ]}),
     );
   }),
 );
 
-// https://stackoverflow.com/questions/58524183/
-// how-to-mock-history-push-with-the-new-react-router-hooks-using-jest/59451956
 const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -31,7 +33,7 @@ jest.mock('react-router-dom', () => ({
     push: mockHistoryPush,
   }),
   useLocation: () => ({
-    pathname: '/2',
+    pathname: '/2'
   }),
 }));
 
@@ -39,30 +41,27 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test('ImageList is there', async () => {
-  render(<ListingList/>);
-  screen.getByRole('list');
-  await waitFor(() => screen.getByText('item'));
+test('List is There', async () => {
+  render(<Subcategories/>);
+  await waitFor(() => screen.getByText('Vehicles'));
 });
 
-test('Image is clickable', async () => {
-  render(<ListingList/>);
-  await waitFor(() => screen.getByRole('button'));
-  const button = screen.getByRole('button');
+test('Button is Clickable', async () => {
+  render(<Subcategories/>);
+  await waitFor(() => screen.getByText('Vehicles'));
+  const button = screen.getByText('Vehicles');
   fireEvent.click(button);
-  await waitFor(() => {
-    expect(mockHistoryPush).toHaveBeenCalledWith('/listing/1');
-  });
+  await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/1'));
 });
 
-test('Category does not exist', async () => {
+test('Not Found', async () => {
   server.use(
     rest.get(URL, (req, res, ctx) => {
       return res(ctx.status(404));
     }),
   );
   jest.spyOn(window, 'alert').mockImplementation(() => {});
-  render(<ListingList/>);
+  render(<Subcategories/>);
   await waitFor(() => expect(alert)
     .toHaveBeenCalledWith('Category does not exist'));
 });
@@ -74,7 +73,7 @@ test('Server Error', async () => {
     }),
   );
   jest.spyOn(window, 'alert').mockImplementation(() => {});
-  render(<ListingList/>);
+  render(<Subcategories/>);
   await waitFor(() => expect(alert)
-    .toHaveBeenCalledWith('Listings Server Error'));
+    .toHaveBeenCalledWith('Subcategories Server Error'));
 });
