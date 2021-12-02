@@ -105,8 +105,6 @@ exports.selectListings = async (q) => {
       }
     }
   }
-  console.log(select);
-  console.log(valuesList);
   query = {
     text: select,
     values: valuesList,
