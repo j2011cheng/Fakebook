@@ -33,9 +33,9 @@ afterAll(() => server.close());
 
 test('Correct Accessibility', () => {
   render(<Login/>);
-  const email = screen.getByPlaceholderText('Email or Phone Number');
-  const password = screen.getByPlaceholderText('Password');
-  const button = screen.getByRole('button');
+  screen.getByPlaceholderText('Email or Phone Number');
+  screen.getByPlaceholderText('Password');
+  screen.getByRole('button');
 });
 
 test('Login with Email and Password', async () => {
