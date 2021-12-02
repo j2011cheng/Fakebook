@@ -2,7 +2,7 @@ import React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 
 /**
  * Primary filter
@@ -11,8 +11,14 @@ import {useHistory} from 'react-router-dom';
  */
 function Categories() {
   const history = useHistory();
+  const location = useLocation();
   const setCategory = (event) => {
-    history.push(`/${event.target.value}`);
+    const path = `/${event.target.value}`;
+    if (location.pathname === path) {
+      history.push('/');
+    } else {
+      history.push(path);
+    }
   };
 
   const [data, setData] = React.useState([]);
