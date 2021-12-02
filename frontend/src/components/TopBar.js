@@ -7,9 +7,7 @@ import {useHistory} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-// import {styled} from '@mui/material/styles';
 
-// const drawerWidth = 400;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -19,32 +17,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const FastLogin = styled('div')(({theme}) => ({
-//   // 'position': 'relative',
-//   // 'borderRadius': theme.shape.borderRadius,
-//   // 'backgroundColor': alpha(theme.palette.common.white, 0.15),
-//   // '&:hover': {
-//   //   backgroundColor: alpha(theme.palette.common.white, 0.25),
-//   // },
-//   // 'marginRight': theme.spacing(2),
-//   // 'marginLeft': 0,
-//   // 'width': '100%',
-//   [theme.breakpoints.up('sm')]: {
-//     marginLeft: theme.spacing(3),
-//     width: 'auto',
-//   },
-// }));
-
 /**
  * @return {object} JSX
  */
 function TopBar() {
   const classes = useStyles();
   const history = useHistory();
-
-  // const signIn = (event) => {
-  //   history.push('/login');
-  // };
 
   const [user, setUser] = React.useState({loginName: '', password: ''});
 
