@@ -71,7 +71,7 @@ function Body() {
   return (
     <Box>
       <Toolbar/>
-      <Container sx={{mt: 4, mb: 4, ml: '50%', mr: '50%'}}>
+      <Container sx={{mt: 4, mb: 4}}>
         <Grid container spacing={3}>
           <Subcategories/>
           <ListingList/>
