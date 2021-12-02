@@ -12,13 +12,16 @@ import {useHistory, useLocation} from 'react-router-dom';
 function Categories() {
   const history = useHistory();
   const location = useLocation();
-  const setCategory = (event) => {
-    const path = `/${event.target.value}`;
-    if (location.pathname === path) {
-      history.push('/');
-    } else {
-      history.push(path);
-    }
+  const setCategory = (id) => {
+    return () => {
+      const params = new URLSearchParams(location.search);
+      if (params.get('category') == id) {
+        params.delete('category');
+      } else {
+        params.set('category', id);
+      }
+      history.push(`/listings?${params.toString()}`);
+    };
   };
 
   const [data, setData] = React.useState([]);
@@ -55,7 +58,7 @@ function Categories() {
       <ListItem key={id}>
         <Button
           value={id}
-          onClick={setCategory}
+          onClick={setCategory(id)}
         >
           {name}
         </Button>

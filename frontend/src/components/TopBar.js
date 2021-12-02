@@ -128,7 +128,6 @@ function TopBar() {
             required
             margin='normal'
             size='small'
-            noWrap
             sx={{
               display: {xs: 'none', md: 'inline-block'},
               mt: 2, mb: 2, ml: 1, mr: 1, justifyContent: 'flex-end',

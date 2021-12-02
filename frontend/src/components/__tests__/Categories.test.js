@@ -33,7 +33,7 @@ jest.mock('react-router-dom', () => ({
     push: mockHistoryPush,
   }),
   useLocation: () => ({
-    pathname: '/2'
+    search: '?category=2'
   })
 }));
 
@@ -51,7 +51,8 @@ test('Button is Clickable', async () => {
   await waitFor(() => screen.getByText('Vehicles'));
   const button = screen.getByText('Vehicles');
   fireEvent.click(button);
-  await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/1'));
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith('/listings?category=1'));
 });
 
 test('Not Found', async () => {
@@ -83,5 +84,6 @@ test('Click category then click back', async () => {
   await waitFor(() => screen.getByText('Electronics'));
   const button = screen.getByText('Electronics');
   fireEvent.click(button);
-  await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/'));
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith('/listings?'));
 });

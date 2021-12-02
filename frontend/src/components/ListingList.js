@@ -18,11 +18,10 @@ function ListingList() {
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
     const getData = async () => {
-      const path = location.pathname.split('?')[0].split('/');
-      const category = path[path.length - 1];
+      const params = new URLSearchParams(location.search);
       let request = '/v0/listings';
-      if (category) {
-        request += `?category=${category}`;
+      if (params) {
+        request += `?${params.toString()}`;
       }
       const disp = await fetch(request, {
         method: 'GET',
@@ -47,7 +46,7 @@ function ListingList() {
       setData(disp);
     };
     getData();
-  }, [location.pathname]);
+  }, [location.search]);
 
   const listingClick = (event) => {
     const listing = event.currentTarget.id;
@@ -61,17 +60,17 @@ function ListingList() {
         key={id}
         onClick={listingClick}
       >
-      <ImageListItem
-      >
-        <img
-          src={image}
-          alt='Not found'/>
-        <ImageListItemBar
-          title={name}
-          subtitle={`$${price}`}
-          position="below"
-        />
-      </ImageListItem>
+        <ImageListItem
+        >
+          <img
+            src={image}
+            alt='Not found'/>
+          <ImageListItemBar
+            title={name}
+            subtitle={`$${price}`}
+            position="below"
+          />
+        </ImageListItem>
       </Button>
     );
   };
