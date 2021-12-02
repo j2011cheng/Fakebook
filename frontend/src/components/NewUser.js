@@ -51,6 +51,7 @@ function NewUser() {
   };
 
   const signIn = (event) => {
+    event.preventDefault();
     history.push('/login');
   };
 

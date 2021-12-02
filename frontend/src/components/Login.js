@@ -57,6 +57,7 @@ function Login() {
   };
 
   const onNewClick = (event) => {
+    event.preventDefault();
     history.push('/newuser');
   };
 
