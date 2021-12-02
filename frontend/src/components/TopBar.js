@@ -55,9 +55,14 @@ function TopBar() {
     setUser(u);
   };
 
-  const onSubmit = (event) => {
+  const logout = (event) => {
+    localStorage.removeItem('user');
+    setUser({loginName: '', password: ''});
+  };
+
+  const onSubmit = async (event) => {
     event.preventDefault();
-    fetch('/v0/authenticate', {
+    await fetch('/v0/authenticate', {
       method: 'POST',
       body: JSON.stringify({
         loginName: user.loginName,
@@ -78,13 +83,13 @@ function TopBar() {
         history.push('/');
       })
       .catch((err) => {
-        setUser({email: '', password: ''});
         if (err.status === 401) {
           alert('Invalid login credentials');
         } else {
           alert('Server Error');
         }
       });
+    setUser({email: '', password: ''});
   };
 
   // if signed in, show an account badge, otherwise show a fast login...
@@ -104,46 +109,61 @@ function TopBar() {
         <Typography variant='h4' sx={{flexGrow: 1, color: '#1976d2'}}>
           Fakebook
         </Typography>
-        <Box
-          component='form'
-        >
-          <TextField
-            type={'text'}
-            name={'loginName'}
-            placeholder='Email or Phone Number'
-            onChange={handleInputChange}
-            required
-            margin='normal'
-            size='small'
-            sx={{
-              display: {xs: 'none', md: 'inline-block'},
-              mt: 2, mb: 2, ml: 1, mr: 1, justifyContent: 'flex-end',
-            }}
-          />
-          <TextField
-            type='password'
-            name='password'
-            placeholder='Password'
-            onChange={handleInputChange}
-            required
-            margin='normal'
-            size='small'
-            sx={{
-              display: {xs: 'none', md: 'inline-block'},
-              mt: 2, mb: 2, ml: 1, mr: 1, justifyContent: 'flex-end',
-            }}
-          />
-          <Button
-            type='submit'
-            value='Submit'
-            variant='contained'
-            margin='normal'
-            sx={{mt: 2, mb: 2, ml: 1, justifyContent: 'flex-end'}}
-            onClick={onSubmit}
-          >
-            Log In
-          </Button>
-        </Box>
+        {
+          localStorage.getItem('user') ? (
+            <Button
+              type='submit'
+              value='Submit'
+              variant='contained'
+              margin='normal'
+              sx={{mt: 2, mb: 2, ml: 1, justifyContent: 'flex-end'}}
+              onClick={logout}
+            >
+              Log Out
+            </Button>
+          ) : (
+            <Box
+              component='form'
+            >
+              <TextField
+                type={'text'}
+                name={'loginName'}
+                placeholder='Email or Phone Number'
+                onChange={handleInputChange}
+                required
+                margin='normal'
+                size='small'
+                sx={{
+                  display: {xs: 'none', md: 'inline-block'},
+                  mt: 2, mb: 2, ml: 1, mr: 1, justifyContent: 'flex-end',
+                }}
+              />
+              <TextField
+                type='password'
+                name='password'
+                placeholder='Password'
+                onChange={handleInputChange}
+                required
+                margin='normal'
+                size='small'
+                sx={{
+                  display: {xs: 'none', md: 'inline-block'},
+                  mt: 2, mb: 2, ml: 1, mr: 1, justifyContent: 'flex-end',
+                }}
+              />
+              <Button
+                type='submit'
+                value='Submit'
+                variant='contained'
+                margin='normal'
+                sx={{mt: 2, mb: 2, ml: 1, justifyContent: 'flex-end'}}
+                onClick={onSubmit}
+              >
+                Log In
+              </Button>
+            </Box>
+          )
+        }
       </Toolbar>
     </AppBar>
   );
