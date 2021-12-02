@@ -30,9 +30,9 @@ function Subcategories() {
   const history = useHistory();
   const setCategory = (id) => {
     return () => {
-      const params = new URLSearchParams(location.search);
+      const params = new URLSearchParams();
       params.set('category', id);
-      history.push(`/listings?${params.toString()}`);
+      history.push(`/?${params.toString()}`);
     };
   };
 

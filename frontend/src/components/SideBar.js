@@ -5,7 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 
 import SideBarTopContent from './SideBarTopContent';
-// import Filters from './Filters';
+import Filters from './Filters';
 import Categories from './Categories';
 
 const drawerWidth = 400;
@@ -49,7 +49,7 @@ function SideBar() {
       />
       <SideBarTopContent/>
       <Divider/>
-      {/* <Filters/>*/}
+      <Filters/>
       <Divider/>
       <Categories/>
     </Drawer>
