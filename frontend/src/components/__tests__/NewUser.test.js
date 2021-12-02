@@ -33,18 +33,18 @@ afterAll(() => server.close());
 
 test('Correct Accessibility', () => {
   render(<NewUser/>);
-  const name = screen.getByPlaceholderText('Name');
-  const email = screen.getByPlaceholderText('Email');
-  const phone = screen.getByPlaceholderText('Phone Number');
-  const password = screen.getByPlaceholderText('Password');
-  const button = screen.getByRole('button');
+  screen.getByPlaceholderText('Name');
+  screen.getByPlaceholderText('Email');
+  screen.getByPlaceholderText('Phone Number');
+  screen.getByPlaceholderText('Password');
+  screen.getByRole('button');
 });
 
 test('Create User with Name, Email, and Password', async () => {
   render(<NewUser/>);
   const name = screen.getByPlaceholderText('Name');
   const email = screen.getByPlaceholderText('Email');
-  const phone = screen.getByPlaceholderText('Phone Number');
+  screen.getByPlaceholderText('Phone Number');
   const password = screen.getByPlaceholderText('Password');
   const button = screen.getByRole('button');
   userEvent.type(name, 'dev');
@@ -64,7 +64,7 @@ test('Create User already Exists', async () => {
   render(<NewUser/>);
   const name = screen.getByPlaceholderText('Name');
   const email = screen.getByPlaceholderText('Email');
-  const phone = screen.getByPlaceholderText('Phone Number');
+  screen.getByPlaceholderText('Phone Number');
   const password = screen.getByPlaceholderText('Password');
   const button = screen.getByRole('button');
   userEvent.type(name, 'dev');
@@ -85,7 +85,7 @@ test('New User Server Error', async () => {
   render(<NewUser/>);
   const name = screen.getByPlaceholderText('Name');
   const email = screen.getByPlaceholderText('Email');
-  const phone = screen.getByPlaceholderText('Phone Number');
+  screen.getByPlaceholderText('Phone Number');
   const password = screen.getByPlaceholderText('Password');
   const button = screen.getByRole('button');
   userEvent.type(name, 'dev');
