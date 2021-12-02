@@ -35,7 +35,7 @@ function Categories() {
           if (err.status === 404) {
             alert('Category does not exist');
           } else {
-            alert('Server Error');
+            alert('Categories Server Error');
           }
           return [];
         });

@@ -76,5 +76,5 @@ test('Server Error', async () => {
   jest.spyOn(window, 'alert').mockImplementation(() => {});
   render(<ListingList/>);
   await waitFor(() => expect(alert)
-    .toHaveBeenCalledWith('Server Error'));
+    .toHaveBeenCalledWith('Listings Server Error'));
 });
