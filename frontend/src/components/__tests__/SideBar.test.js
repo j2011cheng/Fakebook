@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import {screen} from '@testing-library/react';
 
 import {setNarrow, setWide} from './common.js';
-import {getOnlyVisible, getNotVisible, getClickable} from './common.js';
+import {getOnlyVisible} from './common.js';
 import SideBar from '../SideBar';
 
 const mockHistoryPush = jest.fn();

@@ -1,5 +1,4 @@
 import {render, fireEvent, waitFor} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import {screen} from '@testing-library/react';
 import {rest} from 'msw';
@@ -33,7 +32,7 @@ jest.mock('react-router-dom', () => ({
     push: mockHistoryPush,
   }),
   useLocation: () => ({
-    search: '?category=2'
+    search: '?category=2',
   }),
 }));
 
@@ -86,4 +85,4 @@ test('All Categories', async () => {
   fireEvent.click(button);
   await waitFor(() => expect(mockHistoryPush)
     .toHaveBeenCalledWith('/?'));
-})
+});
