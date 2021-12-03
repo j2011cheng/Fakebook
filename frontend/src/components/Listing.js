@@ -1,27 +1,37 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
-import Container from '@mui/material/Container';
+import Dialog from '@mui/material/Dialog';
+import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Pagination from '@mui/material/Pagination';
-import Button from '@mui/material/Button';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
-import {useLocation} from 'react-router-dom';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import {useLocation, useHistory} from 'react-router-dom';
 
+import Responses from './Responses';
 
 /**
  *
  * @return {object} JSX
  */
 function Listing() {
-  const [message, setMessage] = React.useState('');
   const location = useLocation();
+  const history = useHistory();
   const [image, setImage] = React.useState(1);
 
-  const handleInputChange = (event) => {
-    setMessage(event.target.value);
-  };
+  const [listing, setListing] = React.useState();
+  React.useEffect(() => {
+    const getData = async () => {
+      const params = new URLSearchParams(location.search);
+      setListing(params.get('listing'));
+    };
+    getData();
+  }, [location.search]);
 
   const handleChange = (event, value) => {
     setImage(value);
@@ -30,8 +40,10 @@ function Listing() {
   const [data, setData] = React.useState({});
   React.useEffect(() => {
     const getData = async () => {
-      const params = new URLSearchParams(location.search);
-      const request = `/v0/listing/${params.get('listing')}`;
+      if (!listing) {
+        return {};
+      }
+      const request = `/v0/listing/${listing}`;
       const disp = await fetch(request, {
         method: 'GET',
       })
@@ -55,45 +67,7 @@ function Listing() {
       setData(disp);
     };
     getData();
-  }, [location.search]);
-
-  const [responses, setResponses] = React.useState([]);
-  React.useEffect(() => {
-    const getData = async () => {
-      const params = new URLSearchParams(location.search);
-      const user = localStorage.getItem('user') ?
-        JSON.parse(localStorage.getItem('user')) : undefined;
-      if (user) {
-        const request =
-          `/v0/response/${user.owner.id}?listing=${params.get('listing')}`;
-        const bearerToken = user.accessToken;
-        const disp = await fetch(request, {
-          method: 'GET',
-          headers: new Headers({
-            'Authorization': `Bearer ${bearerToken}`,
-            'Content-Type': 'application/x-www-form-urlencoded',
-          }),
-        })
-          .then((res) => {
-            if (!res.ok) {
-              throw res;
-            }
-            return res.json();
-          })
-          .then((json) => {
-            return json;
-          })
-          .catch((err) => {
-            if (err.status !== 404) {
-              alert('Responses Server Error');
-            }
-            return [];
-          });
-        setResponses(disp);
-      }
-    };
-    getData();
-  }, [location.search, message]);
+  }, [listing]);
 
   const attributeItems = () => {
     const attributes = [];
@@ -109,76 +83,44 @@ function Listing() {
     return attributes;
   };
 
-  const submitResponse = () => {
-    const params = new URLSearchParams(location.search);
-    const user = JSON.parse(localStorage.getItem('user'));
-    const request =
-      `/v0/response/${params.get('listing')}`;
-    const bearerToken = user.accessToken;
-    const body = JSON.stringify({
-      message: message,
-    });
-    fetch(request, {
-      method: 'POST',
-      headers: new Headers({
-        'Authorization': `Bearer ${bearerToken}`,
-        'Content-Type': 'application/json',
-      }),
-      body: body,
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw res;
-        }
-      })
-      .catch((err) => {
-        if (err.status === 401) {
-          alert('Login session expired');
-        } else {
-          alert('New Response Server Error');
-        }
-      });
-    setMessage('');
-  };
+  if (!listing) {
+    return (<div></div>);
+  }
 
-  const responseItems = () => {
-    const items = [];
-    if (data.name && localStorage.getItem('user')) {
-      items.push((
-        <Grid item xs={8} key='text'>
-          <TextareaAutosize
-            value={message}
-            placeholder='Response'
-            onInput={handleInputChange}
-          />
-        </Grid>
-      ));
-      items.push((
-        <Grid item xs={4} key='submit'>
-          <Button
-            onClick={submitResponse}
-          >
-            Respond
-          </Button>
-        </Grid>
-      ));
-      if (JSON.parse(localStorage.getItem('user')).owner.id === data.owner.id) {
-        for (let i = 0; i < responses.length; i++) {
-          items.push((
-            <Grid item xs={12} key={i}>
-              {responses[i]}
-            </Grid>
-          ));
-        }
-      }
-      return items;
-    } else {
-      return;
-    }
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+
+  const handleClose = () => {
+    const params = new URLSearchParams(location.search);
+    params.delete('listing');
+    history.push(`/?${params.toString()}`);
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Dialog
+      fullScreen
+      onClose={handleClose}
+      TransitionComponent={Transition}
+      open
+      scroll={'paper'}
+    >
+      <DialogTitle sx={{position: 'relative'}}>
+            <Toolbar>
+              <IconButton
+                edge='start'
+                color='inherit'
+                onClick={handleClose}
+                aria-label='close'
+              >
+                <CloseIcon />
+              </IconButton>
+              <Typography sx={{ml: 2, flex: 1}} variant='h6' component='div'>
+                {data.name}
+              </Typography>
+            </Toolbar>
+          </DialogTitle>
+      <DialogContent>
       <CssBaseline />
       <Box
         sx={{
@@ -188,9 +130,6 @@ function Listing() {
           alignItems: 'center',
         }}
       >
-        <Typography component="h1" variant="h5">
-          {data.name}
-        </Typography>
         <img
           src={data.images ? data.images[image-1] : ''}
           alt='Not found'
@@ -215,11 +154,12 @@ function Listing() {
             {attributeItems()}
           </Grid>
           <Grid container justifyContent='flex-end'>
-            {responseItems()}
+            <Responses/>
           </Grid>
         </Box>
       </Box>
-    </Container>
+      </DialogContent>
+    </Dialog>
   );
 };
 
