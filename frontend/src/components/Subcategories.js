@@ -6,6 +6,18 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import {useHistory, useLocation} from 'react-router-dom';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Dialog from '@mui/material/Dialog';
+import ListItem from '@mui/material/ListItem';
+import List from '@mui/material/List';
+import AppBar from '@mui/material/AppBar';
+import Slide from '@mui/material/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction='up' ref={ref} {...props} />;
+});
 
 /**
  * Category chips section of body
@@ -13,20 +25,18 @@ import {useHistory, useLocation} from 'react-router-dom';
  * @return {object} JSX
  */
 function Subcategories() {
-  // --- Mobile ---
-  // breadcrumbs
-  // category selection (dropdown)
-  // subcategory selection (chips)
-  // search bar
-  // location filter
-  // category specific filters
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  // --- Desktop ---
-  // Shop by category text
-  // category chips
+  const handleClickOpen = () => {
+    setMobileOpen(true);
+  };
+  const handleClose = () => {
+    setMobileOpen(false);
+  };
+
   const location = useLocation();
-
   const history = useHistory();
+
   const setCategory = (id) => {
     return () => {
       const params = new URLSearchParams();
@@ -38,6 +48,49 @@ function Subcategories() {
     const params = new URLSearchParams();
     params.delete('category');
     history.push(`/?${params.toString()}`);
+  };
+
+  const mobileAllCategories = () => {
+    return (
+      <div>
+        <Dialog
+          fullScreen
+          open={mobileOpen}
+          onClose={handleClose}
+          TransitionComponent={Transition}
+        >
+          <AppBar sx={{position: 'relative'}}>
+            <Toolbar
+              sx={{
+                backgroundColor: 'white',
+                height: 75,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+              }}
+            >
+              <Typography variant='h4' sx={{flexGrow: 1, color: '#1976d2'}}>
+                Select Category
+              </Typography>
+              <IconButton
+                onClick={handleClose}
+                aria-label='close'
+                sx={{justifyContent: 'flex-end', color: '#1976d2'}}
+              >
+                <CloseIcon fontSize='large'/>
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Toolbar sx={{height: 75}}/>
+          {/* replace the list with your backend list @graham */}
+          <List sx={{ml: 1}}>
+            <ListItem button>
+              <ListItemText primary='Phone ringtone' secondary='Titania' />
+            </ListItem>
+          </List>
+        </Dialog>
+      </div>
+    );
   };
 
   const [data, setData] = React.useState([]);
@@ -96,7 +149,40 @@ function Subcategories() {
         <ListItemText sx={{mt: -1}}>
           <Typography variant='h5'>Shop by Category</Typography>
         </ListItemText>
-        <Stack direction='row' spacing={1}>
+        {/* Mobile View */}
+        <Stack
+          direction='row'
+          spacing={1}
+          variant='temporary'
+          open={mobileOpen}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            'display': {xs: 'block', sm: 'none'},
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+            },
+          }}
+        >
+          <Chip
+            label={'All Categories'}
+            onClick={handleClickOpen}
+          />
+          {data.map(subcategory)}
+        </Stack>
+        {/* Desktop View */}
+        <Stack
+          direction='row'
+          spacing={1}
+          variant='permanent'
+          sx={{
+            'display': {xs: 'none', sm: 'block'},
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+            },
+          }}
+        >
           <Chip
             label={'All Categories'}
             onClick={allCategories}
@@ -104,8 +190,10 @@ function Subcategories() {
           {data.map(subcategory)}
         </Stack>
       </Paper>
+      {mobileOpen && mobileAllCategories()}
     </Grid>
   );
 };
 
 export default Subcategories;
+
