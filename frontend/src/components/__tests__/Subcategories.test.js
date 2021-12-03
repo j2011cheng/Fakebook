@@ -102,14 +102,12 @@ test('Set mobile view', async () => {
   screen.getByText('Select Category');
 });
 
-test('Set mobile view', async () => {
+test('Close mobile view', async () => {
   render(<Subcategories/>);
   setNarrow();
   await waitFor(() => screen.getByText('All Categories'));
   const button = screen.getByText('All Categories');
   fireEvent.click(button);
-  // await waitFore(() => screen.getByRole('button'))
   const close = screen.getByRole('button');
   fireEvent.click(close);
-  // await waitFor(() => expect(screen.getByRole('close')).not.toBeDefined());
 });
