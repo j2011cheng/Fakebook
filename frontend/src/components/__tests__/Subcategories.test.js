@@ -29,21 +29,24 @@ const server = setupServer(
 );
 
 const mockHistoryPush = jest.fn();
+const mockUseLocationValue = {
+    search: '?category=2',
+};
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useHistory: () => ({
     push: mockHistoryPush,
   }),
-  useLocation: () => ({
-    search: '?category=2',
-  }),
+  useLocation: () => (mockUseLocationValue),
 }));
 
+beforeEach(() => mockUseLocationValue.search = '?category=2');
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 test('List is There', async () => {
+  mockUseLocationValue.search = '';
   render(<Subcategories/>);
   await waitFor(() => screen.getByText('Vehicles'));
 });
@@ -91,10 +94,22 @@ test('All Categories', async () => {
 });
 
 test('Set mobile view', async () => {
-  render(<SideBar/>);
+  render(<Subcategories/>);
   setNarrow();
   await waitFor(() => screen.getByText('All Categories'));
   const button = screen.getByText('All Categories');
   fireEvent.click(button);
   screen.getByText('Select Category');
+});
+
+test('Set mobile view', async () => {
+  render(<Subcategories/>);
+  setNarrow();
+  await waitFor(() => screen.getByText('All Categories'));
+  const button = screen.getByText('All Categories');
+  fireEvent.click(button);
+  // await waitFore(() => screen.getByRole('button'))
+  const close = screen.getByRole('button');
+  fireEvent.click(close);
+  // await waitFor(() => expect(screen.getByRole('close')).not.toBeDefined());
 });

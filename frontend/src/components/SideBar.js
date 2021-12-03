@@ -68,6 +68,9 @@ function SideBar(props) {
         <Divider/>
         <Filters/>
         <Divider/>
+        <h1>
+          Categories
+        </h1>
         <Categories/>
       </Drawer>
     </Box>

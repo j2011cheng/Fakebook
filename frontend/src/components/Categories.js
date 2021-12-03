@@ -70,14 +70,9 @@ function Categories() {
   };
 
   return (
-    <div>
-      <h1>
-        Categories
-      </h1>
-      <List name='categories'>
-        {data.subcategories ? data.subcategories.map(category) : ''}
-      </List>
-    </div>
+    <List name='categories'>
+      {data.subcategories ? data.subcategories.map(category) : ''}
+    </List>
   );
 }
 

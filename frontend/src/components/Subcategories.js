@@ -10,10 +10,12 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Dialog from '@mui/material/Dialog';
-import ListItem from '@mui/material/ListItem';
-import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
+// import List from '@mui/material/List';
 import AppBar from '@mui/material/AppBar';
 import Slide from '@mui/material/Slide';
+
+import Categories from './Categories';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />;
@@ -26,6 +28,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  */
 function Subcategories() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  // https://stackoverflow.com/questions/19014250/
+  // rerender-view-on-browser-resize-with-react
+  const [width, setWidth] = React.useState(0);
+  React.useLayoutEffect(() => {
+    const updateWidth = () => {
+      setWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', updateWidth);
+    updateWidth();
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
 
   const handleClickOpen = () => {
     setMobileOpen(true);
@@ -83,11 +97,7 @@ function Subcategories() {
           </AppBar>
           <Toolbar sx={{height: 75}}/>
           {/* replace the list with your backend list @graham */}
-          <List sx={{ml: 1}}>
-            <ListItem button>
-              <ListItemText primary='Phone ringtone' secondary='Titania' />
-            </ListItem>
-          </List>
+          <Categories/>
         </Dialog>
       </div>
     );
@@ -136,28 +146,13 @@ function Subcategories() {
     );
   };
 
-  return (
-    <Grid item xs={12}>
-      <Paper
-        sx={{
-          p: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          height: 100,
-        }}
-      >
-        <ListItemText sx={{mt: -1}}>
-          <Typography variant='h5'>Shop by Category</Typography>
-        </ListItemText>
-        {/* Mobile View */}
+  const getStack = () => {
+    if (width <= 600) {
+      return (
         <Stack
           direction='row'
           spacing={1}
           variant='temporary'
-          open={mobileOpen}
-          ModalProps={{
-            keepMounted: true,
-          }}
           sx={{
             'display': {xs: 'block', sm: 'none'},
             '& .MuiDrawer-paper': {
@@ -171,7 +166,9 @@ function Subcategories() {
           />
           {data.map(subcategory)}
         </Stack>
-        {/* Desktop View */}
+      );
+    } else {
+      return (
         <Stack
           direction='row'
           spacing={1}
@@ -189,6 +186,24 @@ function Subcategories() {
           />
           {data.map(subcategory)}
         </Stack>
+      );
+    }
+  };
+
+  return (
+    <Grid item xs={12}>
+      <Paper
+        sx={{
+          p: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          height: 100,
+        }}
+      >
+        <ListItemText sx={{mt: -1}}>
+          <Typography variant='h5'>Shop by Category</Typography>
+        </ListItemText>
+        {getStack()}
       </Paper>
       {mobileOpen && mobileAllCategories()}
     </Grid>
@@ -196,4 +211,3 @@ function Subcategories() {
 };
 
 export default Subcategories;
-
