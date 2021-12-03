@@ -6,6 +6,8 @@ import Login from './Login';
 import NewUser from './NewUser';
 import Dashboard from './Dashboard';
 
+import Listing from './Listing';
+
 /**
  * @return {object} JSX
  */
@@ -14,6 +16,7 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route path='/listing'>
+          <Listing/>
         </Route>
         <Route path='/login'>
           <Login/>

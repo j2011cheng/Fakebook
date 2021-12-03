@@ -50,7 +50,7 @@ function ListingList() {
 
   const listingClick = (event) => {
     const listing = event.currentTarget.id;
-    history.push(`/listing/${listing}`);
+    history.push(`/listing?listing=${listing}`);
   };
 
   const listItem = ({id, image, price, name}) => {
