@@ -53,7 +53,7 @@ function Listing() {
   const attributeItems = () => {
     const attributes = [];
     for (const key in data.attributes) {
-      if (data.attributes.hasOwnProperty(key) && key != '') {
+      if (data.attributes.hasOwnProperty(key) && key !== '') {
         attributes.push((
           <Grid item xs={6} key={key}>
             {`${key}: ${data.attributes[key]}`}

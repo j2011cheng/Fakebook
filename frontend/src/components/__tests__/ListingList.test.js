@@ -61,7 +61,7 @@ test('Image is clickable', async () => {
   const button = screen.getByRole('button');
   fireEvent.click(button);
   await waitFor(() => {
-    expect(mockHistoryPush).toHaveBeenCalledWith('/listing/1');
+    expect(mockHistoryPush).toHaveBeenCalledWith('/listing?listing=1');
   });
 });
 

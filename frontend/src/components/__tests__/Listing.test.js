@@ -17,11 +17,11 @@ const server = setupServer(
           name: 'test',
         },
         attributes: {
-          price: 1,
+          'price': 1,
           '': 2,
         },
         id: 1,
-        images: ['image1','image2'],
+        images: ['image1', 'image2'],
       }),
     );
   }),
