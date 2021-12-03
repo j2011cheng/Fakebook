@@ -77,15 +77,17 @@ function NewListing() {
 
   const onSubmit = (event) => {
     const l = listing;
+    const token = JSON.parse(localStorage.getItem('user')).accessToken;
     l.category = categoryList.find((c) => c.id === category);
     setListing(l);
-    // console.log(listing);
+    console.log(listing);
     event.preventDefault();
     fetch('/v0/listing', {
       method: 'POST',
       body: JSON.stringify(listing),
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
     }).then((res) => {
       if (!res.ok) {
