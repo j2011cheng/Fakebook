@@ -31,27 +31,33 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test('Correct Accessibility', () => {
-  render(<NewUser/>);
-  screen.getByPlaceholderText('Name');
-  screen.getByPlaceholderText('Email');
-  screen.getByPlaceholderText('Phone Number');
-  screen.getByPlaceholderText('Password');
-  screen.getByRole('button');
-});
 
 test('Create User with Name, Email, and Password', async () => {
   render(<NewUser/>);
   const name = screen.getByPlaceholderText('Name');
-  const email = screen.getByPlaceholderText('Email');
-  screen.getByPlaceholderText('Phone Number');
-  const password = screen.getByPlaceholderText('Password');
-  const button = screen.getByRole('button');
+  const button = screen.getByText('Continue');
   userEvent.type(name, 'dev');
+  fireEvent.click(button);
+  const email = screen.getByPlaceholderText('Email');
   userEvent.type(email, 'new@dev.dev');
+  fireEvent.click(button);
+  screen.getByPlaceholderText('Phone Number');
+  fireEvent.click(button);
+  const password = screen.getByPlaceholderText('Password');
   userEvent.type(password, 'dev');
   fireEvent.click(button);
+  fireEvent.click(screen.getByText('Sign Up'));
   await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/'));
+});
+
+test('Go Forth and Back', async () => {
+  render(<NewUser/>);
+  const forth = screen.getByText('Continue');
+  fireEvent.click(forth);
+  const back = screen.getAllByText('Back')[1];
+  fireEvent.click(forth);
+  fireEvent.click(back);
+  screen.getByPlaceholderText('Email');
 });
 
 test('Create User already Exists', async () => {
@@ -63,16 +69,45 @@ test('Create User already Exists', async () => {
   jest.spyOn(window, 'alert').mockImplementation(() => {});
   render(<NewUser/>);
   const name = screen.getByPlaceholderText('Name');
-  const email = screen.getByPlaceholderText('Email');
-  screen.getByPlaceholderText('Phone Number');
-  const password = screen.getByPlaceholderText('Password');
-  const button = screen.getByRole('button');
+  const button = screen.getByText('Continue');
   userEvent.type(name, 'dev');
-  userEvent.type(email, 'dev@dev.dev');
+  fireEvent.click(button);
+  const email = screen.getByPlaceholderText('Email');
+  userEvent.type(email, 'new@dev.dev');
+  fireEvent.click(button);
+  screen.getByPlaceholderText('Phone Number');
+  fireEvent.click(button);
+  const password = screen.getByPlaceholderText('Password');
   userEvent.type(password, 'dev');
   fireEvent.click(button);
+  fireEvent.click(screen.getByText('Sign Up'));
   await waitFor(() => expect(alert)
     .toHaveBeenCalledWith('User already exists'));
+});
+
+test('Create User Invalid Email', async () => {
+  server.use(
+    rest.post(URL, (req, res, ctx) => {
+      return res(ctx.status(400));
+    }),
+  );
+  jest.spyOn(window, 'alert').mockImplementation(() => {});
+  render(<NewUser/>);
+  const name = screen.getByPlaceholderText('Name');
+  const button = screen.getByText('Continue');
+  userEvent.type(name, 'dev');
+  fireEvent.click(button);
+  const email = screen.getByPlaceholderText('Email');
+  userEvent.type(email, 'new@dev.dev');
+  fireEvent.click(button);
+  screen.getByPlaceholderText('Phone Number');
+  fireEvent.click(button);
+  const password = screen.getByPlaceholderText('Password');
+  userEvent.type(password, 'dev');
+  fireEvent.click(button);
+  fireEvent.click(screen.getByText('Sign Up'));
+  await waitFor(() => expect(alert)
+    .toHaveBeenCalledWith('Must have a valid email'));
 });
 
 test('New User Server Error', async () => {
@@ -84,21 +119,25 @@ test('New User Server Error', async () => {
   jest.spyOn(window, 'alert').mockImplementation(() => {});
   render(<NewUser/>);
   const name = screen.getByPlaceholderText('Name');
-  const email = screen.getByPlaceholderText('Email');
-  screen.getByPlaceholderText('Phone Number');
-  const password = screen.getByPlaceholderText('Password');
-  const button = screen.getByRole('button');
+  const button = screen.getByText('Continue');
   userEvent.type(name, 'dev');
+  fireEvent.click(button);
+  const email = screen.getByPlaceholderText('Email');
   userEvent.type(email, 'new@dev.dev');
+  fireEvent.click(button);
+  screen.getByPlaceholderText('Phone Number');
+  fireEvent.click(button);
+  const password = screen.getByPlaceholderText('Password');
   userEvent.type(password, 'dev');
   fireEvent.click(button);
+  fireEvent.click(screen.getByText('Sign Up'));
   await waitFor(() => expect(alert)
     .toHaveBeenCalledWith('Server Error'));
 });
 
 test('Click Login', async () => {
   render(<NewUser/>);
-  const button = screen.queryByRole('link');
+  const button = screen.getByText('Log In');
   fireEvent.click(button);
   await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/login'));
 });

@@ -13,69 +13,6 @@ import {useHistory} from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 
-const steps = [
-  {
-    label: 'Enter Name',
-    description: (
-      <Grid item xs={12}>
-        <TextField
-          type='text'
-          name='name'
-          placeholder='Name'
-          onChange={() => console.log('owo')}
-          required
-          fullWidth
-          autoFocus
-        />
-      </Grid>
-    ),
-  },
-  {
-    label: 'Enter Email',
-    description: (
-      <Grid item xs={12}>
-        <TextField
-          required
-          type='text'
-          name='email'
-          placeholder='Email'
-          onChange={() => console.log('owo')}
-          fullWidth
-        />
-      </Grid>
-    ),
-  },
-  {
-    label: 'Enter Phone Number',
-    description: (
-      <Grid item xs={12}>
-        <TextField
-          type='text'
-          name='phone'
-          placeholder='Phone Number'
-          onChange={() => console.log('owo')}
-          fullWidth
-        />
-      </Grid>
-    ),
-  },
-  {
-    label: 'Enter Password',
-    description: (
-      <Grid item xs={12}>
-        <TextField
-          required
-          type='password'
-          name='password'
-          placeholder='Password'
-          onChange={() => console.log('owo')}
-          fullWidth
-        />
-      </Grid>
-    ),
-  },
-];
-
 /**
  * @return {object} JSX
  */
@@ -84,6 +21,10 @@ export default function TempNewUser() {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const [user, setUser] =
@@ -95,7 +36,6 @@ export default function TempNewUser() {
     const u = user;
     u[name] = value;
     setUser(u);
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const onSubmit = (event) => {
@@ -117,6 +57,8 @@ export default function TempNewUser() {
         if (err.status === 409) {
           setUser({name: '', phone: '', email: '', password: ''});
           alert('User already exists');
+        } else if (err.status === 400) {
+          alert('Must have a valid email');
         } else {
           alert('Server Error');
         }
@@ -127,6 +69,69 @@ export default function TempNewUser() {
     event.preventDefault();
     history.push('/login');
   };
+
+  const steps = [
+    {
+      label: 'Enter Name',
+      description: (
+        <Grid item xs={12}>
+          <TextField
+            type='text'
+            name='name'
+            placeholder='Name'
+            onChange={handleInputChange}
+            required
+            fullWidth
+            autoFocus
+          />
+        </Grid>
+      ),
+    },
+    {
+      label: 'Enter Email',
+      description: (
+        <Grid item xs={12}>
+          <TextField
+            required
+            type='text'
+            name='email'
+            placeholder='Email'
+            onChange={handleInputChange}
+            fullWidth
+          />
+        </Grid>
+      ),
+    },
+    {
+      label: 'Enter Phone Number',
+      description: (
+        <Grid item xs={12}>
+          <TextField
+            type='text'
+            name='phone'
+            placeholder='Phone Number'
+            onChange={handleInputChange}
+            fullWidth
+          />
+        </Grid>
+      ),
+    },
+    {
+      label: 'Enter Password',
+      description: (
+        <Grid item xs={12}>
+          <TextField
+            required
+            type='password'
+            name='password'
+            placeholder='Password'
+            onChange={handleInputChange}
+            fullWidth
+          />
+        </Grid>
+      ),
+    },
+  ];
 
   return (
     <Container component="main" maxWidth="xs">
@@ -153,7 +158,7 @@ export default function TempNewUser() {
                     <div>
                       <Button
                         variant='contained'
-                        onClick={handleInputChange}
+                        onClick={handleNext}
                         sx={{mt: 1, mr: 1}}
                       >
                         {index === steps.length - 1 ? 'Finish' : 'Continue'}

@@ -35,14 +35,14 @@ test('Correct Accessibility', () => {
   render(<Login/>);
   screen.getByPlaceholderText('Email or Phone Number');
   screen.getByPlaceholderText('Password');
-  screen.getByRole('button');
+  screen.getByText('Log In');
 });
 
 test('Login with Email and Password', async () => {
   render(<Login/>);
-  const email = screen.queryByPlaceholderText('Email or Phone Number');
-  const password = screen.queryByPlaceholderText('Password');
-  const button = screen.queryByRole('button');
+  const email = screen.getByPlaceholderText('Email or Phone Number');
+  const password = screen.getByPlaceholderText('Password');
+  const button = screen.getByText('Log In');
   userEvent.type(email, 'dev@dev.dev');
   userEvent.type(password, 'dev');
   fireEvent.click(button);
@@ -57,9 +57,9 @@ test('Login with Email and Bad Password', async () => {
   );
   jest.spyOn(window, 'alert').mockImplementation(() => {});
   render(<Login/>);
-  const email = screen.queryByPlaceholderText('Email or Phone Number');
-  const password = screen.queryByPlaceholderText('Password');
-  const button = screen.queryByRole('button');
+  const email = screen.getByPlaceholderText('Email or Phone Number');
+  const password = screen.getByPlaceholderText('Password');
+  const button = screen.getByText('Log In');
   userEvent.type(email, 'dev@dev.dev');
   userEvent.type(password, 'd');
   fireEvent.click(button);
@@ -75,9 +75,9 @@ test('Login Server Error', async () => {
   );
   jest.spyOn(window, 'alert').mockImplementation(() => {});
   render(<Login/>);
-  const email = screen.queryByPlaceholderText('Email or Phone Number');
-  const password = screen.queryByPlaceholderText('Password');
-  const button = screen.queryByRole('button');
+  const email = screen.getByPlaceholderText('Email or Phone Number');
+  const password = screen.getByPlaceholderText('Password');
+  const button = screen.getByText('Log In');
   userEvent.type(email, 'dev@dev.dev');
   userEvent.type(password, 'd');
   fireEvent.click(button);
@@ -87,7 +87,7 @@ test('Login Server Error', async () => {
 
 test('Click New User', async () => {
   render(<Login/>);
-  const button = screen.queryByRole('link');
+  const button = screen.getByText('Create New Account');
   fireEvent.click(button);
   await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/newuser'));
 });
