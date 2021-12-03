@@ -88,7 +88,12 @@ function TopBar() {
   // only login button for mobile and fast login for desktop...
 
   return (
-    <AppBar position='fixed' elevation={1} className={classes.appBar}>
+    <AppBar
+      aria-label='topBar'
+      position='fixed'
+      elevation={1}
+      className={classes.appBar}
+    >
       <Toolbar
         sx={{
           backgroundColor: 'white',
@@ -106,6 +111,7 @@ function TopBar() {
             <Button
               type='submit'
               value='Submit'
+              aria-label='topBarLogout'
               variant='contained'
               margin='normal'
               sx={{mt: 2, mb: 2, ml: 1, justifyContent: 'flex-end'}}
@@ -119,7 +125,7 @@ function TopBar() {
             >
               <TextField
                 type='text'
-                name='loginName'
+                aria-label='topBarName'
                 placeholder='Email or Phone Number'
                 onChange={handleLoginNameChange}
                 value={loginName}
@@ -133,7 +139,7 @@ function TopBar() {
               />
               <TextField
                 type='password'
-                name='password'
+                aria-label='topBarPassword'
                 placeholder='Password'
                 onChange={handlePasswordChange}
                 value={password}
@@ -148,6 +154,7 @@ function TopBar() {
               <Button
                 type='submit'
                 value='Submit'
+                aria-label='topBarLogin'
                 variant='contained'
                 margin='normal'
                 sx={{mt: 2, mb: 2, ml: 1, justifyContent: 'flex-end'}}
