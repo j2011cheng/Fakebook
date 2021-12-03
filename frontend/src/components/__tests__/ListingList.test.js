@@ -1,5 +1,4 @@
 import {render, fireEvent, waitFor} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import {screen} from '@testing-library/react';
 import {rest} from 'msw';
@@ -32,6 +31,7 @@ jest.mock('react-router-dom', () => ({
   }),
   useLocation: () => ({
     pathname: '/2',
+    search: '?category=2',
   }),
 }));
 
@@ -40,6 +40,16 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 test('ImageList is there', async () => {
+  jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useHistory: () => ({
+      push: mockHistoryPush,
+    }),
+    useLocation: () => ({
+      pathname: '/2',
+      search: '',
+    }),
+  }));
   render(<ListingList/>);
   screen.getByRole('list');
   await waitFor(() => screen.getByText('item'));

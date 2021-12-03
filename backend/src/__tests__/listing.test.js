@@ -148,8 +148,10 @@ test('GET Listings By Category and Owner', async () => {
       attributes: {},
       images: [''],
     });
-  console.log(owner.body.owner.id, cat.body.subcategories[0].id);
-  await request.get(`/v0/listings?category=${cat.body.subcategories[0].id}&owner=${owner.body.owner.id}`)
+  const ownerid = owner.body.owner.id;
+  const catid = cat.body.subcategories[0].id;
+  await request
+    .get(`/v0/listings?category=${catid}&owner=${ownerid}`)
     .expect(200)
     .expect('Content-Type', /json/)
     .then((res) => {
@@ -174,7 +176,8 @@ test('GET Listings By Keyword', async () => {
 
 test('GET Listings By Category and Keyword', async () => {
   const cat = await request.get('/v0/category');
-  await request.get(`/v0/listings?category=${cat.body.subcategories[0].id}&search=e`)
+  await request
+    .get(`/v0/listings?category=${cat.body.subcategories[0].id}&search=e`)
     .expect(200)
     .expect('Content-Type', /json/)
     .then((res) => {
@@ -185,7 +188,9 @@ test('GET Listings By Category and Keyword', async () => {
 
 
 test('GET No Listings By Keyword', async () => {
-  await request.get('/v0/listings?search=therereallyshouldnotbeanylistingswiththisweirdstring')
+  const weirdString = 'therereallyshouldnotbeanylistingswiththisweirdstring';
+  await request
+    .get(`/v0/listings?search=${weirdString}`)
     .expect(200)
     .expect('Content-Type', /json/)
     .then((res) => {
@@ -198,13 +203,13 @@ test('GET No Listings By Keyword', async () => {
 
 test('GET Listings By Bad Keyword', async () => {
   await request.get('/v0/listings?search=')
-    .expect(400)
+    .expect(400);
 });
 
 test('GET Listings By Range', async () => {
   const q = {
     'MINprice': 1000,
-    'MAXprice': 10000
+    'MAXprice': 10000,
   };
   const str = new URLSearchParams(q).toString();
   await request.get(`/v0/listings?${str}`)
@@ -220,7 +225,7 @@ test('GET Listings By Range', async () => {
 
 test('GET Listings By Bool', async () => {
   const q = {
-    'electric': true
+    'electric': true,
   };
   const str = new URLSearchParams(q).toString();
   await request.get(`/v0/listings?${str}`)
@@ -236,7 +241,7 @@ test('GET Listings By Bool', async () => {
 
 test('GET Listings By Enum', async () => {
   const q = {
-    'os': 'Mac'
+    'os': 'Mac',
   };
   const str = new URLSearchParams(q).toString();
   await request.get(`/v0/listings?${str}`)
@@ -253,11 +258,10 @@ test('GET Listings By Enum', async () => {
 test('GET Listings By Bad Filter', async () => {
   const q = {
     'MINnotafilter': 1000,
-    'alsonotafilter': "fake",
-    'stillnotafilter': false
+    'alsonotafilter': 'fake',
+    'stillnotafilter': false,
   };
   const str = new URLSearchParams(q).toString();
   await request.get(`/v0/listings?${str}`)
     .expect(404);
 });
-

@@ -1,5 +1,4 @@
 import {render, fireEvent, waitFor} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import {screen} from '@testing-library/react';
 import {rest} from 'msw';
@@ -33,8 +32,8 @@ jest.mock('react-router-dom', () => ({
     push: mockHistoryPush,
   }),
   useLocation: () => ({
-    search: '?category=2'
-  })
+    search: '?category=2',
+  }),
 }));
 
 beforeAll(() => server.listen());
@@ -52,7 +51,7 @@ test('Button is Clickable', async () => {
   const button = screen.getByText('Vehicles');
   fireEvent.click(button);
   await waitFor(() => expect(mockHistoryPush)
-    .toHaveBeenCalledWith('/listings?category=1'));
+    .toHaveBeenCalledWith('/?category=1'));
 });
 
 test('Not Found', async () => {
@@ -85,5 +84,5 @@ test('Click category then click back', async () => {
   const button = screen.getByText('Electronics');
   fireEvent.click(button);
   await waitFor(() => expect(mockHistoryPush)
-    .toHaveBeenCalledWith('/listings?'));
+    .toHaveBeenCalledWith('/?'));
 });

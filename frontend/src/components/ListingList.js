@@ -20,8 +20,8 @@ function ListingList() {
     const getData = async () => {
       const params = new URLSearchParams(location.search);
       let request = '/v0/listings';
-      if (params) {
-        request += `?${params.toString()}`;
+      if (params.toString()) {
+        request += `?${params.toString().replace(/\+/g, '%20')}`;
       }
       const disp = await fetch(request, {
         method: 'GET',

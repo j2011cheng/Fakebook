@@ -14,13 +14,16 @@ function Categories() {
   const location = useLocation();
   const setCategory = (id) => {
     return () => {
-      const params = new URLSearchParams(location.search);
+      let params = new URLSearchParams(location.search);
+      const category = params.get('category');
+      params = new URLSearchParams();
+      params.set('category', category);
       if (params.get('category') === id) {
         params.delete('category');
       } else {
         params.set('category', id);
       }
-      history.push(`/listings?${params.toString()}`);
+      history.push(`/?${params.toString()}`);
     };
   };
 

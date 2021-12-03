@@ -37,8 +37,8 @@ exports.selectListings = async (q) => {
       };
       valuesList.push(q[param]);
       idx++;
-      let {rows} = await pool.query(query);
-      if (!rows.some(cat => cat.id == q[param])){
+      const {rows} = await pool.query(query);
+      if (!rows.some((cat) => cat.id == q[param])) {
         return undefined;
       }
       select =
@@ -59,7 +59,8 @@ exports.selectListings = async (q) => {
         )
         `;
     } else if (param == 'owner') {
-      select += (!q.category && idx == 1) ? ` WHERE owner = $${idx}` : ` AND owner = $${idx}`;
+      select += (!q.category && idx == 1) ?
+        ` WHERE owner = $${idx}` : ` AND owner = $${idx}`;
       valuesList.push(q[param]);
       idx++;
     } else if (param == 'search') {
@@ -69,7 +70,7 @@ exports.selectListings = async (q) => {
         ` AND (jsonb_pretty(listing) LIKE ('%' || $${idx++} || '%')`;
       valuesList.push(keywords[0]);
       for (let i = 1; i < keywords.length; i++) {
-        select += ` OR jsonb_pretty(listing) LIKE ('%' || $${idx++ +i-1} || '%')`;
+        select += ` OR jsonb_pretty(listing) LIKE ('%' || $${idx++} || '%')`;
         valuesList.push(keywords[i]);
       }
       select += ')';
@@ -78,24 +79,24 @@ exports.selectListings = async (q) => {
         text: `SELECT filter->>'name' FROM Filters`,
         values: [],
       };
-      let {rows} = await pool.query(query);
-      if (!rows.some(row => row['?column?'] == param || row['?column?'] == param.slice(3))){
+      const {rows} = await pool.query(query);
+      if (!rows.some((row) => row['?column?'] == param ||
+        row['?column?'] == param.slice(3))) {
         return undefined;
       }
       select += (!q.category && idx == 1) ? ` WHERE` : ` AND`;
-      let type;
-      if (!isNaN(Number(q[param])) && typeof Number(q.param) === "number") {
+      if (!isNaN(Number(q[param])) && typeof Number(q.param) === 'number') {
         valuesList.push(param.slice(3));
         idx++;
-        switch (true){
-          case /^MAX.+$/.test(param):
-            valuesList.push(q[param]);
-            select += ` (listing->'attributes'->>$${idx-1})::float <= $${idx++}`;
-            break;
-          case /^MIN.+$/.test(param):
-            valuesList.push(q[param]);
-            select += ` (listing->'attributes'->>$${idx-1})::float >= $${idx++}`;
-            break;
+        switch (true) {
+        case /^MAX.+$/.test(param):
+          valuesList.push(q[param]);
+          select += ` (listing->'attributes'->>$${idx-1})::float <= $${idx++}`;
+          break;
+        case /^MIN.+$/.test(param):
+          valuesList.push(q[param]);
+          select += ` (listing->'attributes'->>$${idx-1})::float >= $${idx++}`;
+          break;
         }
       } else {
         valuesList.push(param);
@@ -110,7 +111,7 @@ exports.selectListings = async (q) => {
     values: valuesList,
   };
   // console.log(query);
-  let {rows} = await pool.query(query);
+  const {rows} = await pool.query(query);
   const listings = [];
   for (const row of rows) {
     const listing = {

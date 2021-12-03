@@ -1,5 +1,4 @@
 import {render, fireEvent, waitFor} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import {screen} from '@testing-library/react';
 import {rest} from 'msw';
@@ -33,7 +32,7 @@ jest.mock('react-router-dom', () => ({
     push: mockHistoryPush,
   }),
   useLocation: () => ({
-    search: '?category=2'
+    search: '?category=2',
   }),
 }));
 
@@ -52,7 +51,7 @@ test('Button is Clickable', async () => {
   const button = screen.getByText('Vehicles');
   fireEvent.click(button);
   await waitFor(() => expect(mockHistoryPush)
-    .toHaveBeenCalledWith('/listings?category=1'));
+    .toHaveBeenCalledWith('/?category=1'));
 });
 
 test('Not Found', async () => {
@@ -77,4 +76,13 @@ test('Server Error', async () => {
   render(<Subcategories/>);
   await waitFor(() => expect(alert)
     .toHaveBeenCalledWith('Subcategories Server Error'));
+});
+
+test('All Categories', async () => {
+  render(<Subcategories/>);
+  await waitFor(() => screen.getByText('All Categories'));
+  const button = screen.getByText('All Categories');
+  fireEvent.click(button);
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith('/?'));
 });

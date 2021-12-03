@@ -7,21 +7,56 @@ import {setupServer} from 'msw/node';
 
 import SideBarTopContent from '../SideBarTopContent';
 
-// const URL = '/v0/authenticate';
+const URL = '/v0/authenticate';
 
-// const server = setupServer(
-//   rest.post(URL, (req, res, ctx) => {
-//     return res(
-//       ctx.json({key: 'value'}),
-//     );
-//   }),
-// );
+const server = setupServer(
+  rest.post(URL, (req, res, ctx) => {
+    return res(
+      ctx.json({key: 'value'}),
+    );
+  }),
+);
+
+const mockHistoryPush = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: mockHistoryPush,
+  }),
+  useLocation: () => ({
+    pathname: '/2',
+    search: '?category=2',
+  }),
+}));
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 test('Components are there', () => {
   render(<SideBarTopContent/>);
-  const buttons = screen.getAllByRole('button');
+  const search = screen.getByRole('button', {name: ''});
+  // const add = screen.getByRole('button', {name: '+ Create New Listing'});
   const textField = screen.getByPlaceholderText('Search Marketplace');
-  expect(buttons[0]).toBeDefined();
-  expect(buttons[1]).toBeDefined();
+  expect(search).toBeDefined();
+  // expect(add).toBeDefined();
   expect(textField).toBeDefined();
-})
+});
+
+test('Enter search', async () => {
+  render(<SideBarTopContent/>);
+  const textField = screen.getByPlaceholderText('Search Marketplace');
+  userEvent.type(textField, 'search');
+  const search = screen.getByRole('button', {name: ''});
+  fireEvent.click(search);
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith('/2?category=2&search=search'));
+});
+
+test('Reset search', async () => {
+  render(<SideBarTopContent/>);
+  const search = screen.getByRole('button', {name: ''});
+  fireEvent.click(search);
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith('/2?category=2'));
+});
