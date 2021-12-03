@@ -4,6 +4,9 @@ import {screen} from '@testing-library/react';
 import {rest} from 'msw';
 import {setupServer} from 'msw/node';
 
+import {setNarrow} from './common.js'; // , setWide
+// import {getOnlyVisible} from './common.js';
+import SideBar from '../SideBar';
 import Subcategories from '../Subcategories';
 
 const URL = '/v0/category';
@@ -85,4 +88,13 @@ test('All Categories', async () => {
   fireEvent.click(button);
   await waitFor(() => expect(mockHistoryPush)
     .toHaveBeenCalledWith('/?'));
+});
+
+test('Set mobile view', async () => {
+  render(<SideBar/>);
+  setNarrow();
+  await waitFor(() => screen.getByText('All Categories'));
+  const button = screen.getByText('All Categories');
+  fireEvent.click(button);
+  screen.getByText('Select Category');
 });
