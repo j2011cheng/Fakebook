@@ -3,12 +3,11 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {useHistory} from 'react-router-dom';
+import Divider from '@mui/material/Divider';
 
 /**
  * @return {object} JSX
@@ -112,13 +111,19 @@ function Login() {
           >
             Log In
           </Button>
-          <Grid container>
-            <Grid item>
-              <Link href='' variant='body2' onClick={onNewClick}>
-                Create new account
-              </Link>
-            </Grid>
-          </Grid>
+          <Divider>or</Divider>
+          <Button
+            type='submit'
+            name='submit'
+            aria-label='loginButton'
+            value='Login'
+            fullWidth
+            variant='contained'
+            sx={{mt: 3, mb: 2}}
+            onClick={onNewClick}
+          >
+            Create New Account
+          </Button>
         </Box>
       </Box>
     </Container>
