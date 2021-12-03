@@ -81,6 +81,7 @@ function Login() {
           <TextField
             type={'text'}
             name={'loginName'}
+            aria-label='loginName'
             placeholder='Email or Phone Number'
             onChange={handleInputChange}
             required
@@ -91,6 +92,7 @@ function Login() {
           <TextField
             type='password'
             name='password'
+            aria-label='loginPassword'
             placeholder='Password'
             onChange={handleInputChange}
             required
@@ -100,6 +102,7 @@ function Login() {
           <Button
             type='submit'
             name='submit'
+            aria-label='loginButton'
             value='Login'
             fullWidth
             variant='contained'
