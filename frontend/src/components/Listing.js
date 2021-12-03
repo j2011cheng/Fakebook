@@ -5,6 +5,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Pagination from '@mui/material/Pagination';
+import Button from '@mui/material/Button';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 import {useLocation} from 'react-router-dom';
 
 
@@ -13,14 +15,19 @@ import {useLocation} from 'react-router-dom';
  * @return {object} JSX
  */
 function Listing() {
+  const [message, setMessage] = React.useState('');
   const location = useLocation();
   const [image, setImage] = React.useState(1);
+
+  const handleInputChange = (event) => {
+    setMessage(event.target.value);
+  };
 
   const handleChange = (event, value) => {
     setImage(value);
   };
 
-  const [data, setData] = React.useState([]);
+  const [data, setData] = React.useState({});
   React.useEffect(() => {
     const getData = async () => {
       const params = new URLSearchParams(location.search);
@@ -43,12 +50,50 @@ function Listing() {
           } else {
             alert('Listing Server Error');
           }
-          return [];
+          return {};
         });
       setData(disp);
     };
     getData();
   }, [location.search]);
+
+  const [responses, setResponses] = React.useState([]);
+  React.useEffect(() => {
+    const getData = async () => {
+      const params = new URLSearchParams(location.search);
+      const user = localStorage.getItem('user') ?
+        JSON.parse(localStorage.getItem('user')) : undefined;
+      if (user) {
+        const request =
+          `/v0/response/${user.owner.id}?listing=${params.get('listing')}`;
+        const bearerToken = user.accessToken;
+        const disp = await fetch(request, {
+          method: 'GET',
+          headers: new Headers({
+            'Authorization': `Bearer ${bearerToken}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          }),
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw res;
+            }
+            return res.json();
+          })
+          .then((json) => {
+            return json;
+          })
+          .catch((err) => {
+            if (err.status !== 404) {
+              alert('Responses Server Error');
+            }
+            return [];
+          });
+        setResponses(disp);
+      }
+    };
+    getData();
+  }, [location.search, message]);
 
   const attributeItems = () => {
     const attributes = [];
@@ -62,6 +107,74 @@ function Listing() {
       }
     }
     return attributes;
+  };
+
+  const submitResponse = () => {
+    const params = new URLSearchParams(location.search);
+    const user = JSON.parse(localStorage.getItem('user'));
+    const request =
+      `/v0/response/${params.get('listing')}`;
+    const bearerToken = user.accessToken;
+    const body = JSON.stringify({
+      message: message,
+    });
+    fetch(request, {
+      method: 'POST',
+      headers: new Headers({
+        'Authorization': `Bearer ${bearerToken}`,
+        'Content-Type': 'application/json',
+      }),
+      body: body,
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw res;
+        }
+      })
+      .catch((err) => {
+        if (err.status === 401) {
+          alert('Login session expired');
+        } else {
+          alert('New Response Server Error');
+        }
+      });
+    setMessage('');
+  };
+
+  const responseItems = () => {
+    const items = [];
+    if (data.name && localStorage.getItem('user')) {
+      items.push((
+        <Grid item xs={8} key='text'>
+          <TextareaAutosize
+            value={message}
+            placeholder='Response'
+            onInput={handleInputChange}
+          />
+        </Grid>
+      ));
+      items.push((
+        <Grid item xs={4} key='submit'>
+          <Button
+            onClick={submitResponse}
+          >
+            Respond
+          </Button>
+        </Grid>
+      ));
+      if (JSON.parse(localStorage.getItem('user')).owner.id === data.owner.id) {
+        for (let i = 0; i < responses.length; i++) {
+          items.push((
+            <Grid item xs={12} key={i}>
+              {responses[i]}
+            </Grid>
+          ));
+        }
+      }
+      return items;
+    } else {
+      return;
+    }
   };
 
   return (
@@ -101,13 +214,9 @@ function Listing() {
             </Grid>
             {attributeItems()}
           </Grid>
-          {/* <Grid container justifyContent='flex-end'>
-            <Grid item>
-              <Link href='' variant='body2' onClick={signIn}>
-                Already have an account?
-              </Link>
-            </Grid>
-          </Grid> */}
+          <Grid container justifyContent='flex-end'>
+            {responseItems()}
+          </Grid>
         </Box>
       </Box>
     </Container>
