@@ -6,7 +6,7 @@ import {setupServer} from 'msw/node';
 
 import {setNarrow} from './common.js'; // , setWide
 // import {getOnlyVisible} from './common.js';
-import SideBar from '../SideBar';
+// import SideBar from '../SideBar';
 import Subcategories from '../Subcategories';
 
 const URL = '/v0/category';
@@ -30,7 +30,7 @@ const server = setupServer(
 
 const mockHistoryPush = jest.fn();
 const mockUseLocationValue = {
-    search: '?category=2',
+  search: '?category=2',
 };
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

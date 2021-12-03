@@ -96,7 +96,6 @@ function Subcategories() {
             </Toolbar>
           </AppBar>
           <Toolbar sx={{height: 75}}/>
-          {/* replace the list with your backend list @graham */}
           <Categories/>
         </Dialog>
       </div>
