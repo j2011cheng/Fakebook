@@ -38,6 +38,7 @@ app.post('/v0/authenticate', auth.authenticate);
 app.post('/v0/newuser', auth.create);
 
 app.get('/v0/category', category.getCategory);
+app.get('/v0/categories', category.getAll);
 app.get('/v0/listings', listing.getListings);
 app.get('/v0/listing/:id', listing.getListing);
 app.get('/v0/filters', filters.getFilters);

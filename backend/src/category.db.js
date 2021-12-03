@@ -47,3 +47,13 @@ exports.selectCategory = async (id) => {
   }
   return cat;
 };
+
+exports.getAll = async () => {
+  const select = `SELECT id, category->>'name' AS name FROM categories`;
+  const query = {
+    text: select,
+    values: [],
+  };
+  const {rows} = await pool.query(query);
+  return rows;
+};

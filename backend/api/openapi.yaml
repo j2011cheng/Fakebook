@@ -198,6 +198,20 @@ paths:
                 $ref: '#/components/schemas/CategoryResponse'
         404:
           description: Category not found
+  /categories:
+    get:
+      description: Get all categories
+      responses:
+        200:
+          description: Got Categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        404:
+          description: Categories not found
   /filters:
     get:
       description: Get filters for a category
