@@ -18,7 +18,7 @@ import Divider from '@mui/material/Divider';
 /**
  * @return {object} JSX
  */
-export default function TempNewUser() {
+function NewUser() {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleBack = () => {
@@ -228,4 +228,6 @@ export default function TempNewUser() {
       </Container>
     </ThemeProvider>
   );
-}
+};
+
+export default NewUser;
