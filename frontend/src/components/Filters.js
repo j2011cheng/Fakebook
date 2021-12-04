@@ -10,6 +10,9 @@ import Checkbox from '@mui/material/Checkbox';
 import {useHistory, useLocation} from 'react-router-dom';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 
 import Distance from './Distance';
 
@@ -83,58 +86,105 @@ function Filters() {
 
   const filter = ({name, type, options}) => {
     return (
-      <ListItem key={name}>
-        {name + ':'}
-        {type === 'enum' ? (
-          <Select
-            value={getValue(name)}
-            label={name}
-            name={name}
-            onChange={handleInputChange}
-          >
-            {options.map(
-              (option) => (
-                <MenuItem
-                  key={option}
-                  value={option}
-                >
-                  {option}
+      <ListItem
+        display='flex'
+        flexDirection='row'
+        key={name}
+      >
+        <Box
+          sx={{
+            width: '20%',
+          }}
+        >
+          {name + ':'}
+        </Box>
+        <Box
+          sx={{
+            width: '75%',
+          }}
+        >
+          {type === 'enum' ? (
+            <FormControl
+              key = {name}
+              sx={{
+                width: '100%',
+              }}
+            >
+              <InputLabel id='category-select'>{name}</InputLabel>
+              <Select
+                value={getValue(name)}
+                label={name}
+                name={name}
+                defaultValue={name}
+                onChange={handleInputChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
                 </MenuItem>
-              ),
-            )}
-          </Select>
-        ) : (type === 'range' ? (
-          <div>
-            <TextField
-              label='Min'
-              variant='standard'
-              name={'MIN' + name}
+                {options.map(
+                  (option) => (
+                    <MenuItem
+                      key={option}
+                      value={option}
+                    >
+                      {option}
+                    </MenuItem>
+                  ),
+                )}
+              </Select>
+            </FormControl>
+          ) : (type === 'range' ? (
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+              }}
+            >
+              <TextField
+                label='Min'
+                size='small'
+                name={'MIN' + name}
+                onChange={handleInputChange}
+              />
+              <TextField
+                variant='standard'
+                defaultValue='to'
+                sx={{
+                  mt: 1,
+                  width: 25,
+                  ml: 1,
+                  mr: 1,
+                }}
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+              <TextField
+                label='Max'
+                size='small'
+                name={'MAX' + name}
+                onChange={handleInputChange}
+              />
+            </Box>
+          ) : (
+            <Checkbox
+              name={name}
               onChange={handleInputChange}
-              sx={{width: '125px', marginLeft: '45px'}}/>
-              to
-            <TextField
-              label='Max'
-              variant='standard'
-              name={'MAX' + name}
-              onChange={handleInputChange}
-              sx={{width: '125px'}}/>
-          </div>
-        ) : (
-          <Checkbox
-            name={name}
-            onChange={handleInputChange}
-          />
-        )
-        )}
+            />
+          )
+          )}
+        </Box>
       </ListItem>
     );
   };
 
   return (
     <div>
-      <ListItemText sx={{mt: 1, ml: 1}}>
-        <Typography variant='h5'>Filters</Typography>
-      </ListItemText>
+      {window.innerWidth > 600 ?
+        <ListItemText sx={{mt: 1, ml: 1}}>
+          <Typography variant='h5'>Filters</Typography>
+        </ListItemText> :
+        ''}
       <List>
         <Distance/>
         {data.map(filter)}

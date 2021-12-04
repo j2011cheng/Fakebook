@@ -1,6 +1,7 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import ListItem from '@mui/material/ListItem';
+import Box from '@mui/material/Box';
 import {useLocation, useHistory} from 'react-router-dom';
 /**
  *
@@ -60,14 +61,29 @@ function Distance() {
 
   return (
     <ListItem>
-      {'Distance:'}
-      <TextField
-        onInput={handleInputChange}
-        onFocus={enableLocation}
-        value={distance}
-        name='distance'
-        label='km'
-      />
+      <Box
+        sx={{
+          width: '20%',
+        }}
+      >
+        {'Distance:'}
+      </Box>
+      <Box
+        sx={{
+          width: '75%',
+        }}
+      >
+        <TextField
+          onInput={handleInputChange}
+          onFocus={enableLocation}
+          value={distance}
+          name='distance'
+          label='km'
+          sx={{
+            width: '100%',
+          }}
+        />
+      </Box>
     </ListItem>
   );
 };

@@ -56,7 +56,7 @@ afterEach(async () => {
 
 // Clicks the 'Get Dummy' button and checks the server response is displayed.
 test('Get Dummy', async () => {
-  await page.goto('http://localhost:3000');
+  await page.goto('http://localhost:3000/dummy');
   const label = await page.$('aria/dummy message');
   let cont = await (await label.getProperty('textContent')).jsonValue();
   expect(cont).toBe('Click the button!');

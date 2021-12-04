@@ -59,6 +59,15 @@ test('Component renders', async () => {
   screen.getByText('os:');
 });
 
+test('Component renders Mobile', async () => {
+  render(<Filters/>);
+  global.innerWidth=550;
+  global.dispatchEvent(new Event('resize'));
+  await waitFor(() => screen.getByText('price:'));
+  screen.getByText('electric:');
+  screen.getByText('os:');
+});
+
 test('Range filter is interactable', async () => {
   render(<Filters/>);
   await waitFor(() => screen.getByText('price:'));

@@ -147,7 +147,7 @@ function TopBar() {
             >
               <TextField
                 type='text'
-                aria-label='topBarName'
+                aria-label='topbar name'
                 placeholder='Email or Phone Number'
                 onChange={handleLoginNameChange}
                 value={loginName}
