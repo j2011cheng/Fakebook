@@ -20,6 +20,7 @@ import Checkbox from '@mui/material/Checkbox';
  */
 function NewListing() {
   const owner = JSON.parse(localStorage.getItem('user')).owner;
+  let loaded = false;
   const [category, setCategory] = React.useState();
   const [listing, setListing] =
     React.useState({
@@ -56,7 +57,7 @@ function NewListing() {
     case 'checkbox':
       value = target.checked;
       break;
-    case 'text':
+    case 'number':
       value = Number(target.value);
       break;
     default:
@@ -80,7 +81,6 @@ function NewListing() {
     const token = JSON.parse(localStorage.getItem('user')).accessToken;
     l.category = categoryList.find((c) => c.id === category);
     setListing(l);
-    console.log(listing);
     event.preventDefault();
     fetch('/v0/listing', {
       method: 'POST',
@@ -94,7 +94,15 @@ function NewListing() {
         throw res;
       }
       history.push('/');
-    });
+    })
+      .catch((err) => {
+        if (err.status === 400) {
+          alert('Bad Listing');
+        } else {
+          alert('New Listing Server Error');
+        }
+        return [];
+      });
   };
 
   const [filters, setFilters] = React.useState([]);
@@ -134,24 +142,29 @@ function NewListing() {
     const getCategories = async () => {
       const list = await fetch('/v0/categories', {
         method: 'GET',
-      }).then((res) => {
-        if (!res.ok) {
-          throw res;
-        }
-        return res.json();
-      }).then((json) => {
-        return json;
-      }).catch((err) => {
-        if (err.status === 404) {
-          alert('Categories Not Found');
-        } else {
-          alert('Categories Server Error');
-        }
-      });
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+          return res.json();
+        })
+        .then((json) => {
+          return json;
+        })
+        .catch((err) => {
+          if (err.status === 404) {
+            alert('Categories Not Found');
+          } else {
+            alert('Categories Server Error');
+          }
+          return [];
+        });
       setCategoryList(list);
     };
     getCategories();
-  }, [category]);
+    loaded = true;
+  }, [loaded]);
 
 
   const categories = (cat) => {
@@ -173,9 +186,7 @@ function NewListing() {
           <Select
             label={name}
             name={name}
-            value={listing.attributes[name] ?
-              listing.attributes[name] :
-              ''}
+            value={listing.attributes[name]}
             onChange={handleFilterChange}
           >
             <MenuItem value="">
@@ -198,6 +209,7 @@ function NewListing() {
           key={name}
           label={name}
           name={name}
+          placeholder={name}
           type='number'
           onChange={handleFilterChange}
           sx={{width: '125px'}}
@@ -269,7 +281,7 @@ function NewListing() {
                 type='number'
                 label="Price"
                 name='price'
-                placeholder='Price'
+                placeholder='0.00'
                 onChange={handleInputChange}
                 InputProps={{
                   startAdornment:
