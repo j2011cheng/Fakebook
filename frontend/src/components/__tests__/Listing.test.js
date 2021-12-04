@@ -1,5 +1,4 @@
 import {render, fireEvent, waitFor} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import {screen} from '@testing-library/react';
 import {rest} from 'msw';
@@ -31,7 +30,7 @@ const server = setupServer(
   }),
   rest.get(URL2, (req, res, ctx) => {
     return res(
-      ctx.json(['message1','message2']),
+      ctx.json(['message1', 'message2']),
     );
   }),
   rest.post(URL3, (req, res, ctx) => {
@@ -77,7 +76,7 @@ beforeEach(() => {
     },
     accessToken: '10',
   }));
-})
+});
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
@@ -88,6 +87,14 @@ test('Load listing', async () => {
   await waitFor(() => screen.getAllByText('item'));
   screen.getByText('test');
   screen.getByText('price: 1');
+});
+
+test('Image Error', async () => {
+  render(<Listing/>);
+  await waitFor(() => screen.getAllByText('item'));
+  const img = screen.getByRole('img');
+  expect(img).toBeDefined();
+  fireEvent(img, new Event('error'));
 });
 
 test('Change image', async () => {
@@ -122,8 +129,8 @@ test('Listing Server Error', async () => {
 });
 
 test('Close Listing', async () => {
-    render(<Listing/>);
-    await waitFor(() => screen.getByLabelText('close'));
-    const button = screen.getByLabelText('close');
-    fireEvent.click(button);
+  render(<Listing/>);
+  await waitFor(() => screen.getByLabelText('close'));
+  const button = screen.getByLabelText('close');
+  fireEvent.click(button);
 });

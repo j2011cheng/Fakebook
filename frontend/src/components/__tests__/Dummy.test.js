@@ -18,16 +18,12 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-/**
- */
 test('Button Clickable', async () => {
   render(<Dummy />);
   fireEvent.click(screen.getByText('Get Dummy'));
   await waitFor(() => screen.getByText('Hello CSE183'));
 });
 
-/**
- */
 test('Handles Server Error', async () => {
   server.use(
     rest.get(URL, (req, res, ctx) => {

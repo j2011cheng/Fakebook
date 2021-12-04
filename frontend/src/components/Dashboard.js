@@ -11,9 +11,7 @@ import Body from './Body';
  *
  * @return {object} JSX
  */
-function DashboardContent() {
-  // probably use a 'loggedin' state to show/hide things
-
+function Dashboard() {
   return (
     <Box sx={{display: 'flex'}}>
       <CssBaseline />
@@ -29,6 +27,4 @@ function DashboardContent() {
  *
  * @return {object} JSX
  */
-export default function Dashboard() {
-  return <DashboardContent />;
-}
+export default Dashboard;

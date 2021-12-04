@@ -64,7 +64,12 @@ function ListingList() {
         >
           <img
             src={image}
-            alt='Not found'/>
+            alt='Not found'
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src='/not-found-image.jpg';
+            }}
+          />
           <ImageListItemBar
             title={name}
             subtitle={`$${price}`}

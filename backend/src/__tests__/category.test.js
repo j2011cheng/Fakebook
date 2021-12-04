@@ -17,7 +17,7 @@ afterAll((done) => {
   server.close(done);
 });
 
-test('Get All', async () => {
+test('Get Root', async () => {
   await request.get('/v0/category')
     .expect(200)
     .expect('Content-Type', /json/)
@@ -28,6 +28,18 @@ test('Get All', async () => {
       expect(res.body.category.name).toEqual('root');
       expect(res.body.subcategories).toBeDefined();
       expect(res.body.filters).toBeDefined();
+    });
+});
+
+test('Get All', async () => {
+  await request.get('/v0/categories')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .then((res) => {
+      expect(res).toBeDefined();
+      expect(res.body).toBeDefined();
+      expect(res.body.length).toBeDefined();
+      expect(res.body.length > 0).toBeTruthy();
     });
 });
 

@@ -9,22 +9,6 @@ const pool = new Pool({
 });
 
 exports.selectListings = async (q) => {
-  // https://stackoverflow.com/questions/6654774/how-to-traverse-a-tree-work-with-hierarchical-data-in-sql-code
-  // WITH Family As
-  // (
-  //     SELECT e.id, e.supervisorid, 0 as Depth
-  //     FROM Employee e
-  //     WHERE id = @SupervisorID
-  //     UNION All
-  //     SELECT e2.ID, e2.supervisorid, Depth + 1
-  //     FROM Employee e2
-  //         JOIN Family
-  //             On Family.id = e2.supervisorid
-  // )
-  // SELECT*
-  // FROM Family
-
-
   let select = 'SELECT id, listing FROM listings';
   let query;
   const valuesList = [];
@@ -110,7 +94,6 @@ exports.selectListings = async (q) => {
     text: select,
     values: valuesList,
   };
-  // console.log(query);
   const {rows} = await pool.query(query);
   const listings = [];
   for (const row of rows) {

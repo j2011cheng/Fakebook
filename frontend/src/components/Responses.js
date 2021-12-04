@@ -117,13 +117,13 @@ function Responses() {
       ));
       // if (JSON.parse(localStorage.getItem('user')).owner.id
       // === data.owner.id) {
-        for (let i = 0; i < responses.length; i++) {
-          items.push((
-            <Grid item xs={12} key={i}>
-              {responses[i]}
-            </Grid>
-          ));
-        }
+      for (let i = 0; i < responses.length; i++) {
+        items.push((
+          <Grid item xs={12} key={i}>
+            {responses[i]}
+          </Grid>
+        ));
+      }
       // }
       return items;
     } else {

@@ -10,8 +10,6 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Dialog from '@mui/material/Dialog';
-// import ListItem from '@mui/material/ListItem';
-// import List from '@mui/material/List';
 import AppBar from '@mui/material/AppBar';
 import Slide from '@mui/material/Slide';
 

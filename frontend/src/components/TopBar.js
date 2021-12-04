@@ -97,9 +97,6 @@ function TopBar() {
     }
   };
 
-  // if signed in, show an account badge, otherwise show a fast login...
-  // only login button for mobile and fast login for desktop...
-
   return (
     <AppBar
       aria-label='topBar'

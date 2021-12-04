@@ -40,7 +40,6 @@ exports.selectFiltersByCategory = async (category) => {
     values: category ? [category] : [],
   };
   const {rows} = await pool.query(query);
-  // console.log(rows);
   if (rows.length > 0) {
     const filters = [];
     for (const row of rows) {

@@ -20,7 +20,6 @@ import Checkbox from '@mui/material/Checkbox';
  */
 function NewListing() {
   const owner = JSON.parse(localStorage.getItem('user')).owner;
-  let loaded = false;
   const [category, setCategory] = React.useState();
   const [listing, setListing] =
     React.useState({
@@ -163,8 +162,7 @@ function NewListing() {
       setCategoryList(list);
     };
     getCategories();
-    loaded = true;
-  }, [loaded]);
+  });
 
 
   const categories = (cat) => {

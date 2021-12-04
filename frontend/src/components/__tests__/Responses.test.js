@@ -13,7 +13,7 @@ const URL2 = '/v0/response/2';
 const server = setupServer(
   rest.get(URL1, (req, res, ctx) => {
     return res(
-      ctx.json(['message1','message2']),
+      ctx.json(['message1', 'message2']),
     );
   }),
   rest.post(URL2, (req, res, ctx) => {
@@ -21,7 +21,6 @@ const server = setupServer(
   }),
 );
 
-const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useLocation: () => ({
@@ -33,7 +32,7 @@ beforeEach(() => {
   server.use(
     rest.get(URL1, (req, res, ctx) => {
       return res(
-        ctx.json(['message1','message2']),
+        ctx.json(['message1', 'message2']),
       );
     }),
     rest.post(URL2, (req, res, ctx) => {
@@ -47,7 +46,7 @@ beforeEach(() => {
     },
     accessToken: '10',
   }));
-})
+});
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
@@ -60,7 +59,7 @@ test('Response is there', async () => {
 test('Responses no login', async () => {
   localStorage.removeItem('user');
   render(<Responses/>);
-})
+});
 
 test('Responses are there', async () => {
   render(<Responses/>);

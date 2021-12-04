@@ -42,7 +42,6 @@ app.get('/v0/categories', category.getAll);
 app.get('/v0/listings', listing.getListings);
 app.get('/v0/listing/:id', listing.getListing);
 app.get('/v0/filters', filters.getFilters);
-// app.get('/v0/filter', listing.filterListings);
 app.get('/v0/response/:id', auth.check, response.getResponses);
 
 app.post('/v0/listing', auth.check, listing.postListing);

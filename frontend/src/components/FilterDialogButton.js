@@ -27,11 +27,11 @@ function FilterDialogButton() {
 
   return (
     <div>
-    <Chip
-      label={'Filter'}
-      onClick={handleClickOpen}
-    />
-    <Dialog
+      <Chip
+        label={'Filter'}
+        onClick={handleClickOpen}
+      />
+      <Dialog
         fullScreen
         open={open}
         onClose={handleClose}
@@ -56,7 +56,7 @@ function FilterDialogButton() {
           <Filters/>
         </DialogContent>
       </Dialog>
-      </div>
+    </div>
   );
 };
 
