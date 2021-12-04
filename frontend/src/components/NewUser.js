@@ -12,6 +12,8 @@ import ListItem from '@mui/material/ListItem';
 import {useHistory} from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import Divider from '@mui/material/Divider';
 
 /**
  * @return {object} JSX
@@ -76,11 +78,14 @@ export default function TempNewUser() {
       description: (
         <Grid item xs={12}>
           <TextField
+            margin='normal'
+            required
             type='text'
             name='name'
             placeholder='Name'
+            id="name"
+            label="Name"
             onChange={handleInputChange}
-            required
             fullWidth
             autoFocus
           />
@@ -92,10 +97,13 @@ export default function TempNewUser() {
       description: (
         <Grid item xs={12}>
           <TextField
+            margin='normal'
             required
             type='text'
             name='email'
             placeholder='Email'
+            id="email"
+            label="Email"
             onChange={handleInputChange}
             fullWidth
           />
@@ -107,9 +115,12 @@ export default function TempNewUser() {
       description: (
         <Grid item xs={12}>
           <TextField
+            margin='normal'
             type='text'
             name='phone'
             placeholder='Phone Number'
+            id="phone number"
+            label="Phone Number"
             onChange={handleInputChange}
             fullWidth
           />
@@ -121,10 +132,13 @@ export default function TempNewUser() {
       description: (
         <Grid item xs={12}>
           <TextField
+            margin='normal'
             required
             type='password'
             name='password'
             placeholder='Password'
+            id="password"
+            label="Password"
             onChange={handleInputChange}
             fullWidth
           />
@@ -133,77 +147,85 @@ export default function TempNewUser() {
     },
   ];
 
+  const theme = createTheme();
+
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography component='h1' variant='h5' align='center'>
-            Fakebook
-        </Typography>
-        <Box component='form'>
-          <Stepper activeStep={activeStep} orientation='vertical'>
-            {steps.map((step, index) => (
-              <Step key={step.label}>
-                <StepLabel>{step.label}</StepLabel>
-                <StepContent>
-                  <Typography>{step.description}</Typography>
-                  <Box sx={{mb: 2}}>
-                    <div>
-                      <Button
-                        variant='contained'
-                        onClick={handleNext}
-                        sx={{mt: 1, mr: 1}}
-                      >
-                        {index === steps.length - 1 ? 'Finish' : 'Continue'}
-                      </Button>
-                      <Button
-                        disabled={index === 0}
-                        onClick={handleBack}
-                        sx={{mt: 1, mr: 1}}
-                      >
-                        Back
-                      </Button>
-                    </div>
-                  </Box>
-                </StepContent>
-              </Step>
-            ))}
-          </Stepper>
-          {activeStep === steps.length && (
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Typography component='h1' variant='h5' align='center'>
+              Fakebook
+          </Typography>
+          <Box component='form' noValidate>
+            <Stepper activeStep={activeStep} orientation='vertical'>
+              {steps.map((step, index) => (
+                <Step key={step.label}>
+                  <StepLabel>{step.label}</StepLabel>
+                  <StepContent>
+                    <Typography>{step.description}</Typography>
+                    <Box sx={{mb: 2}}>
+                      <div>
+                        <Button
+                          variant='contained'
+                          onClick={handleNext}
+                          sx={{mt: 1, mr: 1}}
+                        >
+                          {index === steps.length - 1 ? 'Finish' : 'Continue'}
+                        </Button>
+                        <Button
+                          disabled={index === 0}
+                          onClick={handleBack}
+                          sx={{mt: 1, mr: 1}}
+                        >
+                          Back
+                        </Button>
+                      </div>
+                    </Box>
+                  </StepContent>
+                </Step>
+              ))}
+            </Stepper>
+            {activeStep === steps.length && (
+              <ListItem>
+                <Button
+                  type='submit'
+                  name='submit'
+                  aria-label='newuserButton'
+                  value='NewUser'
+                  variant='contained'
+                  fullWidth
+                  sx={{mt: 1, mb: 1, width: '325px'}}
+                  onClick={onSubmit}
+                >
+                  Sign Up
+                </Button>
+              </ListItem>
+            )}
+            <Divider>or</Divider>
             <ListItem>
-              <Typography sx={{ml: 2, mt: 2}}>Finish signing up!</Typography>
               <Button
                 type='submit'
-                value='Submit'
+                name='submit'
+                aria-label='loginButton'
+                value='Login'
                 variant='contained'
-                sx={{ml: 2, mt: 2}}
-                onClick={onSubmit}
+                onClick={signIn}
+                sx={{mt: 1, width: '325px'}}
               >
-                Sign Up
+                Log In
               </Button>
             </ListItem>
-          )}
-          <ListItem>
-            <Typography sx={{ml: 2, mt: 2}}>
-              Already have an account?
-            </Typography>
-            <Button
-              variant='contained'
-              onClick={signIn}
-              sx={{mt: 2, ml: 2}}
-            >
-              Log In
-            </Button>
-          </ListItem>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </ThemeProvider>
   );
 }
