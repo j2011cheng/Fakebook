@@ -93,14 +93,14 @@ function Filters() {
       >
         <Box
           sx={{
-            width: '20%',
+            minWidth: '30%',
           }}
         >
           {name + ':'}
         </Box>
         <Box
           sx={{
-            width: '75%',
+            width: '100%',
           }}
         >
           {type === 'enum' ? (
@@ -151,7 +151,7 @@ function Filters() {
                 defaultValue='to'
                 sx={{
                   mt: 1,
-                  width: 25,
+                  width: 50,
                   ml: 1,
                   mr: 1,
                 }}

@@ -63,14 +63,14 @@ function Distance() {
     <ListItem>
       <Box
         sx={{
-          width: '20%',
+          minWidth: '30%',
         }}
       >
         {'Distance:'}
       </Box>
       <Box
         sx={{
-          width: '75%',
+          width: '100%',
         }}
       >
         <TextField
