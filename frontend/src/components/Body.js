@@ -72,7 +72,7 @@ function Body() {
     <Box>
       <Toolbar/>
       <Container sx={{mt: 4, mb: 4}}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} maxWidth='100%'>
           <Subcategories/>
           <ListingList/>
         </Grid>

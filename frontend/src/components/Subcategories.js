@@ -3,7 +3,7 @@ import Paper from '@mui/material/Paper';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
 import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {useHistory, useLocation} from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,6 +15,7 @@ import Slide from '@mui/material/Slide';
 
 import Categories from './Categories';
 import FilterDialogButton from './FilterDialogButton';
+// import BreadSlices from './BreadSlices';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />;
@@ -142,55 +143,61 @@ function Subcategories() {
 
   const subcategory = ({name, id}) => {
     return (
-      <Chip
-        key={id}
-        label={name}
-        onClick={setCategoryParam(id)}
-      />
+      <Box sx={{mr: 1}}>
+        <Chip
+          key={id}
+          label={name}
+          onClick={setCategory(id)}
+        />
+      </Box>
     );
   };
 
   const getStack = () => {
     if (width <= 600) {
       return (
-        <Stack
-          direction='row'
-          spacing={1}
-          variant='temporary'
-          sx={{
-            'display': {xs: 'block', sm: 'none'},
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-            },
-          }}
-        >
-          <Chip
-            label={'All Categories'}
-            onClick={handleClickOpen}
-          />
-          <FilterDialogButton/>
-          {data.map(subcategory)}
-        </Stack>
+        <div style={{width: '100%'}}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              overflow: 'auto',
+              p: 1,
+              m: 1,
+            }}
+          >
+            <Box sx={{ml: -1, mr: 1}}>
+              <Chip
+                label={'All Categories'}
+                onClick={handleClickOpen}
+              />
+            </Box>
+            <Box sx={{mr: 1}}><FilterDialogButton/></Box>
+            {data.map(subcategory)}
+          </Box>
+        </div>
       );
     } else {
       return (
-        <Stack
-          direction='row'
-          spacing={1}
-          variant='permanent'
-          sx={{
-            'display': {xs: 'none', sm: 'block'},
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-            },
-          }}
-        >
-          <Chip
-            label={'All Categories'}
-            onClick={allCategories}
-          />
-          {data.map(subcategory)}
-        </Stack>
+        <div style={{width: '100%'}}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              overflow: 'auto',
+              p: 1,
+              m: 1,
+            }}
+          >
+            <Box sx={{ml: -1, mr: 1}}>
+              <Chip
+                label={'All Categories'}
+                onClick={allCategories}
+              />
+            </Box>
+            {data.map(subcategory)}
+          </Box>
+        </div>
       );
     }
   };
@@ -203,7 +210,7 @@ function Subcategories() {
           display: 'flex',
           flexDirection: 'column',
           height: 100,
-          minWidth: 250,
+          width: window.innerWidth <= 600 ? width : '100%',
         }}
       >
         <ListItemText sx={{mt: -1}}>
