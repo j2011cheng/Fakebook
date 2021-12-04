@@ -11,6 +11,8 @@ import {useHistory, useLocation} from 'react-router-dom';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 
+import Distance from './Distance';
+
 /**
  * Filters list
  * Populate data based on category selected
@@ -134,6 +136,7 @@ function Filters() {
         <Typography variant='h5'>Filters</Typography>
       </ListItemText>
       <List>
+        <Distance/>
         {data.map(filter)}
       </List>
     </div>

@@ -62,7 +62,7 @@ test('Component renders', async () => {
 test('Range filter is interactable', async () => {
   render(<Filters/>);
   await waitFor(() => screen.getByText('price:'));
-  const entry = screen.getAllByRole('textbox')[0];
+  const entry = screen.getAllByRole('textbox')[1];
   userEvent.type(entry, '2');
   await waitFor(() => expect(mockHistoryPush)
     .toHaveBeenCalledWith('/?category=2&type=magic&MINprice=2'));
@@ -92,7 +92,7 @@ test('Enum filter is interactable', async () => {
 test('Removing data from component', async () => {
   render(<Filters/>);
   await waitFor(() => screen.getByText('price:'));
-  const entry = screen.getAllByRole('textbox')[0];
+  const entry = screen.getAllByRole('textbox')[1];
   userEvent.type(entry, '2');
   await waitFor(() => expect(mockHistoryPush)
     .toHaveBeenCalledWith('/?category=2&type=magic&MINprice=2'));

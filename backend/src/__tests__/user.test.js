@@ -111,6 +111,10 @@ test('POST Listing No Authentication', async () => {
       description: 'This is a test listing.',
       images: [],
       attributes: {},
+      location: {
+        latitude: 0,
+        longitude: 0,
+      },
     })
     .expect(403);
 });

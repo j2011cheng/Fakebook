@@ -404,6 +404,8 @@ components:
           type: string
         description:
           type: string
+        location:
+          $ref: '#/components/schemas/Location'
         images:
           type: array
           items:
@@ -417,6 +419,7 @@ components:
         - name
         - description
         - images
+        - location
       additionalProperties: false
 
     ListingNew:
@@ -435,6 +438,8 @@ components:
           format: float
         description:
           type: string
+        location:
+          $ref: '#/components/schemas/Location'
         images:
           type: array
           items:
@@ -447,6 +452,19 @@ components:
         - price
         - description
         - images
+        - location
+      additionalProperties: false
+
+    Location:
+      type: object
+      properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
+      required:
+        - latitude
+        - longitude
       additionalProperties: false
 
     ListingList:

@@ -101,8 +101,9 @@ exports.selectListings = async (q) => {
       id: row.id,
       name: row.listing.name,
       price: row.listing.attributes.price,
+      image: row.listing.images[0],
+      location: row.listing.location,
     };
-    listing.image = row.listing.images[0];
     listings.push(listing);
   }
   return listings;
@@ -129,14 +130,18 @@ exports.selectListingById = async (listing) => {
   const {rows} = await pool.query(query);
   if (rows.length == 1) {
     const row = rows[0];
-    const listing = row.listing;
-    listing.id = row.id;
-    listing.category = row.category;
+    const listing = {
+      name: row.listing.name,
+      id: row.id,
+      owner: row.owner,
+      category: row.category,
+      attributes: row.listing.attributes,
+      images: row.listing.images,
+      description: row.listing.description,
+      location: row.listing.location,
+    };
     listing.category.id = row.categoryid;
-    listing.owner = row.owner;
     listing.owner.id = row.ownerid;
-    listing.attributes = row.listing.attributes;
-    listing.description = row.listing.description;
     return listing;
   } else {
     return undefined;

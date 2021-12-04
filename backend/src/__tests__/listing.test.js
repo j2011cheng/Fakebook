@@ -77,6 +77,10 @@ test('POST Listing', async () => {
       description: 'This is a test listing.',
       attributes: {},
       images: [''],
+      location: {
+        latitude: 0,
+        longitude: 0,
+      },
     })
     .expect(201);
 });
@@ -99,6 +103,10 @@ test('POST Bad Listing', async () => {
       description: 'This is a test listing.',
       images: [],
       attributes: {},
+      location: {
+        latitude: 0,
+        longitude: 0,
+      },
     })
     .expect(400);
 });
@@ -264,4 +272,22 @@ test('GET Listings By Bad Filter', async () => {
   const str = new URLSearchParams(q).toString();
   await request.get(`/v0/listings?${str}`)
     .expect(404);
+});
+
+test('GET Listings by Distance', async () => {
+  const q = {
+    'distance': 1,
+    'lat': 90,
+    'long': 45,
+  };
+  const str = new URLSearchParams(q).toString();
+  await request.get(`/v0/listings?${str}`)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .then((res) => {
+      expect(res).toBeDefined();
+      expect(res.body).toBeDefined();
+      expect(res.body.length).toBeDefined();
+      expect(res.body.length > 0).toBeTruthy();
+    });
 });
