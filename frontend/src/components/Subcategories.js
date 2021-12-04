@@ -16,6 +16,7 @@ import AppBar from '@mui/material/AppBar';
 import Slide from '@mui/material/Slide';
 
 import Categories from './Categories';
+import FilterDialogButton from './FilterDialogButton';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />;
@@ -163,6 +164,7 @@ function Subcategories() {
             label={'All Categories'}
             onClick={handleClickOpen}
           />
+          <FilterDialogButton/>
           {data.map(subcategory)}
         </Stack>
       );
@@ -197,6 +199,7 @@ function Subcategories() {
           display: 'flex',
           flexDirection: 'column',
           height: 100,
+          minWidth: 250,
         }}
       >
         <ListItemText sx={{mt: -1}}>

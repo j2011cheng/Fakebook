@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import ListItemText from '@mui/material/ListItemText';
 
 import SideBarTopContent from './SideBarTopContent';
 import Filters from './Filters';
@@ -68,9 +70,9 @@ function SideBar(props) {
         <Divider/>
         <Filters/>
         <Divider/>
-        <h1>
-          Categories
-        </h1>
+        <ListItemText sx={{mt: 1, ml: 1}}>
+          <Typography variant='h5'>Categories</Typography>
+        </ListItemText>
         <Categories/>
       </Drawer>
     </Box>

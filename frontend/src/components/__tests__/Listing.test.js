@@ -9,7 +9,7 @@ import Listing from '../Listing';
 
 const URL1 = '/v0/listing/2';
 const URL2 = '/v0/response/2';
-const URL3 = '/v0/response/2'
+const URL3 = '/v0/response/2';
 
 const server = setupServer(
   rest.get(URL1, (req, res, ctx) => {
@@ -39,10 +39,14 @@ const server = setupServer(
   }),
 );
 
+const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useLocation: () => ({
     search: '?listing=2',
+  }),
+  useHistory: () => ({
+    push: mockHistoryPush,
   }),
 }));
 
@@ -64,14 +68,6 @@ beforeEach(() => {
           images: ['image1', 'image2'],
         }),
       );
-    }),
-    rest.get(URL2, (req, res, ctx) => {
-      return res(
-        ctx.json(['message1','message2']),
-      );
-    }),
-    rest.post(URL3, (req, res, ctx) => {
-      return res(ctx.status(201));
     }),
   );
   localStorage.setItem('user', JSON.stringify({
@@ -106,9 +102,6 @@ test('Listing does not exist', async () => {
     rest.get(URL1, (req, res, ctx) => {
       return res(ctx.status(404));
     }),
-    rest.get(URL2, (req, res, ctx) => {
-      return res(ctx.status(404));
-    }),
   );
   jest.spyOn(window, 'alert').mockImplementation(() => {});
   render(<Listing/>);
@@ -128,83 +121,9 @@ test('Listing Server Error', async () => {
     .toHaveBeenCalledWith('Listing Server Error'));
 });
 
-test('Response is there', async () => {
-  render(<Listing/>);
-  await waitFor(() => screen.getByText('Respond'));
-});
-
-test('Responses are there', async () => {
-  localStorage.setItem('user', JSON.stringify({
-    owner: {
-      name: 'dev',
-      id: '1',
-    },
-    accessToken: '10',
-  }));
-  server.use(
-    rest.get('/v0/response/1', (req, res, ctx) => {
-      return res(
-        ctx.json(['message1','message2']),
-      );
-    }),
-  );
-  render(<Listing/>);
-  await waitFor(() => screen.getByText('message1'));
-});
-
-test('Submit Response', async () => {
-  render(<Listing/>);
-  await waitFor(() => screen.getByText('Respond'));
-  const text = screen.getByPlaceholderText('Response');
-  const button = screen.getByText('Respond');
-  userEvent.type(text, 'Response text');
-  fireEvent.click(button);
-  await waitFor(() =>
-    expect(screen.getByPlaceholderText('Response').value).toBe(''));
-});
-
-test('Response Server Error', async () => {
-  server.use(
-    rest.get(URL2, (req, res, ctx) => {
-      return res(ctx.status(500));
-    }),
-  );
-  jest.spyOn(window, 'alert').mockImplementation(() => {});
-  render(<Listing/>);
-  await waitFor(() => expect(alert)
-    .toHaveBeenCalledWith('Responses Server Error'));
-});
-
-test('Submit Response No Login', async () => {
-  server.use(
-    rest.post(URL2, (req, res, ctx) => {
-      return res(ctx.status(401));
-    }),
-  );
-  jest.spyOn(window, 'alert').mockImplementation(() => {});
-  render(<Listing/>);
-  await waitFor(() => screen.getByText('Respond'));
-  const text = screen.getByPlaceholderText('Response');
-  const button = screen.getByText('Respond');
-  userEvent.type(text, 'Response');
-  fireEvent.click(button);
-  await waitFor(() => expect(alert)
-    .toHaveBeenCalledWith('Login session expired'));
-});
-
-test('Submit Response Server Error', async () => {
-  server.use(
-    rest.post(URL3, (req, res, ctx) => {
-      return res(ctx.status(500));
-    }),
-  );
-  jest.spyOn(window, 'alert').mockImplementation(() => {});
-  render(<Listing/>);
-  await waitFor(() => screen.getByText('Respond'));
-  const text = screen.getByPlaceholderText('Response');
-  const button = screen.getByText('Respond');
-  userEvent.type(text, 'Response');
-  fireEvent.click(button);
-  await waitFor(() => expect(alert)
-    .toHaveBeenCalledWith('New Response Server Error'));
+test('Close Listing', async () => {
+    render(<Listing/>);
+    await waitFor(() => screen.getByLabelText('close'));
+    const button = screen.getByLabelText('close');
+    fireEvent.click(button);
 });
