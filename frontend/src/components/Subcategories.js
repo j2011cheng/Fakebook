@@ -147,7 +147,7 @@ function Subcategories() {
         <Chip
           key={id}
           label={name}
-          onClick={setCategory(id)}
+          onClick={setCategoryParam(id)}
         />
       </Box>
     );
