@@ -51,7 +51,14 @@ function Subcategories() {
   const location = useLocation();
   const history = useHistory();
 
-  const setCategory = (id) => {
+  const [category, setCategory] = React.useState(
+    new URLSearchParams(location.search).get('category'));
+  React.useEffect(() => {
+    setCategory(new URLSearchParams(location.search).get('category'));
+    handleClose();
+  }, [location.search]);
+
+  const setCategoryParam = (id) => {
     return () => {
       const params = new URLSearchParams();
       params.set('category', id);
@@ -105,10 +112,9 @@ function Subcategories() {
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
     const getData = async () => {
-      const params = new URLSearchParams(location.search);
       let request = '/v0/category';
-      if (params.get('category')) {
-        request += `?category=${params.get('category')}`;
+      if (category) {
+        request += `?category=${category}`;
       }
       const disp = await fetch(request, {
         method: 'GET',
@@ -133,7 +139,7 @@ function Subcategories() {
       setData(disp);
     };
     getData();
-  }, [location.search]);
+  }, [category]);
 
   const subcategory = ({name, id}) => {
     return (
@@ -141,7 +147,7 @@ function Subcategories() {
         <Chip
           key={id}
           label={name}
-          onClick={setCategory(id)}
+          onClick={setCategoryParam(id)}
         />
       </Box>
     );
