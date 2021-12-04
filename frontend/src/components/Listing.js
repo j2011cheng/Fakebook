@@ -130,14 +130,24 @@ function Listing() {
             alignItems: 'center',
           }}
         >
-          <img
-            src={data.images ? data.images[image-1] : ''}
-            alt='Not found'
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src='/not-found-image.jpg';
+          <Box
+            sx={{
+              m: 3,
+              width: '60%',
+              maxHeight: '60%',
             }}
-          />
+          >
+            <img
+              src={data.images ? data.images[image-1] : ''}
+              alt='Not found'
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src='/not-found-image.jpg';
+              }}
+              width='100%'
+              height='100%'
+            />
+          </Box>
           <Pagination
             count={data.images ? data.images.length : 0}
             page={image}
@@ -156,9 +166,9 @@ function Listing() {
                 {data.description}
               </Grid>
               {attributeItems()}
-            </Grid>
-            <Grid container justifyContent='flex-end'>
-              <Responses/>
+              <Grid item xs={12}>
+                <Responses/>
+              </Grid>
             </Grid>
           </Box>
         </Box>
