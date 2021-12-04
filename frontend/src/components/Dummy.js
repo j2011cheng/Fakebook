@@ -6,7 +6,6 @@ import React from 'react';
  * @param {function} setDummy set the dummy state
  */
 function getDummy(setDummy) {
-  // fetch('http://localhost:3010/v0/dummy')
   fetch('/v0/dummy')
     .then((response) => {
       if (!response.ok) {

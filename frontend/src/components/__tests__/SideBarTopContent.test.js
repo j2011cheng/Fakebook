@@ -35,12 +35,15 @@ afterAll(() => server.close());
 
 test('Components are there', () => {
   render(<SideBarTopContent/>);
-  const search = screen.getByRole('button', {name: ''});
-  // const add = screen.getByRole('button', {name: '+ Create New Listing'});
-  const textField = screen.getByPlaceholderText('Search Marketplace');
-  expect(search).toBeDefined();
-  // expect(add).toBeDefined();
-  expect(textField).toBeDefined();
+  screen.getByRole('button');
+  screen.getByPlaceholderText('Search Marketplace');
+});
+
+test('New Listing Button', async () => {
+  localStorage.setItem('user', 'user');
+  render(<SideBarTopContent/>);
+  await waitFor(() => screen.getByText('+ Create New Listing'));
+  fireEvent.click(screen.getByText('+ Create New Listing'));
 });
 
 test('Enter search', async () => {

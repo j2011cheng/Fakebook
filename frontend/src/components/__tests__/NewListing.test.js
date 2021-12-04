@@ -16,8 +16,8 @@ const server = setupServer(
     return res(ctx.json([
       {
         id: '1',
-        name: 'vehicles'
-      }
+        name: 'vehicles',
+      },
     ]));
   }),
   rest.get(URL2, (req, res, ctx) => {
@@ -69,7 +69,7 @@ beforeEach(() => {
     },
     accessToken: '10',
   }));
-})
+});
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
@@ -82,18 +82,18 @@ test('NewListing Renders', async () => {
 test('Post Listing', async () => {
   render(<NewListing/>);
   await waitFor(() => screen.getAllByText('Category'));
-  const category = await screen.getAllByRole('button')[0];
+  const category = screen.getAllByRole('button')[0];
   fireEvent.mouseDown(category);
   await waitFor(() => screen.getByText('vehicles'));
   let menuItem = screen.getByText('vehicles');
   fireEvent.click(menuItem);
-  const name = await screen.getByPlaceholderText('Name');
+  const name = screen.getByPlaceholderText('Name');
   userEvent.type(name, 'listing name');
-  const price = await screen.getByPlaceholderText('0.00');
+  const price = screen.getByPlaceholderText('0.00');
   userEvent.type(price, '10.00');
-  const rangefilter = await screen.getByPlaceholderText('rangefilter');
+  const rangefilter = screen.getByPlaceholderText('rangefilter');
   userEvent.type(rangefilter, '2');
-  const emptyrangefilter = await screen.getByPlaceholderText('emptyrangefilter');
+  const emptyrangefilter = screen.getByPlaceholderText('emptyrangefilter');
   userEvent.type(emptyrangefilter, '2{Backspace}');
   const boolfilter = screen.getByRole('checkbox');
   fireEvent.click(boolfilter);
@@ -102,7 +102,7 @@ test('Post Listing', async () => {
   await waitFor(() => screen.getByRole('listbox'));
   menuItem = screen.getByText('op2');
   fireEvent.click(menuItem);
-  const desc = await screen.getByPlaceholderText('Description');
+  const desc = screen.getByPlaceholderText('Description');
   userEvent.type(desc, 'listing description');
   const images = await screen.getAllByRole('textbox')[2];
   userEvent.type(images, 'img1{Enter}img2');

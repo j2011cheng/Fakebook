@@ -4,9 +4,8 @@ import {screen} from '@testing-library/react';
 import {rest} from 'msw';
 import {setupServer} from 'msw/node';
 
-import {setNarrow} from './common.js'; // , setWide
-// import {getOnlyVisible} from './common.js';
-// import SideBar from '../SideBar';
+import {setNarrow} from './common.js';
+
 import Subcategories from '../Subcategories';
 
 const URL = '/v0/category';

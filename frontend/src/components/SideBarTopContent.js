@@ -13,6 +13,10 @@ function SideBarTopContent() {
   const history = useHistory();
   const location = useLocation();
 
+  const user = React.useCallback(() => {
+    return localStorage.getItem('user');
+  }, []);
+
   const handleInputChange = (event) => {
     setSearch(event.target.value);
   };
@@ -27,8 +31,6 @@ function SideBarTopContent() {
     setSearch('');
     history.push(`${location.pathname}?${params.toString()}`);
   };
-
-  // const newListing = () => {};
 
   return (
     <div>
@@ -51,16 +53,16 @@ function SideBarTopContent() {
       >
         <SearchIcon/>
       </Button>
-      {/* localStorage.getItem('user') ? (
+      {user() ? (
         <Button
           variant='contained'
           name='new listing'
-          onClick={newListing}
+          onClick={() => history.push('/newlisting')}
           sx={{ml: 1, mb: 1, width: '95%'}}
         >
           + Create New Listing
         </Button>
-      ) : ''*/}
+      ) : <div></div>}
     </div>
   );
 };

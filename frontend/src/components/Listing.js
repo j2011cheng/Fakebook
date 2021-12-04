@@ -106,58 +106,62 @@ function Listing() {
       scroll={'paper'}
     >
       <DialogTitle sx={{position: 'relative'}}>
-            <Toolbar>
-              <IconButton
-                edge='start'
-                color='inherit'
-                onClick={handleClose}
-                aria-label='close'
-              >
-                <CloseIcon />
-              </IconButton>
-              <Typography sx={{ml: 2, flex: 1}} variant='h6' component='div'>
-                {data.name}
-              </Typography>
-            </Toolbar>
-          </DialogTitle>
+        <Toolbar>
+          <IconButton
+            edge='start'
+            color='inherit'
+            onClick={handleClose}
+            aria-label='close'
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography sx={{ml: 2, flex: 1}} variant='h6' component='div'>
+            {data.name}
+          </Typography>
+        </Toolbar>
+      </DialogTitle>
       <DialogContent>
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <img
-          src={data.images ? data.images[image-1] : ''}
-          alt='Not found'
-        />
-        <Pagination
-          count={data.images ? data.images.length : 0}
-          page={image}
-          onChange={handleChange}
-        />
+        <CssBaseline />
         <Box
-          sx={{mt: 3}}>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              {data.name ? data.name : ''}
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <img
+            src={data.images ? data.images[image-1] : ''}
+            alt='Not found'
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src='/not-found-image.jpg';
+            }}
+          />
+          <Pagination
+            count={data.images ? data.images.length : 0}
+            page={image}
+            onChange={handleChange}
+          />
+          <Box
+            sx={{mt: 3}}>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                {data.name ? data.name : ''}
+              </Grid>
+              <Grid item xs={6}>
+                {data.owner && data.owner.name ? data.owner.name : ''}
+              </Grid>
+              <Grid item xs={12}>
+                {data.description}
+              </Grid>
+              {attributeItems()}
             </Grid>
-            <Grid item xs={6}>
-              {data.owner && data.owner.name ? data.owner.name : ''}
+            <Grid container justifyContent='flex-end'>
+              <Responses/>
             </Grid>
-            <Grid item xs={12}>
-              {data.description}
-            </Grid>
-            {attributeItems()}
-          </Grid>
-          <Grid container justifyContent='flex-end'>
-            <Responses/>
-          </Grid>
+          </Box>
         </Box>
-      </Box>
       </DialogContent>
     </Dialog>
   );

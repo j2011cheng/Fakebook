@@ -55,6 +55,14 @@ test('ImageList is there', async () => {
   await waitFor(() => screen.getByText('item'));
 });
 
+test('Image Error', async () => {
+  render(<ListingList/>);
+  await waitFor(() => screen.getAllByText('item'));
+  const img = screen.getAllByRole('img')[0];
+  expect(img).toBeDefined();
+  fireEvent(img, new Event('error'));
+});
+
 test('Image is clickable', async () => {
   render(<ListingList/>);
   await waitFor(() => screen.getByRole('button'));
