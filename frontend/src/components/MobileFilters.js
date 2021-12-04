@@ -1,6 +1,6 @@
 import React from 'react';
 // import Button from '@mui/material/Button';
-import List from '@mui/material/List';
+// import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 // import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,8 +8,25 @@ import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import {useHistory, useLocation} from 'react-router-dom';
+import Paper from '@mui/material/Paper';
 import ListItemText from '@mui/material/ListItemText';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Dialog from '@mui/material/Dialog';
+// import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+// import ListItem from '@mui/material/ListItem';
+// import List from '@mui/material/List';
+import AppBar from '@mui/material/AppBar';
+import Slide from '@mui/material/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction='up' ref={ref} {...props} />;
+});
 
 /**
  * Filters list
@@ -17,7 +34,7 @@ import Typography from '@mui/material/Typography';
  *
  * @return {object} JSX
  */
-function Filters() {
+function MobileFilters() {
   const history = useHistory();
   const location = useLocation();
 
@@ -128,16 +145,92 @@ function Filters() {
     );
   };
 
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setMobileOpen(true);
+  };
+  const handleClose = () => {
+    setMobileOpen(false);
+  };
+
+  const mobileAllFilters = () => {
+    return (
+      <div>
+        <Dialog
+          fullScreen
+          open={mobileOpen}
+          onClose={handleClose}
+          TransitionComponent={Transition}
+        >
+          <AppBar sx={{position: 'relative'}}>
+            <Toolbar
+              sx={{
+                backgroundColor: 'white',
+                height: 75,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+              }}
+            >
+              <Typography variant='h4' sx={{flexGrow: 1, color: '#1976d2'}}>
+                Filters
+              </Typography>
+              <IconButton
+                onClick={handleClose}
+                aria-label='close'
+                sx={{justifyContent: 'flex-end', color: '#1976d2'}}
+              >
+                <CloseIcon fontSize='large'/>
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Toolbar sx={{height: 75}}/>
+          {data.map(filter)}
+        </Dialog>
+      </div>
+    );
+  };
+
   return (
-    <div>
-      <ListItemText sx={{mt: 1, ml: 1}}>
-        <Typography variant='h5'>Filters</Typography>
-      </ListItemText>
-      <List>
-        {data.map(filter)}
-      </List>
-    </div>
+    <Grid item xs={12}>
+      <Paper
+        sx={{
+          p: 2,
+          flexDirection: 'column',
+          height: 100,
+          display: {xs: 'block', sm: 'none'},
+        }}
+      >
+        <ListItemText sx={{mt: -1}}>
+          <Typography variant='h5'>Shop by Filters</Typography>
+        </ListItemText>
+        {/* Mobile View */}
+        <Stack
+          direction='row'
+          spacing={1}
+          variant='temporary'
+          open={mobileOpen}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+            },
+            'mt': 1.5,
+          }}
+        >
+          {/* location filter goes here when ready */}
+          <Chip
+            label={'All Filters'}
+            onClick={handleClickOpen}
+          />
+        </Stack>
+      </Paper>
+      {mobileOpen && mobileAllFilters()}
+    </Grid>
   );
 }
 
-export default Filters;
+export default MobileFilters;

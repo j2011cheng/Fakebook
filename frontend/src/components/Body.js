@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 
 import ListingList from './ListingList';
 import Subcategories from './Subcategories';
+import MobileFilters from './MobileFilters';
 
 // /**
 //  * Advertisement section of body
@@ -74,6 +75,7 @@ function Body() {
       <Container sx={{mt: 4, mb: 4}}>
         <Grid container spacing={3}>
           <Subcategories/>
+          <MobileFilters/>
           <ListingList/>
         </Grid>
       </Container>

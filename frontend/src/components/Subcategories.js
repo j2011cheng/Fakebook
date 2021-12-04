@@ -197,6 +197,7 @@ function Subcategories() {
           display: 'flex',
           flexDirection: 'column',
           height: 100,
+          minWidth: 250,
         }}
       >
         <ListItemText sx={{mt: -1}}>
