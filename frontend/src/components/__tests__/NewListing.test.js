@@ -110,6 +110,14 @@ test('Post Listing', async () => {
   fireEvent.click(create);
 });
 
+test('Cancel Listing', async () => {
+  render(<NewListing/>);
+  const cancel = screen.getByText('Cancel');
+  fireEvent.click(cancel);
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith('/'));
+});
+
 test('Post Bad Listing', async () => {
   server.use(
     rest.post(URL3, (req, res, ctx) => {

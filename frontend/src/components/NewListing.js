@@ -331,6 +331,7 @@ function NewListing() {
               value="Cancel"
               fullWidth
               sx={{mt: 3, mb: 2}}
+              onClick={() => history.push('/')}
             >
               Cancel
             </Button>
