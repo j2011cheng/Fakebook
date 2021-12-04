@@ -210,12 +210,12 @@ function Subcategories() {
           display: 'flex',
           flexDirection: 'column',
           height: 100,
-          width: window.innerWidth <= 600 ? width : '100%',
+          width: window.innerWidth <= 600 ? width - 30 : '100%',
         }}
       >
-        <ListItemText sx={{mt: -1}}>
+        {/* <ListItemText sx={{mt: -1, width: 225}}>
           <Typography variant='h5'>Shop by Category</Typography>
-        </ListItemText>
+        </ListItemText> */}
         {getStack()}
       </Paper>
       {mobileOpen && mobileAllCategories()}
