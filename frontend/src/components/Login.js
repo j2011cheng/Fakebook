@@ -83,7 +83,7 @@ function Login() {
               required
               type={'text'}
               name={'loginName'}
-              aria-label='loginName'
+              aria-label='email or phone number'
               placeholder='Email or Phone Number'
               id='email or phone number'
               label='Email or Phone Number'
@@ -96,7 +96,7 @@ function Login() {
               required
               type='password'
               name='password'
-              aria-label='loginPassword'
+              aria-label='password'
               placeholder='Password'
               label='Password'
               id='password'
@@ -106,7 +106,7 @@ function Login() {
             <Button
               type='submit'
               name='submit'
-              aria-label='loginButton'
+              aria-label='log in'
               value='Login'
               fullWidth
               variant='contained'
@@ -119,7 +119,7 @@ function Login() {
             <Button
               type='submit'
               name='submit'
-              aria-label='newuserButton'
+              aria-label='create new account'
               value='Newuser'
               fullWidth
               variant='contained'

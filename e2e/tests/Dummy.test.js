@@ -19,13 +19,13 @@ beforeAll(() => {
   });
   frontend = http.createServer(
     express()
-      .use('/v0', createProxyMiddleware({ 
+      .use('/v0', createProxyMiddleware({
         target: 'http://localhost:3010/',
         changeOrigin: true}))
       .use('/static', express.static(
         path.join(__dirname, '..', '..', 'frontend', 'build', 'static')))
       .get('*', function(req, res) {
-        res.sendFile('index.html', 
+        res.sendFile('index.html',
             {root:  path.join(__dirname, '..', '..', 'frontend', 'build')})
       })
   );
@@ -35,7 +35,7 @@ beforeAll(() => {
 });
 
 afterAll((done) => {
-  backend.close(() => { 
+  backend.close(() => {
     frontend.close(done);
   });
 });
@@ -56,7 +56,7 @@ afterEach(async () => {
 
 // Clicks the 'Get Dummy' button and checks the server response is displayed.
 test('Get Dummy', async () => {
-  await page.goto('http://localhost:3000');
+  await page.goto('http://localhost:3000/dummy');
   const label = await page.$('aria/dummy message');
   let cont = await (await label.getProperty('textContent')).jsonValue();
   expect(cont).toBe('Click the button!');

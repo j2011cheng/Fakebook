@@ -146,7 +146,7 @@ function TopBar() {
             >
               <TextField
                 type='text'
-                aria-label='name'
+                aria-label='email or phone'
                 placeholder='Email or Phone Number'
                 onChange={handleLoginNameChange}
                 value={loginName}
@@ -175,7 +175,7 @@ function TopBar() {
               <Button
                 type='submit'
                 value='Submit'
-                aria-label='login'
+                aria-label='log in'
                 variant='contained'
                 margin='normal'
                 sx={{mt: 2, mb: 2, ml: 1, justifyContent: 'flex-end'}}
