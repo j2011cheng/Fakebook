@@ -74,7 +74,7 @@ test('End of ranges', () => {
   fireEvent.click(forth);
   back = screen.getByText('Back');
   fireEvent.click(back);
-})
+});
 
 test('Create User already Exists', async () => {
   server.use(

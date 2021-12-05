@@ -8,11 +8,12 @@ const pool = new Pool({
   password: process.env.POSTGRES_PASSWORD,
 });
 
-exports.insertResponse = async (listing, message) => {
-  const insert = `INSERT INTO responses(listing, message) VALUES ($1,$2);`;
+exports.insertResponse = async (listing, owner, message) => {
+  const insert = `INSERT INTO responses(listing, owner, message)
+    VALUES ($1,$2,$3);`;
   const query = {
     text: insert,
-    values: [listing, message],
+    values: [listing, owner, message],
   };
   let rowCount;
   try {
@@ -28,12 +29,15 @@ exports.insertResponse = async (listing, message) => {
 };
 
 exports.selectResponses = async (listing, owner) => {
-  const select = `SELECT responses.message AS message FROM responses
+  const select = `SELECT responses.message AS message,
+    people.person->>'name' AS name FROM responses
     INNER JOIN listings
     ON responses.listing = listings.id
+    INNER JOIN people
+    ON listings.owner = people.id
     WHERE listings.owner = $2
     AND listings.id = $1
-    ORDER BY responses.id ASC;`;
+    ORDER BY responses.id DESC;`;
   const query = {
     text: select,
     values: [listing, owner],
@@ -42,7 +46,10 @@ exports.selectResponses = async (listing, owner) => {
   const responses = [];
   if (rows.length > 0) {
     for (const row of rows) {
-      responses.push(row.message);
+      responses.push({
+        message: row.message,
+        owner: row.name,
+      });
     }
   }
   return responses;
