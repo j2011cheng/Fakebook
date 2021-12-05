@@ -63,35 +63,39 @@ function Responses() {
   }, [message, listing]);
 
   const submitResponse = () => {
-    const params = new URLSearchParams(location.search);
-    const user = JSON.parse(localStorage.getItem('user'));
-    const request =
-      `/v0/response/${params.get('listing')}`;
-    const bearerToken = user.accessToken;
-    const body = JSON.stringify({
-      message: message,
-    });
-    fetch(request, {
-      method: 'POST',
-      headers: new Headers({
-        'Authorization': `Bearer ${bearerToken}`,
-        'Content-Type': 'application/json',
-      }),
-      body: body,
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw res;
-        }
-      })
-      .catch((err) => {
-        if (err.status === 401) {
-          alert('Login session expired');
-        } else {
-          alert('New Response Server Error');
-        }
+    if (message) {
+      const params = new URLSearchParams(location.search);
+      const user = JSON.parse(localStorage.getItem('user'));
+      const request =
+        `/v0/response/${params.get('listing')}`;
+      const bearerToken = user.accessToken;
+      console.log(user.owner.id);
+      const body = JSON.stringify({
+        message: message,
+        owner: user.owner.id,
       });
-    setMessage('');
+      fetch(request, {
+        method: 'POST',
+        headers: new Headers({
+          'Authorization': `Bearer ${bearerToken}`,
+          'Content-Type': 'application/json',
+        }),
+        body: body,
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
+          }
+        })
+        .catch((err) => {
+          if (err.status === 401) {
+            alert('Login session expired');
+          } else {
+            alert('New Response Server Error');
+          }
+        });
+      setMessage('');
+    }
   };
 
   const responseItems = () => {
@@ -121,8 +125,13 @@ function Responses() {
       ));
       for (let i = 0; i < responses.length; i++) {
         items.push((
-          <Grid item xs={12} key={i}>
-            {responses[i]}
+          <Grid container>
+            <Grid item xs={4} key={i + responses[i].owner}>
+              {responses[i].owner}
+            </Grid>
+            <Grid item xs={8} key={i + responses[i].owner}>
+              {responses[i].message}
+            </Grid>
           </Grid>
         ));
       }

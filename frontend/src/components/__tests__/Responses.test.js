@@ -32,7 +32,14 @@ beforeEach(() => {
   server.use(
     rest.get(URL1, (req, res, ctx) => {
       return res(
-        ctx.json(['message1', 'message2']),
+        ctx.json([{
+          message: 'message1',
+          owner: 'dev',
+        },
+        {
+          message: 'message2',
+          owner: 'dev',
+        }]),
       );
     }),
     rest.post(URL2, (req, res, ctx) => {
@@ -72,6 +79,15 @@ test('Submit Response', async () => {
   const text = screen.getByPlaceholderText('Response');
   const button = screen.getByText('Respond');
   userEvent.type(text, 'Response text');
+  fireEvent.click(button);
+  await waitFor(() =>
+    expect(screen.getByPlaceholderText('Response').value).toBe(''));
+});
+
+test('Submit Empty Response', async () => {
+  render(<Responses/>);
+  await waitFor(() => screen.getByText('Respond'));
+  const button = screen.getByText('Respond');
   fireEvent.click(button);
   await waitFor(() =>
     expect(screen.getByPlaceholderText('Response').value).toBe(''));

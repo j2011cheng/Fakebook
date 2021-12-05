@@ -4,7 +4,8 @@ const db = require('./response.db');
 exports.postResponse = async (req, res) => {
   const listing = req.params.id;
   const message = req.body.message;
-  const created = await db.insertResponse(listing, message);
+  const owner = req.body.owner;
+  const created = await db.insertResponse(listing, owner, message);
   if (created) {
     res.status(201).send();
   } else {

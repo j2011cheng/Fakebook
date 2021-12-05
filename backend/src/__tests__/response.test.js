@@ -44,6 +44,7 @@ test('POST Response', async () => {
     .set('Authorization', `Bearer ${auth.accessToken}`)
     .send({
       message: 'This is a nice listing.',
+      owner: auth.owner.id,
     })
     .expect(201);
 });

@@ -229,7 +229,12 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                    owner:
+                      type: string
         401:
           description: Must be logged in to view responses
         404:
@@ -254,6 +259,9 @@ paths:
               properties:
                 message:
                   type: string
+                owner:
+                  type: string
+                  format: uuid
       security:
         - bearerAuth: []
       responses:

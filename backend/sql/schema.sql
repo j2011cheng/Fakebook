@@ -21,4 +21,4 @@ CREATE TABLE listings(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), list
 CREATE TABLE filters(id UUID UNIQUE PRIMARY KEY DEFAULT gen_random_uuid(), filter jsonb, category UUID, CONSTRAINT fk_category FOREIGN KEY(category) REFERENCES categories(id));
 
 -- Responses Table --
-CREATE TABLE responses(id SERIAL PRIMARY KEY, listing UUID, message TEXT, CONSTRAINT fk_listing FOREIGN KEY(listing) REFERENCES listings(id));
+CREATE TABLE responses(id SERIAL PRIMARY KEY, listing UUID, owner UUID, message TEXT, CONSTRAINT fk_listing FOREIGN KEY(listing) REFERENCES listings(id), CONSTRAINT fk_owner FOREIGN KEY(owner) REFERENCES people(id));
