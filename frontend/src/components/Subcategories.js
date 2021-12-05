@@ -10,17 +10,12 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Drawer from '@mui/material/Drawer';
-import Slide from '@mui/material/Slide';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 
 import Categories from './Categories';
 import FilterDialogButton from './FilterDialogButton';
 // import BreadSlices from './BreadSlices';
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction='up' ref={ref} {...props} />;
-});
 
 /**
  * Category chips section of body
@@ -74,48 +69,48 @@ function Subcategories() {
 
   const mobileAllCategories = () => {
     return (
-      <div>
-        <Drawer
-          anchor='top'
-          open={mobileOpen}
-          onClose={handleClose}
-          TransitionComponent={Transition}
+      <Drawer
+        anchor='top'
+        open={mobileOpen}
+        onClose={handleClose}
+      >
+        <Paper
+          sx={{
+            height: window.innerHeight,
+          }}
         >
-          <Paper
+          <Toolbar
             sx={{
-              height: window.innerHeight,
+              height: 75,
+              display: 'flex',
             }}
-          >
-            <Toolbar
+          />
+          <List>
+            <ListItem
               sx={{
-                height: 75,
-                display: 'flex',
-                alignItems: 'center',
+                width: '100%',
               }}
-            />
-            <List>
-              <ListItem
-                sx={{
-                  width: '100%',
-                }}
+            >
+              <Typography variant='h4' sx={{flexGrow: 1}}>
+                Categories
+              </Typography>
+              <IconButton
+                onClick={handleClose}
+                aria-label='close'
               >
-                <Typography variant='h4' sx={{flexGrow: 1}}>
-                  Categories
-                </Typography>
-                <IconButton
-                  onClick={handleClose}
-                  aria-label='close'
-                >
-                  <CloseIcon fontSize='large'/>
-                </IconButton>
-              </ListItem>
-              <ListItem>
-                <Categories/>
-              </ListItem>
-            </List>
-          </Paper>
-        </Drawer>
-      </div>
+                <CloseIcon fontSize='large'/>
+              </IconButton>
+            </ListItem>
+            <ListItem
+              sx={{
+                width: 400,
+              }}
+            >
+              <Categories/>
+            </ListItem>
+          </List>
+        </Paper>
+      </Drawer>
     );
   };
 

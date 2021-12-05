@@ -1,6 +1,7 @@
 import React from 'react';
 import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
+import ListItem from '@mui/material/ListItem';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {useHistory, useLocation} from 'react-router-dom';
 
@@ -67,23 +68,28 @@ function Categories() {
 
   const category = ({name, id}) => {
     return (
-      <ListItemButton
-        key={id}
-        onClick={setCategory(id)}
-        sx={{
-          width: '100%',
-          ml: 2,
-        }}
-      >
-        {name}
-      </ListItemButton>
+      <ListItem>
+        <Button
+          key={id}
+          onClick={setCategory(id)}
+          variant='contained'
+          sx={{
+            width: '100%',
+            height: 50,
+          }}
+        >
+          {name}
+        </Button>
+      </ListItem>
     );
   };
 
   return (
     <List
       name='categories'
-      component='nav'
+      sx={{
+        width: '100%',
+      }}
     >
       {width > 600 ?
         <Typography

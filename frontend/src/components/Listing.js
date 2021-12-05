@@ -127,8 +127,9 @@ function Listing() {
           <Box
             sx={{
               m: 3,
-              width: '60%',
-              maxHeight: '60%',
+              width: '75%',
+              maxWidth: 600,
+              maxHeight: '75%',
             }}
           >
             <img
