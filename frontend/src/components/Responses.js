@@ -1,6 +1,6 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
+import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useLocation} from 'react-router-dom';
 
@@ -98,11 +98,15 @@ function Responses() {
     const items = [];
     if (localStorage.getItem('user')) {
       items.push((
-        <Grid item xs={8} key='text'>
-          <TextareaAutosize
+        <Grid item xs={12} key='text'>
+          <TextField
             value={message}
             onInput={handleInputChange}
             placeholder='Response'
+            multiline
+            rows={4}
+            overflow='auto'
+            fullWidth
           />
         </Grid>
       ));
@@ -115,8 +119,6 @@ function Responses() {
           </Button>
         </Grid>
       ));
-      // if (JSON.parse(localStorage.getItem('user')).owner.id
-      // === data.owner.id) {
       for (let i = 0; i < responses.length; i++) {
         items.push((
           <Grid item xs={12} key={i}>
@@ -124,7 +126,6 @@ function Responses() {
           </Grid>
         ));
       }
-      // }
       return items;
     } else {
       return;

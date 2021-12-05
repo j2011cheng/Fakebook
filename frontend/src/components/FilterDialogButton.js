@@ -39,6 +39,9 @@ function FilterDialogButton() {
       >
         <DialogTitle>
           <Toolbar>
+            <Typography sx={{ml: 2, flex: 1}} variant='h5'>
+              Filters
+            </Typography>
             <IconButton
               edge='start'
               color='inherit'
@@ -47,9 +50,6 @@ function FilterDialogButton() {
             >
               <CloseIcon />
             </IconButton>
-            <Typography sx={{ml: 2, flex: 1}} variant='h6' component='div'>
-              Filters
-            </Typography>
           </Toolbar>
         </DialogTitle>
         <DialogContent dividers>

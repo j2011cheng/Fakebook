@@ -10,7 +10,8 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Dialog from '@mui/material/Dialog';
-import AppBar from '@mui/material/AppBar';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
 import Slide from '@mui/material/Slide';
 
 import Categories from './Categories';
@@ -80,7 +81,7 @@ function Subcategories() {
           onClose={handleClose}
           TransitionComponent={Transition}
         >
-          <AppBar sx={{position: 'relative'}}>
+          <DialogTitle>
             <Toolbar
               sx={{
                 backgroundColor: 'white',
@@ -90,8 +91,8 @@ function Subcategories() {
                 justifyContent: 'flex-start',
               }}
             >
-              <Typography variant='h4' sx={{flexGrow: 1, color: '#1976d2'}}>
-                Select Category
+              <Typography variant='h4' sx={{flexGrow: 1}}>
+                Categories
               </Typography>
               <IconButton
                 onClick={handleClose}
@@ -101,9 +102,10 @@ function Subcategories() {
                 <CloseIcon fontSize='large'/>
               </IconButton>
             </Toolbar>
-          </AppBar>
-          <Toolbar sx={{height: 75}}/>
-          <Categories/>
+          </DialogTitle>
+          <DialogContent dividers>
+            <Categories/>
+          </DialogContent>
         </Dialog>
       </div>
     );
