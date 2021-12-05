@@ -23,16 +23,12 @@ function NewUser() {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleBack = () => {
-    if (counterStep > 0) {
-      setCounterStep(counterStep - 1);
-    }
+    setCounterStep(counterStep - 1);
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   const handleNext = () => {
-    if (counterStep < 4) {
-      setCounterStep(counterStep + 1);
-    }
+    setCounterStep(counterStep + 1);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 

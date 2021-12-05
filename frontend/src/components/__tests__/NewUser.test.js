@@ -58,6 +58,24 @@ test('Go Forth and Back', async () => {
   screen.getByPlaceholderText('Email');
 });
 
+test('End of ranges', () => {
+  render(<NewUser/>);
+  let back = screen.getByText('Back');
+  fireEvent.click(back);
+  let forth = screen.getByText('Continue');
+  fireEvent.click(forth);
+  forth = screen.getByText('Continue');
+  fireEvent.click(forth);
+  forth = screen.getByText('Continue');
+  fireEvent.click(forth);
+  forth = screen.getByText('Continue');
+  fireEvent.click(forth);
+  forth = screen.getByText('Continue');
+  fireEvent.click(forth);
+  back = screen.getByText('Back');
+  fireEvent.click(back);
+})
+
 test('Create User already Exists', async () => {
   server.use(
     rest.post(URL, (req, res, ctx) => {

@@ -149,6 +149,7 @@ function Subcategories() {
         <Chip
           key={id}
           label={name}
+          aria-label={name}
           onClick={setCategoryParam(id)}
         />
       </Box>

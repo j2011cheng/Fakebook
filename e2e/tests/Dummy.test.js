@@ -14,13 +14,13 @@ let page;
 
 beforeAll(() => {
   backend = http.createServer(app);
-  backend.listen(3010, () => {
-    console.log('Backend Running at http://localhost:3010');
+  backend.listen(3011, () => {
+    console.log('Backend Running at http://localhost:3011');
   });
   frontend = http.createServer(
     express()
       .use('/v0', createProxyMiddleware({
-        target: 'http://localhost:3010/',
+        target: 'http://localhost:3011/',
         changeOrigin: true}))
       .use('/static', express.static(
         path.join(__dirname, '..', '..', 'frontend', 'build', 'static')))
@@ -29,8 +29,8 @@ beforeAll(() => {
             {root:  path.join(__dirname, '..', '..', 'frontend', 'build')})
       })
   );
-  frontend.listen(3000, () => {
-    console.log('Frontend Running at http://localhost:3000');
+  frontend.listen(3001, () => {
+    console.log('Frontend Running at http://localhost:3001');
   });
 });
 
@@ -56,7 +56,7 @@ afterEach(async () => {
 
 // Clicks the 'Get Dummy' button and checks the server response is displayed.
 test('Get Dummy', async () => {
-  await page.goto('http://localhost:3000/dummy');
+  await page.goto('http://localhost:3001/dummy');
   const label = await page.$('aria/dummy message');
   let cont = await (await label.getProperty('textContent')).jsonValue();
   expect(cont).toBe('Click the button!');
