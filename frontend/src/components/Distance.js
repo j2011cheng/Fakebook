@@ -13,8 +13,8 @@ function Distance() {
 
   const [distance, setDistance] = React.useState('');
   const [[lat, long], setLocation] = React.useState([
-    new URLSearchParams(url.search).get('lat'),
-    new URLSearchParams(url.search).get('long'),
+    Number(new URLSearchParams(url.search).get('lat')),
+    Number(new URLSearchParams(url.search).get('long')),
   ]);
   const [locationWatch, setLocationWatch] = React.useState(0);
 
