@@ -156,7 +156,8 @@ test('TopBar Mobile Create Listing', async () => {
   await waitFor(() => screen.getByRole('button'));
   const button = screen.getByRole('button');
   fireEvent.click(button);
-  const newlisting = await waitFor(() => screen.getByText('Create New Listing'));
+  const newlisting = await waitFor(() =>
+    screen.getByText('Create New Listing'));
   fireEvent.click(newlisting);
   await waitFor(() => expect(mockHistoryPush)
     .toHaveBeenCalledWith(`/newlisting`));

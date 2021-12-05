@@ -1,4 +1,4 @@
-import {render, fireEvent, waitFor} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import {screen} from '@testing-library/react';
@@ -37,16 +37,6 @@ test('Enter search', async () => {
   render(<SideBarTopContent/>);
   const textField = screen.getByPlaceholderText('Search Marketplace');
   userEvent.type(textField, 'search');
-  const search = screen.getByRole('button', {name: ''});
-  fireEvent.click(search);
   await waitFor(() => expect(mockHistoryPush)
     .toHaveBeenCalledWith('/2?category=2&search=search'));
-});
-
-test('Reset search', async () => {
-  render(<SideBarTopContent/>);
-  const search = screen.getByRole('button', {name: ''});
-  fireEvent.click(search);
-  await waitFor(() => expect(mockHistoryPush)
-    .toHaveBeenCalledWith('/2?category=2'));
 });
