@@ -8,7 +8,6 @@ import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import {useHistory, useLocation} from 'react-router-dom';
-import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
@@ -181,9 +180,15 @@ function Filters() {
   return (
     <div>
       {window.innerWidth > 600 ?
-        <ListItemText sx={{mt: 1, ml: 1}}>
-          <Typography variant='h5'>Filters</Typography>
-        </ListItemText> :
+        <Typography
+          variant='h5'
+          sx={{
+            mt: 1,
+            ml: 2,
+          }}
+        >
+          Filters
+        </Typography> :
         ''}
       <List>
         <Distance/>

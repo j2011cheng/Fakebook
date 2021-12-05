@@ -98,7 +98,7 @@ test('Set mobile view', async () => {
   await waitFor(() => screen.getByText('All Categories'));
   const button = screen.getByText('All Categories');
   fireEvent.click(button);
-  screen.getByText('Select Category');
+  screen.getByText('Categories');
 });
 
 test('Close mobile view', async () => {

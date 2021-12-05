@@ -1,6 +1,7 @@
 import React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import {useHistory, useLocation} from 'react-router-dom';
 
@@ -71,6 +72,17 @@ function Categories() {
 
   return (
     <List name='categories'>
+      {window.innerWidth > 600 ?
+        <Typography
+          variant='h5'
+          sx={{
+            mt: 1,
+            ml: 2,
+          }}
+        >
+          Categories
+        </Typography> :
+        ''}
       {data.subcategories ? data.subcategories.map(category) : ''}
     </List>
   );
