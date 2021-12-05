@@ -91,3 +91,10 @@ test('Click New User', async () => {
   fireEvent.click(button);
   await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/newuser'));
 });
+
+test('Click Cancel', async () => {
+  render(<Login/>);
+  const button = screen.getByText('Cancel');
+  fireEvent.click(button);
+  await waitFor(() => expect(mockHistoryPush).toHaveBeenCalledWith('/'));
+});
