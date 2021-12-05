@@ -68,9 +68,10 @@ function Categories() {
 
   const category = ({name, id}) => {
     return (
-      <ListItem>
+      <ListItem
+        key={id}
+      >
         <Button
-          key={id}
           onClick={setCategory(id)}
           variant='contained'
           sx={{

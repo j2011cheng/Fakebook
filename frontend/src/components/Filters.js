@@ -96,7 +96,6 @@ function Filters() {
     return (
       <ListItem
         display='flex'
-        flexDirection='row'
         key={name}
       >
         <Box
@@ -145,7 +144,6 @@ function Filters() {
             <Box
               sx={{
                 display: 'flex',
-                flexDirection: 'row',
               }}
             >
               <TextField

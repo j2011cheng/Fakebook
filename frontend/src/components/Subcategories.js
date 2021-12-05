@@ -149,9 +149,11 @@ function Subcategories() {
 
   const subcategory = ({name, id}) => {
     return (
-      <Box sx={{mr: 1}}>
+      <Box
+        key={id}
+        sx={{mr: 1}}
+      >
         <Chip
-          key={id}
           label={name}
           aria-label={name}
           onClick={setCategoryParam(id)}
@@ -167,7 +169,6 @@ function Subcategories() {
           <Box
             sx={{
               display: 'flex',
-              flexDirection: 'row',
               overflow: 'auto',
               p: 1,
               m: 1,
@@ -190,7 +191,6 @@ function Subcategories() {
           <Box
             sx={{
               display: 'flex',
-              flexDirection: 'row',
               overflow: 'auto',
               p: 1,
               m: 1,

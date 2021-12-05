@@ -29,6 +29,7 @@ function NewListing() {
       name: '',
       price: 0.0,
       description: '',
+      location: [],
       images: [],
     });
   const history = useHistory();
@@ -75,10 +76,42 @@ function NewListing() {
     setListing(l);
   };
 
+
+  const [location, setLocation] = React.useState({
+    latitude: 0,
+    longitude: 0,
+  });
+  const handlePosition = (pos) => {
+    const crd = pos.coords;
+    if (!location.latitude || !location.longitude) {
+      setLocation({
+        latitude: crd.latitude,
+        longitude: crd.longitude,
+      });
+    }
+  };
+  const handleErr = (err) => {
+    if (err.code !== 1) {
+      console.warn(`Location error (${err.code}): ${err.message}`);
+    }
+  };
+  const options = {
+    magimumAge: Infinity,
+    timeout: 5000,
+  };
+  const getLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      handlePosition,
+      handleErr,
+      options,
+    );
+  };
+
   const onSubmit = (event) => {
     const l = listing;
     const token = JSON.parse(localStorage.getItem('user')).accessToken;
     l.category = categoryList.find((c) => c.id === category);
+    l.location = location;
     setListing(l);
     event.preventDefault();
     fetch('/v0/listing', {
@@ -164,7 +197,6 @@ function NewListing() {
     getCategories();
   });
 
-
   const categories = (cat) => {
     return (
       <MenuItem key={cat.id} value={cat.id}>
@@ -185,6 +217,7 @@ function NewListing() {
             label={name}
             name={name}
             value={listing.attributes[name]}
+            onFocus={getLocation}
             onChange={handleFilterChange}
           >
             <MenuItem value="">

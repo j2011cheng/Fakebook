@@ -52,6 +52,10 @@ const server = setupServer(
   }),
 );
 
+const mockGeolocation = {
+  getCurrentPosition: () => {},
+};
+navigator.geolocation = mockGeolocation;
 const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -80,6 +84,81 @@ test('NewListing Renders', async () => {
 });
 
 test('Post Listing', async () => {
+  render(<NewListing/>);
+  await waitFor(() => screen.getAllByText('Category'));
+  const category = screen.getAllByRole('button')[0];
+  fireEvent.mouseDown(category);
+  await waitFor(() => screen.getByText('vehicles'));
+  let menuItem = screen.getByText('vehicles');
+  fireEvent.click(menuItem);
+  const name = screen.getByPlaceholderText('Name');
+  userEvent.type(name, 'listing name');
+  const price = screen.getByPlaceholderText('0.00');
+  userEvent.type(price, '10.00');
+  const rangefilter = screen.getByPlaceholderText('rangefilter');
+  userEvent.type(rangefilter, '2');
+  const emptyrangefilter = screen.getByPlaceholderText('emptyrangefilter');
+  userEvent.type(emptyrangefilter, '2{Backspace}');
+  const boolfilter = screen.getByRole('checkbox');
+  fireEvent.click(boolfilter);
+  const enumfilter = screen.getAllByRole('button')[1];
+  fireEvent.mouseDown(enumfilter);
+  await waitFor(() => screen.getByRole('listbox'));
+  menuItem = screen.getByText('op2');
+  fireEvent.click(menuItem);
+  const desc = screen.getByPlaceholderText('Description');
+  userEvent.type(desc, 'listing description');
+  const images = await screen.getAllByRole('textbox')[2];
+  userEvent.type(images, 'img1{Enter}img2');
+  const create = screen.getByText('Create');
+  fireEvent.click(create);
+});
+
+test('Post Listing with Location', async () => {
+  jest.spyOn(navigator.geolocation, 'getCurrentPosition')
+    .mockImplementation((a, b, c) => {
+      a({
+        coords: {
+          latitude: 51.1,
+          longitude: 45.3,
+        }});
+      b({code: 1, message: 'err'});
+    });
+  render(<NewListing/>);
+  await waitFor(() => screen.getAllByText('Category'));
+  const category = screen.getAllByRole('button')[0];
+  fireEvent.mouseDown(category);
+  await waitFor(() => screen.getByText('vehicles'));
+  let menuItem = screen.getByText('vehicles');
+  fireEvent.click(menuItem);
+  const name = screen.getByPlaceholderText('Name');
+  userEvent.type(name, 'listing name');
+  const price = screen.getByPlaceholderText('0.00');
+  userEvent.type(price, '10.00');
+  const rangefilter = screen.getByPlaceholderText('rangefilter');
+  userEvent.type(rangefilter, '2');
+  const emptyrangefilter = screen.getByPlaceholderText('emptyrangefilter');
+  userEvent.type(emptyrangefilter, '2{Backspace}');
+  const boolfilter = screen.getByRole('checkbox');
+  fireEvent.click(boolfilter);
+  const enumfilter = screen.getAllByRole('button')[1];
+  fireEvent.mouseDown(enumfilter);
+  await waitFor(() => screen.getByRole('listbox'));
+  menuItem = screen.getByText('op2');
+  fireEvent.click(menuItem);
+  const desc = screen.getByPlaceholderText('Description');
+  userEvent.type(desc, 'listing description');
+  const images = await screen.getAllByRole('textbox')[2];
+  userEvent.type(images, 'img1{Enter}img2');
+  const create = screen.getByText('Create');
+  fireEvent.click(create);
+});
+
+test('Post Listing with No Location', async () => {
+  jest.spyOn(navigator.geolocation, 'getCurrentPosition')
+    .mockImplementation((a, b, c) => {
+      b({code: 6, message: 'err'});
+    });
   render(<NewListing/>);
   await waitFor(() => screen.getAllByText('Category'));
   const category = screen.getAllByRole('button')[0];

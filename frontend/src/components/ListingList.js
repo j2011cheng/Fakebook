@@ -82,7 +82,6 @@ function ListingList() {
 
   return (
     <ImageList
-      maxWidth='100%'
       name='listings'
     >
       {data.length ? data.map(listItem) : ''}

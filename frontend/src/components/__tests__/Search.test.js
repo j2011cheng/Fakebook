@@ -5,7 +5,7 @@ import {screen} from '@testing-library/react';
 import {rest} from 'msw';
 import {setupServer} from 'msw/node';
 
-import SideBarTopContent from '../SideBarTopContent';
+import Search from '../Search';
 
 const URL = '/v0/authenticate';
 
@@ -33,8 +33,8 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test('Enter search', async () => {
-  render(<SideBarTopContent/>);
+test('Enter Search', async () => {
+  render(<Search/>);
   const textField = screen.getByPlaceholderText('Search Marketplace');
   userEvent.type(textField, 'search');
   await waitFor(() => expect(mockHistoryPush)
