@@ -3,7 +3,11 @@ const bcrypt = require('bcrypt');
 
 const db = require('./user.db');
 
-const secrets = require('../data/secrets');
+const secrets = {accessToken: ''};
+secrets.accessToken += 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpb';
+secrets.accessToken += 'CI6ImFubmFAYm9va3MuY29tIiwicm9sZSI6ImFkbWluIiw';
+secrets.accessToken += 'iaWF0IjoxNjA2Mjc3MDAxLCJleHAiOjE2MDYyNzcwNjF9.';
+secrets.accessToken += '1nwY0lDMGrb7AUFFgSaYd4Q7Tzr-BjABclmoKZOqmr4';
 
 exports.create = async (req, res) => {
   const {name, email, password} = req.body;
