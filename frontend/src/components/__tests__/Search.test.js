@@ -33,15 +33,20 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test('Components are there', () => {
+test('Enter search', async () => {
   render(<SideBarTopContent/>);
+  const textField = screen.getByPlaceholderText('Search Marketplace');
+  userEvent.type(textField, 'search');
+  const search = screen.getByRole('button', {name: ''});
+  fireEvent.click(search);
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith('/2?category=2&search=search'));
 });
 
-test('New Listing Button', async () => {
-  localStorage.setItem('user', 'user');
+test('Reset search', async () => {
   render(<SideBarTopContent/>);
-  await waitFor(() => screen.getByText('+ Create New Listing'));
-  fireEvent.click(screen.getByText('+ Create New Listing'));
-  await waitFor(() =>
-    expect(mockHistoryPush).toHaveBeenCalledWith('/newlisting'));
+  const search = screen.getByRole('button', {name: ''});
+  fireEvent.click(search);
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith('/2?category=2'));
 });
