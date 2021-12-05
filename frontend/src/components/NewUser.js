@@ -19,13 +19,20 @@ import Divider from '@mui/material/Divider';
  * @return {object} JSX
  */
 function NewUser() {
+  const [counterStep, setCounterStep] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleBack = () => {
+    if (counterStep > 0) {
+      setCounterStep(counterStep - 1);
+    }
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   const handleNext = () => {
+    if (counterStep < 4) {
+      setCounterStep(counterStep + 1);
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -175,30 +182,28 @@ function NewUser() {
                   <StepLabel>{step.label}</StepLabel>
                   <StepContent>
                     <Typography>{step.description}</Typography>
-                    <Box sx={{mb: 2}}>
-                      <div>
-                        <Button
-                          variant='contained'
-                          aria-label='continue'
-                          onClick={handleNext}
-                          sx={{mt: 1, mr: 1}}
-                        >
-                          Continue
-                        </Button>
-                        <Button
-                          disabled={index === 0}
-                          onClick={handleBack}
-                          aria-label='back'
-                          sx={{mt: 1, mr: 1}}
-                        >
-                          Back
-                        </Button>
-                      </div>
-                    </Box>
                   </StepContent>
                 </Step>
               ))}
             </Stepper>
+            <Box sx={{mb: 2, justifyContent: 'center', ml: '25%'}}>
+              <Button
+                disabled={counterStep===4}
+                aria-label='continue'
+                onClick={handleNext}
+                sx={{mt: 1, mr: 1}}
+              >
+                Continue
+              </Button>
+              <Button
+                disabled={counterStep===0}
+                onClick={handleBack}
+                aria-label='back'
+                sx={{mt: 1, mr: 1}}
+              >
+                Back
+              </Button>
+            </Box>
             {activeStep === steps.length && (
               <ListItem>
                 <Button

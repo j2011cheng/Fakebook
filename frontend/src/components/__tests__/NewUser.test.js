@@ -31,7 +31,6 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-
 test('Create User with Name, Email, and Password', async () => {
   render(<NewUser/>);
   const name = screen.getByPlaceholderText('Name');
@@ -54,8 +53,7 @@ test('Go Forth and Back', async () => {
   render(<NewUser/>);
   const forth = screen.getByText('Continue');
   fireEvent.click(forth);
-  const back = screen.getAllByText('Back')[1];
-  fireEvent.click(forth);
+  const back = screen.getByText('Back');
   fireEvent.click(back);
   screen.getByPlaceholderText('Email');
 });
