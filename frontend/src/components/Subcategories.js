@@ -9,10 +9,10 @@ import {useHistory, useLocation} from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
+import Drawer from '@mui/material/Drawer';
 import Slide from '@mui/material/Slide';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 
 import Categories from './Categories';
 import FilterDialogButton from './FilterDialogButton';
@@ -75,38 +75,46 @@ function Subcategories() {
   const mobileAllCategories = () => {
     return (
       <div>
-        <Dialog
-          fullScreen
+        <Drawer
+          anchor='top'
           open={mobileOpen}
           onClose={handleClose}
           TransitionComponent={Transition}
         >
-          <DialogTitle>
+          <Paper
+            sx={{
+              height: window.innerHeight,
+            }}
+          >
             <Toolbar
               sx={{
-                backgroundColor: 'white',
                 height: 75,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'flex-start',
               }}
-            >
-              <Typography variant='h4' sx={{flexGrow: 1}}>
-                Categories
-              </Typography>
-              <IconButton
-                onClick={handleClose}
-                aria-label='close'
-                sx={{justifyContent: 'flex-end', color: '#1976d2'}}
+            />
+            <List>
+              <ListItem
+                sx={{
+                  width: '100%',
+                }}
               >
-                <CloseIcon fontSize='large'/>
-              </IconButton>
-            </Toolbar>
-          </DialogTitle>
-          <DialogContent dividers>
-            <Categories/>
-          </DialogContent>
-        </Dialog>
+                <Typography variant='h4' sx={{flexGrow: 1}}>
+                  Categories
+                </Typography>
+                <IconButton
+                  onClick={handleClose}
+                  aria-label='close'
+                >
+                  <CloseIcon fontSize='large'/>
+                </IconButton>
+              </ListItem>
+              <ListItem>
+                <Categories/>
+              </ListItem>
+            </List>
+          </Paper>
+        </Drawer>
       </div>
     );
   };
@@ -181,7 +189,7 @@ function Subcategories() {
       );
     } else {
       return (
-        <div style={{width: '100%'}}>
+        <div>
           <Box
             sx={{
               display: 'flex',
@@ -211,13 +219,10 @@ function Subcategories() {
           p: 2,
           display: 'flex',
           flexDirection: 'column',
-          height: 100,
-          width: window.innerWidth <= 600 ? width - 30 : '100%',
+          height: 'auto',
+          width: 'auto',
         }}
       >
-        {/* <ListItemText sx={{mt: -1, width: 225}}>
-          <Typography variant='h5'>Shop by Category</Typography>
-        </ListItemText> */}
         {getStack()}
       </Paper>
       {mobileOpen && mobileAllCategories()}

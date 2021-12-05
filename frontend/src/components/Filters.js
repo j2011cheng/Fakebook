@@ -24,6 +24,15 @@ import Distance from './Distance';
 function Filters() {
   const history = useHistory();
   const location = useLocation();
+  const [width, setWidth] = React.useState(0);
+  React.useLayoutEffect(() => {
+    const updateWidth = () => {
+      setWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', updateWidth);
+    updateWidth();
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
 
   const handleInputChange = (event) => {
     const target = event.target;
@@ -146,19 +155,6 @@ function Filters() {
                 onChange={handleInputChange}
               />
               <TextField
-                variant='standard'
-                defaultValue='to'
-                sx={{
-                  mt: 1,
-                  width: 50,
-                  ml: 1,
-                  mr: 1,
-                }}
-                InputProps={{
-                  readOnly: true,
-                }}
-              />
-              <TextField
                 label='Max'
                 size='small'
                 name={'MAX' + name}
@@ -179,7 +175,7 @@ function Filters() {
 
   return (
     <div>
-      {window.innerWidth > 600 ?
+      {width > 600 ?
         <Typography
           variant='h5'
           sx={{

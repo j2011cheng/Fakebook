@@ -1,8 +1,7 @@
 import React from 'react';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import {useHistory, useLocation} from 'react-router-dom';
 
 /**
@@ -28,6 +27,15 @@ function Categories() {
     };
   };
 
+  const [width, setWidth] = React.useState(0);
+  React.useLayoutEffect(() => {
+    const updateWidth = () => {
+      setWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', updateWidth);
+    updateWidth();
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
     const getData = async () => {
@@ -59,20 +67,25 @@ function Categories() {
 
   const category = ({name, id}) => {
     return (
-      <ListItem key={id}>
-        <Button
-          value={id}
-          onClick={setCategory(id)}
-        >
-          {name}
-        </Button>
-      </ListItem>
+      <ListItemButton
+        key={id}
+        onClick={setCategory(id)}
+        sx={{
+          width: '100%',
+          ml: 2,
+        }}
+      >
+        {name}
+      </ListItemButton>
     );
   };
 
   return (
-    <List name='categories'>
-      {window.innerWidth > 600 ?
+    <List
+      name='categories'
+      component='nav'
+    >
+      {width > 600 ?
         <Typography
           variant='h5'
           sx={{

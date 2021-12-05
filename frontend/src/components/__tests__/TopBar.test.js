@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 import {screen} from '@testing-library/react';
 import {rest} from 'msw';
 import {setupServer} from 'msw/node';
+import {setNarrow} from './common.js';
 
 import TopBar from '../TopBar';
 
@@ -117,4 +118,46 @@ test('TopBar My Listings', async () => {
   fireEvent.click(screen.getByText('My Listings'));
   await waitFor(() => expect(mockHistoryPush)
     .toHaveBeenCalledWith(`/?owner=${id}`));
+});
+
+test('TopBar Mobile Menu', async () => {
+  render(<TopBar/>);
+  setNarrow();
+  await waitFor(() => screen.getByRole('button'));
+  const button = screen.getByRole('button');
+  fireEvent.click(button);
+  await waitFor(() => screen.getByText('Log In'));
+  userEvent.type(button, '{esc}');
+});
+
+test('TopBar Mobile Log In', async () => {
+  render(<TopBar/>);
+  setNarrow();
+  await waitFor(() => screen.getByRole('button'));
+  const button = screen.getByRole('button');
+  fireEvent.click(button);
+  const login = await waitFor(() => screen.getByText('Log In'));
+  fireEvent.click(login);
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith(`/login`));
+});
+
+test('TopBar Mobile Create Listing', async () => {
+  localStorage.removeItem('user');
+  localStorage.setItem('user', JSON.stringify({
+    owner: {
+      name: 'dev',
+      id: 'a',
+    },
+    accessToken: '10',
+  }));
+  render(<TopBar/>);
+  setNarrow();
+  await waitFor(() => screen.getByRole('button'));
+  const button = screen.getByRole('button');
+  fireEvent.click(button);
+  const newlisting = await waitFor(() => screen.getByText('Create New Listing'));
+  fireEvent.click(newlisting);
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith(`/newlisting`));
 });
