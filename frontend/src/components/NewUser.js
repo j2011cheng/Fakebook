@@ -83,8 +83,9 @@ function NewUser() {
             type='text'
             name='name'
             placeholder='Name'
-            id="name"
-            label="Name"
+            id='name'
+            label='Name'
+            aria-label='name'
             onChange={handleInputChange}
             fullWidth
             autoFocus
@@ -102,8 +103,9 @@ function NewUser() {
             type='text'
             name='email'
             placeholder='Email'
-            id="email"
-            label="Email"
+            id='email'
+            label='Email'
+            aria-label='email'
             onChange={handleInputChange}
             fullWidth
           />
@@ -119,8 +121,9 @@ function NewUser() {
             type='text'
             name='phone'
             placeholder='Phone Number'
-            id="phone number"
-            label="Phone Number"
+            id='phone number'
+            label='Phone Number'
+            aria-label='phone number'
             onChange={handleInputChange}
             fullWidth
           />
@@ -137,8 +140,9 @@ function NewUser() {
             type='password'
             name='password'
             placeholder='Password'
-            id="password"
-            label="Password"
+            id='password'
+            label='Password'
+            aria-label='password'
             onChange={handleInputChange}
             fullWidth
           />
@@ -151,7 +155,7 @@ function NewUser() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component='main' maxWidth='xs'>
         <CssBaseline />
         <Box
           sx={{
@@ -175,14 +179,16 @@ function NewUser() {
                       <div>
                         <Button
                           variant='contained'
+                          aria-label='continue'
                           onClick={handleNext}
                           sx={{mt: 1, mr: 1}}
                         >
-                          {index === steps.length - 1 ? 'Finish' : 'Continue'}
+                          Continue
                         </Button>
                         <Button
                           disabled={index === 0}
                           onClick={handleBack}
+                          aria-label='back'
                           sx={{mt: 1, mr: 1}}
                         >
                           Back
@@ -198,7 +204,7 @@ function NewUser() {
                 <Button
                   type='submit'
                   name='submit'
-                  aria-label='newuserButton'
+                  aria-label='sign up'
                   value='NewUser'
                   variant='contained'
                   fullWidth
@@ -214,7 +220,7 @@ function NewUser() {
               <Button
                 type='submit'
                 name='submit'
-                aria-label='loginButton'
+                aria-label='log in'
                 value='Login'
                 variant='contained'
                 onClick={signIn}
