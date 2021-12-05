@@ -2,7 +2,6 @@ import React from 'react';
 import Grid from '@mui/material/Grid';
 import Dialog from '@mui/material/Dialog';
 import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -87,10 +86,6 @@ function Listing() {
     return (<div></div>);
   }
 
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
-
   const handleClose = () => {
     const params = new URLSearchParams(location.search);
     params.delete('listing');
@@ -101,7 +96,6 @@ function Listing() {
     <Dialog
       fullScreen
       onClose={handleClose}
-      TransitionComponent={Transition}
       open
       scroll={'paper'}
     >
