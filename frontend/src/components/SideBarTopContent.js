@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 
 import Search from './Search';
 
+
 /**
  *
  * @return {object} JSX
@@ -23,7 +24,12 @@ function SideBarTopContent() {
           variant='contained'
           name='new listing'
           onClick={() => history.push('/newlisting')}
-          sx={{ml: 1, mb: 1, width: '95%'}}
+          sx={{
+            mt: 2,
+            ml: 1,
+            mb: 1,
+            width: '95%',
+          }}
         >
           + Create New Listing
         </Button>

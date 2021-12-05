@@ -120,6 +120,23 @@ test('TopBar My Listings', async () => {
     .toHaveBeenCalledWith(`/?owner=${id}`));
 });
 
+test('TopBar Desktop Create Listing', async () => {
+  localStorage.removeItem('user');
+  localStorage.setItem('user', JSON.stringify({
+    owner: {
+      name: 'dev',
+      id: 'a',
+    },
+    accessToken: '10',
+  }));
+  render(<TopBar/>);
+  const newlisting = await waitFor(() =>
+    screen.getByText('+ Create New Listing'));
+  fireEvent.click(newlisting);
+  await waitFor(() => expect(mockHistoryPush)
+    .toHaveBeenCalledWith(`/newlisting`));
+});
+
 test('TopBar Mobile Menu', async () => {
   render(<TopBar/>);
   setNarrow();
@@ -162,3 +179,4 @@ test('TopBar Mobile Create Listing', async () => {
   await waitFor(() => expect(mockHistoryPush)
     .toHaveBeenCalledWith(`/newlisting`));
 });
+

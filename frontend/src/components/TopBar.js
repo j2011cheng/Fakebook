@@ -243,11 +243,29 @@ function TopBar() {
     user ? (
       <div>
         <Button
+          variant='contained'
+          name='new listing'
+          onClick={() => history.push('/newlisting')}
+          sx={{
+            mt: 2,
+            mb: 2,
+            ml: 1,
+            justifyContent: 'flex-end',
+          }}
+        >
+          + Create New Listing
+        </Button>
+        <Button
           type='submit'
           value='Submit'
           variant='contained'
           margin='normal'
-          sx={{mt: 2, mb: 2, ml: 1, justifyContent: 'flex-end'}}
+          sx={{
+            mt: 2,
+            mb: 2,
+            ml: 1,
+            justifyContent: 'flex-end',
+          }}
           onClick={myListings}
         >
           My Listings

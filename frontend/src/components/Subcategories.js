@@ -14,6 +14,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 
 import Categories from './Categories';
+import Search from './Search';
 import FilterDialogButton from './FilterDialogButton';
 // import BreadSlices from './BreadSlices';
 
@@ -219,6 +220,7 @@ function Subcategories() {
           width: 'auto',
         }}
       >
+        <Search/>
         {getStack()}
       </Paper>
       {mobileOpen && mobileAllCategories()}
