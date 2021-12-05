@@ -65,10 +65,7 @@ exports.postListing = async (req, res) => {
     name: req.body.name,
     description: req.body.description,
     attributes: req.body.attributes,
-    location: {
-      latitude: 0,
-      longitude: 0,
-    },
+    location: req.body.location,
   };
   listing.attributes.price = req.body.price;
   listing.images = req.body.images;
