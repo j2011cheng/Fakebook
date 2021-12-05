@@ -105,20 +105,31 @@ function Login() {
             />
             <Button
               type='submit'
-              name='submit'
+              name='login'
               aria-label='log in'
               value='Login'
               fullWidth
               variant='contained'
-              sx={{mt: 2, mb: 2}}
+              sx={{mt: 2}}
               onClick={onSubmit}
             >
               Log In
             </Button>
+            <Button
+              type='submit'
+              name='home'
+              aria-label='home'
+              value='Home'
+              fullWidth
+              sx={{mt: 2, mb: 2}}
+              onClick={() => history.push('/')}
+            >
+              Cancel
+            </Button>
             <Divider>or</Divider>
             <Button
               type='submit'
-              name='submit'
+              name='newuser'
               aria-label='create new account'
               value='Newuser'
               fullWidth
