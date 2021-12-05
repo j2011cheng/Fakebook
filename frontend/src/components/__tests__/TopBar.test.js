@@ -179,4 +179,3 @@ test('TopBar Mobile Create Listing', async () => {
   await waitFor(() => expect(mockHistoryPush)
     .toHaveBeenCalledWith(`/newlisting`));
 });
-
