@@ -124,7 +124,9 @@ function TopBar() {
         onClick={() => setMenuOpen(true)}
         className='menuButton'
       >
-        <MenuIcon/>
+        <MenuIcon
+          fontSize='large'
+        />
       </IconButton>
       <Drawer
         anchor='right'
